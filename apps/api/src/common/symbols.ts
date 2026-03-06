@@ -1,0 +1,1 @@
+export const CHAT_MESSAGE_QUEUE_TOKEN = Symbol('CHAT_MESSAGE_QUEUE');

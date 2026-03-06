@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": [
+        "apps/api/src/*"
+      ],
+      "@/modules/*": [
+        "apps/api/src/modules/*"
+      ],
+      "@/common/*": [
+        "apps/api/src/common/*"
+      ],
+      "@/api/*": [
+        "apps/api/src/api/*"
+      ],
+      "@app/db": [
+        "libs/db/src"
+      ],
+      "@app/db/*": [
+        "libs/db/src/*"
+      ],
+      "@app/queue": [
+        "libs/queue/src"
+      ],
+      "@app/queue/*": [
+        "libs/queue/src/*"
+      ],
+
+    },
+  }
+}

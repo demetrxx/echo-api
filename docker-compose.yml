@@ -1,0 +1,22 @@
+name: echo_v2
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: echo_v2_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+
+  postgres:
+    image: pgvector/pgvector:pg18-trixie
+    container_name: echo_v2_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: echo_v2_db
+    ports:
+      - '5432:5432'
+
+volumes:
+  redis_data:

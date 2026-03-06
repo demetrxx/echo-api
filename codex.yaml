@@ -1,0 +1,29 @@
+version: 1
+
+project:
+  name: echo
+  description: >
+    todo
+
+stack:
+  language: typescript
+  runtime: nodejs
+  framework: nestjs
+  db: postgres
+  orm: typeorm
+
+conventions:
+  design_strategy:
+    - smart solution
+    - elegant solution
+    - ninja programming principles
+
+deliverables:
+  - ingestion_pipeline_skeleton
+  - retrieval_pipeline_skeleton
+  - ui_copy_guidelines
+
+agent_workflow:
+  planning:
+    location: codex-plans/
+    note: When a plan is requested, write it to a new file in codex-plans/ with a task-specific name.

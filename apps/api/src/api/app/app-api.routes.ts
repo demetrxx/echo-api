@@ -1,0 +1,20 @@
+import { RouteTree } from '@nestjs/core';
+
+import { FilesApiModule } from './files';
+import { PostsApiModule } from './posts';
+import { ProfilesApiModule } from './profiles';
+import { ThemesApiModule } from './themes';
+import { UserApiModule } from './user';
+
+const routes: [string, any][] = [
+  ['files', FilesApiModule],
+  ['posts', PostsApiModule],
+  ['profiles', ProfilesApiModule],
+  ['user', UserApiModule],
+  ['themes', ThemesApiModule],
+];
+
+export const appApiRoutes: RouteTree = {
+  path: '/',
+  children: routes.map(([path, module]) => ({ path, module })),
+};
