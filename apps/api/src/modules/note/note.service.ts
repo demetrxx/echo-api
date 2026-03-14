@@ -45,11 +45,18 @@ export class NoteService {
     };
   }
 
-  async create(userId: string, dto?: { name?: string }) {
-    return await this.dataSource.getRepository(NoteEntity).save({
+  async create(userId: string, dto?: { name?: string; text?: string }) {
+    const note = await this.dataSource.getRepository(NoteEntity).save({
       userId,
       name: dto?.name,
+      text: dto?.text,
     });
+
+    if (dto?.text.trim()) {
+      this.generateTitle(note.id, userId, dto.text);
+    }
+
+    return note;
   }
 
   async getOne(id: string, userId: string) {
@@ -70,7 +77,11 @@ export class NoteService {
     userId: string,
     dto: { name?: string; text?: string },
   ) {
-    await this.getOne(id, userId);
+    const note = await this.getOne(id, userId);
+
+    if (!note.text && dto.text) {
+      this.generateTitle(note.id, userId, dto.text);
+    }
 
     await this.dataSource.getRepository(NoteEntity).update(id, {
       name: dto.name,
@@ -82,6 +93,22 @@ export class NoteService {
     await this.getOne(id, userId);
 
     await this.dataSource.getRepository(NoteEntity).softDelete(id);
+  }
+
+  async generateTitle(id, userId: string, text: string) {
+    const response = await this.llmService.fastClient.invoke(
+      [
+        {
+          role: 'user',
+          content: `Generate a short title (3-5 words) for the following text: """${text}""", \n **return only the title and nothing else**`,
+        },
+      ],
+      {},
+    );
+
+    const title = (response.content as string).trim();
+
+    this.updateOne(id, userId, { name: title });
   }
 
   async addNoteItem(
@@ -98,7 +125,23 @@ export class NoteService {
   ) {
     const note = await this.getOne(id, userId);
 
-    const noteItem = await this.dataSource.getRepository(NoteItemEntity).save({
+    if (dto.type === NoteItemType.Voice && dto.fileId) {
+      const file = await this.fileService.getOne(dto.fileId);
+      if (!file) {
+        throw Err.notFound('File not found');
+      }
+      const buffer = await this.fileService.getBuffer(file.path);
+
+      dto.value = await this.llmService.voiceToText({
+        buffer,
+        name: file.name,
+        mime: file.mime,
+      });
+
+      await this.concatText(id, userId, dto.value);
+    }
+
+    return this.dataSource.getRepository(NoteItemEntity).save({
       noteId: note.id,
       type: dto.type,
       status: [
@@ -113,25 +156,6 @@ export class NoteService {
       fileId: dto.fileId,
       meta: dto.meta,
     });
-
-    if (dto.type === NoteItemType.Voice && dto.fileId) {
-      const file = await this.fileService.getOne(dto.fileId);
-      if (!file) {
-        throw Err.notFound('File not found');
-      }
-      const buffer = await this.fileService.getBuffer(file.path);
-
-      this.transcribeVoiceNote({
-        userId,
-        noteId: note.id,
-        noteItemId: noteItem.id,
-        buffer,
-        name: file.name,
-        mime: file.mime,
-      });
-    }
-
-    return noteItem;
   }
 
   async updateNoteItem(
@@ -162,7 +186,13 @@ export class NoteService {
   }
 
   async concatText(id: string, userId: string, text: string) {
-    const note = await this.getOne(id, userId);
+    const note = await this.dataSource.getRepository(NoteEntity).findOne({
+      where: { id, userId },
+    });
+
+    if (!note.text) {
+      this.generateTitle(id, userId, text);
+    }
 
     await this.updateOne(id, userId, {
       text: trimNL(note.text + '\n\n' + text),
