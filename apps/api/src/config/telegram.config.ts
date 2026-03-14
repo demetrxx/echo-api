@@ -1,9 +1,9 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 
 export const TelegramConfig = registerAs('telegram', () => ({
-  apiId: Number(process.env.TELEGRAM_API_ID),
-  apiHash: process.env.TELEGRAM_API_HASH,
-  session: process.env.TELEGRAM_SESSION,
+  token: process.env.TELEGRAM_BOT_TOKEN,
+  webhookUrl: process.env.APP_URL + '/internal/telegram/webhook',
+  botId: Number(process.env.TELEGRAM_BOT_ID),
 }));
 
 export type TelegramConfig = ConfigType<typeof TelegramConfig>;

@@ -1,0 +1,169 @@
+{
+  "profile": {
+    "name": "Elena",
+    "age": 34,
+    "role": "product designer / UX educator",
+    "audience": "junior and mid-level designers",
+    "platforms": ["LinkedIn", "Threads", "newsletter"],
+    "writes_to": [
+      "привлекать клиентов и студентов",
+      "укреплять экспертность",
+      "объяснять сложные вещи просто"
+    ]
+  },
+  "goals": [
+    "писать полезный контент без выгорания",
+    "не повторяться",
+    "превращать клиентские наблюдения в посты",
+    "держать баланс между education и personality"
+  ],
+  "pillars": [
+    "UX mistakes",
+    "product thinking",
+    "research habits",
+    "career growth for designers",
+    "clarity in communication"
+  ],
+  "tone_rules": [
+    "спокойно и понятно",
+    "без агрессии",
+    "любит структуры “3 ways / one mistake / what changed for me”",
+    "без хайпа",
+    "без снобизма",
+    "объясняет через рабочие примеры",
+    "завершает practical takeaway"
+  ],
+  "strategy_state": [
+    "меньше generic educational posts",
+    "больше real-world scenarios",
+    "усилить тему “design is decision-making”",
+    "связать UX с бизнесом, а не только интерфейсами"
+  ],
+  "notes": {
+    "raw": [
+      "client wanted 5 CTAs on one page because “different users need different paths”",
+      "usually that just means nobody made a real priority decision",
+      "maybe: “multiple CTAs often signal internal misalignment, not user centricity”",
+      "users rarely read onboarding as carefully as teams hope",
+      "teams confuse explanation with usability",
+      "a flow that needs too much explaining is usually doing too much",
+      "research insight from last week: users skipped the top banner completely",
+      "noticed PM and designer used “simple” to mean different things",
+      "simple for business != simple for user",
+      "maybe post about “clean UI can still produce hesitation”",
+      "one recurring pattern: teams ask for feedback too late, after falling in love with solution",
+      "designers need stronger language for tradeoffs",
+      "a lot of bad UX comes from unresolved business tension",
+      "juniors often think polish is the final layer; actually clarity starts earlier",
+      "post idea: “if you need to highlight everything, nothing is truly important”",
+      "teams want flexibility, users want confidence",
+      "“can we add an option?” is often avoidance of making a decision",
+      "maybe explain progressive disclosure with a real example",
+      "user quotes are powerful, but teams cherry-pick them",
+      "sometimes the right UX fix is changing product policy, not redesigning screen",
+      "interface problems often begin in product strategy meetings",
+      "most UX debt is decision debt"
+    ],
+    "noisy": [
+      "maybe CTA overload = team politics, not UX",
+      "not exactly politics, more unresolved priorities",
+      "screen was clean but user still froze",
+      "clean != clear yes but i already say this often",
+      "maybe need fresher framing",
+      "users skipped banner again. nobody reads banners?",
+      "“if you need 5 callouts the hierarchy is already broken”",
+      "too harsh?",
+      "PM said simple means fewer dev tickets basically lol",
+      "simple for business vs simple for user maybe useful",
+      "onboarding text block… team loved it, users ignored all of it",
+      "explainability and usability not same thing",
+      "there is a post in that somewhere but very known already",
+      "maybe one about confidence vs flexibility",
+      "too many options often means team didn’t decide",
+      "voice note: sometimes interface issue is actually policy issue, like we keep redesigning around a rule that shouldn’t exist",
+      "could be good but needs example",
+      "maybe progressive disclosure post with ecommerce checkout example",
+      "note from workshop: juniors jump to screens before decision framing",
+      "“design debt” or “decision debt”? probably decision debt stronger",
+      "user quote was cherry picked in meeting lol",
+      "teams use research like decoration sometimes",
+      "probably too cynical for her tone",
+      "maybe write softer",
+      "one client literally asked “can we highlight all three plans equally”",
+      "this is gold maybe",
+      "if everything is highlighted nothing is chosen, obvious but still true",
+      "polish is not clarity",
+      "visual simplicity still can hide cognitive work",
+      "too abstract, needs concrete scenario",
+      "maybe carousel? no, not building platform-specific now",
+      "late feedback = expensive ego",
+      "sounds rude. rephrase",
+      "unresolved business tension creates messy screens",
+      "maybe title “your UX issue started before Figma”",
+      "actually strong",
+      "if teams ask users what they want they get feature soup",
+      "again maybe too dismissive sounding",
+      "a lot of “user-centered” decisions are actually stakeholder-centered compromises",
+      "good thought but dangerous wording",
+      "note: teams confuse accommodating edge cases with serving users",
+      "maybe that’s strong",
+      "most UX fixes are prioritization fixes",
+      "probably repetitive with old content",
+      "“can we add one more option?” is often fear in disguise",
+      "don’t know if audience ready for that framing",
+      "voice transcript rough: i keep noticing that the more a team says they need flexibility the less confidence the user feels in the interface"
+    ]
+  },
+  "post_samples": [
+    {
+      "id": "post_1",
+      "text": "A lot of junior designers think good UX means adding helpful elements.\n\nIn practice, good UX often means removing things that create hesitation.\n\nEvery extra choice has a cost.\nEvery extra sentence has a cost.\nEvery extra state has a cost.\n\nClarity is not about effort.\nIt’s about restraint."
+    },
+    {
+      "id": "post_2",
+      "text": "One of the most common research mistakes is asking users what they want instead of understanding what they struggle with.\n\nUsers are usually good at describing friction.\nThey are much worse at designing solutions.\n\nThat’s your job."
+    },
+    {
+      "id": "post_3",
+      "text": "A screen can look clean and still feel hard to use.\n\nVisual simplicity is not the same as cognitive simplicity.\n\nIf the user still has to stop, interpret, compare, and guess, the interface is doing too much work in their head."
+    },
+    {
+      "id": "post_4",
+      "text": "A surprising amount of UX work is really prioritization work.\n\nWhat do we show now?\nWhat do we hide?\nWhat deserves attention?\nWhat can wait?\n\nA lot of interface problems are actually product decision problems."
+    },
+    {
+      "id": "post_5",
+      "text": "The more experienced I get, the less I try to sound clever in design reviews.\n\nClarity wins.\nSpecificity wins.\n“Here’s where users may hesitate” is more useful than a beautiful abstract critique."
+    }
+  ],
+  "expected_tasks": [
+    {
+      "id": 1,
+      "task": "Generate 8 educational post ideas"
+    },
+    {
+      "id": 2,
+      "task": "Build 4 recurring rubrics"
+    },
+    {
+      "id": 3,
+      "task": "Turn “most UX debt is decision debt” into a post"
+    },
+    {
+      "id": 4,
+      "task": "Suggest 5 related old notes to connect into one theme"
+    },
+    {
+      "id": 5,
+      "task": "Produce a soft LinkedIn-style post in her tone"
+    },
+    {
+      "id": 6,
+      "task": "Produce a sharper Threads-style version"
+    },
+    {
+      "id": 7,
+      "task": "Summarize current strategy in 5 lines"
+    }
+  ]
+}

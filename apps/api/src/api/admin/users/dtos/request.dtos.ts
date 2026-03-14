@@ -1,12 +1,5 @@
-import { UserStatus } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEnum,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 import { TransformBooleanString } from '@/common/decorators';
 import { PaginationSortingQuery } from '@/common/utils';
@@ -44,9 +37,9 @@ export class InviteUserRequestDto {
   phone: string;
 }
 
-export class UpdateUserRequestDto {
-  @ApiProperty()
-  @IsEnum(UserStatus)
-  @IsOptional()
-  status?: UserStatus;
-}
+// export class UpdateUserRequestDto {
+//   @ApiProperty()
+//   @IsEnum(UserStatus)
+//   @IsOptional()
+//   status?: UserStatus;
+// }

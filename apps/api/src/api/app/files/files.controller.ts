@@ -1,4 +1,4 @@
-import { S3Folder } from '@app/db';
+import { FileDir } from '@app/db/entities';
 import {
   BadRequestException,
   Body,
@@ -60,9 +60,9 @@ export class FilesController {
 
     const file = await this.fileService.uploadOne({
       mime: body.file.mimetype,
-      fileName: body.file.filename,
       buffer,
-      folder: S3Folder.FILES,
+      folder: FileDir.Public,
+      fileName: body.file.filename,
     });
 
     return FileDto.mapFromEntity(file);
@@ -75,9 +75,9 @@ export class FilesController {
 
     const file = await this.fileService.uploadOne({
       mime: body.file.mimetype,
-      fileName: body.file.filename,
       buffer,
-      folder: S3Folder.FILES,
+      folder: FileDir.Private,
+      fileName: body.file.filename,
     });
 
     return FileDto.mapFromEntity(file);

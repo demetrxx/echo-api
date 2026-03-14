@@ -7,8 +7,9 @@ export enum FileStatus {
   UPLOADED = 'UPLOADED',
 }
 
-export enum S3Folder {
-  FILES = 'files',
+export enum FileDir {
+  Public = 'public',
+  Private = 'private',
 }
 
 @Entity('file', {
@@ -49,9 +50,16 @@ export class FileEntity extends AbstractEntity {
   mime: string;
 
   @Column({
+    type: 'varchar',
+    comment: 'Original file name',
+    nullable: true,
+  })
+  ogName: string | null;
+
+  @Column({
     type: 'enum',
-    enum: S3Folder,
+    enum: FileDir,
     comment: 'Directory in S3 where the file is stored',
   })
-  dir: S3Folder;
+  dir: FileDir;
 }

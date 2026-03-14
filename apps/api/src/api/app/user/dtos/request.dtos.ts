@@ -12,3 +12,14 @@ export class UpdateUserRequestDto {
   @IsOptional()
   lastName?: string;
 }
+
+export class LinkTelegramRequestDto {
+  @ApiProperty()
+  @IsString()
+  telegramId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  username?: string;
+}

@@ -1,9 +1,11 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { NoteEntity } from './note.entity';
 import { PostEntity } from './post.entity';
 import { ProfileEntity } from './profile.entity';
 import { RefreshSessionEntity } from './refresh-session.entity';
+import { TgUserEntity } from './tg-user.entity';
 import { ThemeEntity } from './theme.entity';
 
 export enum UserStatus {
@@ -70,8 +72,21 @@ export class UserEntity extends AbstractEntity {
   })
   emailConfirmedAt: Date | null;
 
+  @Column({
+    type: 'timestamp',
+    name: 'last_activity_at',
+    nullable: true,
+  })
+  lastActivityAt: Date | null;
+
+  @OneToOne(() => TgUserEntity, (tgUser) => tgUser.user)
+  tgUser: TgUserEntity;
+
   @OneToMany(() => ThemeEntity, (theme) => theme.user)
   themes: ThemeEntity[];
+
+  @OneToMany(() => NoteEntity, (note) => note.user)
+  notes: NoteEntity[];
 
   @OneToMany(() => PostEntity, (post) => post.user)
   posts: PostEntity[];

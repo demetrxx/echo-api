@@ -34,18 +34,34 @@ export class FileDto {
   name: string;
 
   @ApiProperty({
+    description: 'Original file name',
+    example: 'document.csv',
+    nullable: true,
+  })
+  ogName: string | null;
+
+  @ApiProperty({
     description: 'File created date',
     example: '2023-01-01T00:00:00.000Z',
   })
   createdAt: Date;
+
+  @ApiProperty({
+    description: 'File URL',
+    example: 'https://example.com/files/file-123',
+    nullable: true,
+  })
+  url: string | null;
 
   static mapFromEntity(entity: FileEntity): FileDto {
     return {
       id: entity.id,
       path: entity.path,
       mime: entity.mime,
+      url: entity.url,
       status: entity.status,
       name: entity.name,
+      ogName: entity.ogName,
       createdAt: entity.createdAt,
     };
   }

@@ -7,6 +7,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiModule } from '@/api';
+import { TelegramModule } from '@/modules/telegram';
 
 import { AuthConfig, RedisConfig } from './config';
 
@@ -48,6 +49,7 @@ import { AuthConfig, RedisConfig } from './config';
       },
     }),
     ApiModule,
+    TelegramModule,
   ],
   providers: [
     {

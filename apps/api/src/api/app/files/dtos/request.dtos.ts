@@ -1,9 +1,7 @@
-import { S3Folder } from '@app/db';
+import { FileDir } from '@app/db';
 import { MultipartFile } from '@fastify/multipart';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsObject, IsString } from 'class-validator';
-
-import { MimeType } from '@/common/consts';
 
 export class PostFileRequestDto {
   @ApiProperty({
@@ -16,14 +14,14 @@ export class PostFileRequestDto {
 
 export class SignUploadDto {
   @ApiProperty()
-  @IsEnum(MimeType)
-  mime: MimeType;
+  @IsString()
+  mime: string;
 
   @ApiProperty()
   @IsString()
   fileName?: string;
 
   @ApiProperty()
-  @IsEnum(S3Folder)
-  folder: S3Folder;
+  @IsEnum(FileDir)
+  folder: FileDir;
 }

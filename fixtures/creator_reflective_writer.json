@@ -1,0 +1,167 @@
+{
+  "profile": {
+    "name": "Nina",
+    "age": 31,
+    "role": "writer / independent creator",
+    "audience": "thoughtful professionals, creatives, people tired of hustle culture",
+    "platforms": ["Telegram", "Substack", "Instagram captions"],
+    "writes_to": [
+      "делиться наблюдениями",
+      "строить более глубокую аудиторию",
+      "исследовать тему работы, внимания, внутренней жизни"
+    ]
+  },
+  "goals": [
+    "публиковать регулярно без давления",
+    "фиксировать хрупкие мысли до того, как они исчезнут",
+    "соединять личное и полезное",
+    "меньше обесценивать “маленькие” наблюдения"
+  ],
+  "pillars": [
+    "attention and mental space",
+    "slow creativity",
+    "modern work and emotional fatigue",
+    "identity and self-trust",
+    "living without constant self-optimization"
+  ],
+  "tone_rules": [
+    "мягкий, точный, наблюдательный",
+    "без инфоцыганства",
+    "допускает уязвимость",
+    "любит контрасты, но без агрессии",
+    "можно писать чуть литературно",
+    "не любит “productivity hacks”",
+    "ценит спокойный ритм"
+  ],
+  "strategy_state": [
+    "меньше абстракции",
+    "больше коротких, честных заметок",
+    "не превращать всё в lesson",
+    "писать так, чтобы читатель чувствовал себя увиденным"
+  ],
+  "notes": {
+    "raw": [
+      "had a thought in the supermarket and lost it before reaching home, felt weirdly sad",
+      "not all lost thoughts are brilliant, but losing them repeatedly changes how you trust your own mind",
+      "maybe we need gentler systems, not stricter ones",
+      "“a tool can reduce friction without turning your life into a factory”",
+      "people don’t need more pressure disguised as discipline",
+      "small observations often carry more truth than polished frameworks",
+      "maybe post about “thoughts that arrive sideways”",
+      "when a note is too hard to capture, i just let it go",
+      "maybe there’s grief in how much inner life disappears because there’s no easy place to put it",
+      "some productivity tools make me feel supervised",
+      "i don’t want a dashboard for my soul",
+      "pressure kills fragile thoughts",
+      "maybe talk about shame-based consistency",
+      "not every unfinished note is procrastination; sometimes it just needs a different form",
+      "“clarity returns when pressure leaves”",
+      "there is a difference between support and surveillance",
+      "i trust notebooks more than systems that score me",
+      "maybe post: “you are allowed to have a rhythm that does not look impressive”",
+      "soft structure > rigid discipline",
+      "i want tools that make me feel more like myself, not more optimized",
+      "sometimes a voice note is really a way of keeping company with yourself",
+      "creativity rarely appears when summoned like an employee"
+    ],
+    "noisy": [
+      "lost thought between store and home, annoying, maybe sadder than it should be",
+      "maybe because repeated thought loss changes trust in self?",
+      "not every thought matters but losing them feels like inner leakage",
+      "too dramatic?",
+      "i don’t want a dashboard for my soul still like this line",
+      "some apps feel like supervision dressed as support",
+      "there is something in “support vs surveillance”",
+      "voice note: fragile thoughts need low pressure environments or they just don’t land fully, messy wording",
+      "maybe post on notes that arrive sideways",
+      "sideways is good word maybe too poetic",
+      "pressure makes me go blank",
+      "not even pressure exactly, more like being observed",
+      "weird how some tools make me feel like i’m already behind",
+      "even before using them",
+      "shame-based consistency maybe strong phrase",
+      "or too therapy-coded?",
+      "“you are allowed to have a rhythm that does not look impressive” still good",
+      "i trust paper more than systems that score me",
+      "scoring the self is exhausting",
+      "not every unfinished note is avoidance",
+      "sometimes it’s just not ready",
+      "maybe compare ideas to shy animals? maybe too much",
+      "creativity does not like fluorescent lighting lol maybe too abstract",
+      "some thoughts only survive if not demanded too quickly",
+      "i think people confuse gentle structure with laziness",
+      "not sure how to say without sounding defensive",
+      "voice note garbage: okay so like sometimes speaking into your phone is less about productivity and more about not abandoning yourself in the middle of the day",
+      "maybe too intimate",
+      "small observations are often more true than frameworks",
+      "but framework content performs better, annoying",
+      "should not turn this into anti-productivity rant every time",
+      "maybe there’s grief in how much of inner life gets dropped because capture is annoying",
+      "grief maybe too heavy but maybe true",
+      "i want systems that return me to myself, not systems that grade me",
+      "too polished already, maybe save",
+      "pressure kills fragile thoughts yes still central",
+      "maybe short post: some ideas don’t need deadlines, they need shelter",
+      "shelter maybe cheesy",
+      "consistency as moral test = still strong line",
+      "there is loneliness in always translating life into output",
+      "some moments should remain unprocessed for a while",
+      "unclear if that fits creator tool angle",
+      "maybe yes because forcing output too soon kills honesty",
+      "soft structure > rigid discipline feels almost too slogan-y",
+      "note to self: not everything has to become advice"
+    ]
+  },
+  "post_samples": [
+    {
+      "id": "post_1",
+      "text": "Some thoughts don’t arrive at your desk.\n\nThey arrive while washing dishes, standing in line, halfway through a walk.\n\nAnd if your life only has room for thoughts that come in productive formats, you lose a lot of what is actually yours."
+    },
+    {
+      "id": "post_2",
+      "text": "I’m starting to think that a lot of modern exhaustion is not physical.\n\nIt’s interpretive.\n\nToo many tabs open in the mind.\nToo many half-decisions.\nToo many things requiring a version of you that isn’t here today."
+    },
+    {
+      "id": "post_3",
+      "text": "Not every meaningful thought wants to become a content pillar.\n\nSome ideas are small.\nPrivate.\nHalf-formed.\n\nBut sometimes the thoughts we dismiss for being too quiet are the ones closest to the truth."
+    },
+    {
+      "id": "post_4",
+      "text": "I no longer believe consistency should feel like a moral test.\n\nSome systems help.\nSome systems only turn your attention into a place where you keep disappointing yourself.\n\nThose are different things."
+    },
+    {
+      "id": "post_5",
+      "text": "There is a kind of loneliness in always translating your life into output.\n\nSometimes the most human thing you can do is let an experience remain an experience for a while before asking what it can become."
+    }
+  ],
+  "expected_tasks": [
+    {
+      "id": 1,
+      "task": "Suggest 10 post ideas"
+    },
+    {
+      "id": 2,
+      "task": "Cluster notes into emotional themes"
+    },
+    {
+      "id": 3,
+      "task": "Turn “pressure kills fragile thoughts” into a Telegram post"
+    },
+    {
+      "id": 4,
+      "task": "Draft a Substack intro from 3 related notes"
+    },
+    {
+      "id": 5,
+      "task": "Suggest a low-pressure strategy system"
+    },
+    {
+      "id": 6,
+      "task": "Write 3 post openings in her tone"
+    },
+    {
+      "id": 7,
+      "task": "Find which notes are most aligned with her current direction"
+    }
+  ]
+}

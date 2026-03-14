@@ -1,4 +1,5 @@
-import { UserEntity, UserStatus } from '@app/db';
+import { UserEntity } from '@app/db';
+import { UserStatus } from '@app/db/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {

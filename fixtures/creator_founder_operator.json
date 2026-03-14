@@ -1,0 +1,170 @@
+{
+  "profile": {
+    "name": "Artem",
+    "age": 29,
+    "role": "solo founder SaaS-продукта",
+    "audience": "founders, indie hackers, early-stage builders",
+    "platforms": ["X", "LinkedIn", "Telegram"],
+    "writes_to": [
+      "строить доверие",
+      "привлекать аудиторию",
+      "получать early adopters",
+      "формулировать свои мысли"
+    ]
+  },
+  "goals": [
+    "Публиковать 3–4 раза в неделю",
+    "Писать более системно",
+    "Не терять наблюдения из работы",
+    "Не звучать как AI-founder-slop",
+    "Развивать 3 темы: продукт, distribution, founder psychology"
+  ],
+  "pillars": [
+    "building product",
+    "user research",
+    "mistakes in execution",
+    "distribution/growth",
+    "founder mindset without cliché"
+  ],
+  "tone_rules": [
+    "короткие абзацы",
+    "прямой язык",
+    "допускается жёсткость",
+    "не любит мотивационный мусор",
+    "любит контраст: “люди думают X, но на деле Y”",
+    "любит конкретику, а не общие слова",
+    "не любит эмодзи",
+    "не любит “5 tips”",
+    "может быть слегка cynical"
+  ],
+  "strategy_state": [
+    "меньше писать абстрактно",
+    "больше писать из личного опыта",
+    "усилить тему “execution > ideas”",
+    "не скатываться в motivational founder content"
+  ],
+  "notes": {
+    "raw": [
+      "had 3 user calls, same pattern: they don’t want more features, they want less friction",
+      "founders keep saying “users don’t get it” when UX is unclear",
+      "maybe “confusion is usually a product failure, not user failure”",
+      "noticed i open analytics when i don’t want to do hard work",
+      "dashboards can become a way to feel in control without making progress",
+      "people say they want an all-in-one, then use 20% of it",
+      "elegant systems die when they meet tired users",
+      "product decisions are often made for our aspirational user, not actual user",
+      "maybe write about “most software is designed for your Sunday self, not your Tuesday 4pm self”",
+      "captured idea while walking: consistency is easier when the tool reduces shame, not when it adds pressure",
+      "too many products gamify discipline and accidentally make people feel worse",
+      "a feature can test well in demo and die in reality because it requires too much activation energy",
+      "“clarity” is often just willingness to make a tradeoff",
+      "if user needs motivation to use your product, maybe it’s not part of natural workflow",
+      "founders overrate feature count and underrate subjective relief",
+      "product should feel lighter after opening it, not heavier",
+      "maybe a post: “if your app needs a tutorial, maybe the first-time experience is broken”",
+      "noticed that i store ideas in 4 places and then never revisit them",
+      "lots of content tools assume you sit down intending to create. most ideas happen before that",
+      "building for “real energy state” could be a whole theme",
+      "maybe write about false productivity in startup building",
+      "every extra decision point costs more than founders think",
+      "users don’t quit because your app is missing one more feature; they quit because the flow feels like work"
+    ],
+    "noisy": [
+      "maybe write smth about founders loving tools more than users",
+      "had thought in taxi, forgot middle part, only remember “friction beats features” or opposite maybe",
+      "analytics again. opened twice today. procrastination?",
+      "users say “simple” but mean different things maybe post",
+      "maybe too negative lately in posts",
+      "if onboarding long = bad? too simplistic maybe",
+      "one more idea about dashboards and fake progress",
+      "not fake progress exactly, more like emotional substitute for progress",
+      "“working on product” often means avoiding market ??? too harsh maybe",
+      "voice note: okay so i think maybe founders build for ideal user because real user is kind of inconvenient and then they say market is dumb, something there",
+      "elegant UX breaks when tired person opens it. repeat? already had this",
+      "all in one thing. people ask for it. then churn. maybe because they don’t want complexity. obvious?",
+      "users don’t read. but that sounds arrogant. reframe",
+      "maybe post “clarity is expensive because it kills optionality”",
+      "not sure if optionality point is real or just sounds smart",
+      "product choices for sunday self not weekday self yes this one is still good",
+      "“every extra click is a tax” too cliché maybe",
+      "if people need motivation to use your app then it’s not natural workflow or maybe retention issue idk",
+      "something about startup founders confusing motion and movement",
+      "should write on activation energy later",
+      "activation energy is probably huge underestimated term in SaaS",
+      "maybe compare feature count to self-soothing",
+      "i think founders use roadmap as anti-anxiety device",
+      "people say “we need more use cases” when they actually need one sharp use case",
+      "note from call: user literally said “i don’t want more power i want less stuff”",
+      "maybe content angle around “less capability, more usability”",
+      "not usability maybe relief",
+      "subjective relief > feature count",
+      "voice transcript messy: what if the real moat is not features but the feeling after opening the app, like lighter not heavier, i need cleaner wording",
+      "“confusion is a product bug” too absolute",
+      "some tools are built for demos not habits",
+      "demoable features vs livable features ??",
+      "need post on this maybe",
+      "found same note in telegram and apple notes lol",
+      "if i lose ideas in 4 places, users definitely do too",
+      "maybe not founder angle, maybe personal angle on chaos",
+      "tired users always expose product truth",
+      "real users arrive distracted hungry late and on bad wifi. maybe funny post",
+      "half idea: software should assume low energy not high intent",
+      "post about tutorials maybe too generic",
+      "“more scope less truth” still strong maybe reuse",
+      "not sure whether to post hard truths all the time. can sound performative"
+    ]
+  },
+  "post_samples": [
+    {
+      "id": "post_1",
+      "text": "Most startup advice is written by people optimizing for looking smart, not for being useful.\n\nThat’s why early founders consume content all day and still don’t move.\n\nThe bottleneck usually isn’t lack of knowledge.\n\nIt’s avoidance.\n\nYou already know the next uncomfortable step:\n\n* ship the ugly version\n* talk to users\n* ask for money\n* cut features\n\nBut that step threatens your self-image, so you open another thread instead."
+    },
+    {
+      "id": "post_2",
+      "text": "A lot of founders say they want feedback.\n\nWhat they actually want is confirmation.\n\nReal feedback is annoying.\nIt ruins the elegant story in your head.\n\nThat’s why user research feels “unclear” only until a user tells you something you don’t want to hear.\n\nThen suddenly the problem is not clarity.\n\nIt’s ego."
+    },
+    {
+      "id": "post_3",
+      "text": "You do not need better productivity systems.\n\nYou need fewer escape hatches.\n\nMost people are not disorganized.\n\nThey are perfectly organized around avoiding the most important task."
+    },
+    {
+      "id": "post_4",
+      "text": "Bad products often don’t fail because the market is tiny.\n\nThey fail because the founder built a tool for a version of the user that does not exist in real life.\n\nThe user in their head is rational, focused, and grateful.\n\nThe real user is distracted, inconsistent, impatient, and forgetful.\n\nBuild for that one."
+    },
+    {
+      "id": "post_5",
+      "text": "There is a point where adding features becomes a form of emotional self-protection.\n\nBecause shipping the smaller version would expose whether the core idea is actually weak.\n\nMore scope often means less truth."
+    }
+  ],
+  "expected_tasks": [
+    {
+      "id": 1,
+      "task": "Find 10 post ideas from raw notes"
+    },
+    {
+      "id": 2,
+      "task": "Group notes into 3 content pillars"
+    },
+    {
+      "id": 3,
+      "task": "Suggest strategy summary in founder’s tone"
+    },
+    {
+      "id": 4,
+      "task": "Turn raw note “dashboards can become a way to feel in control without making progress” into:",
+      "outputs": ["X post", "LinkedIn post", "Telegram post"]
+    },
+    {
+      "id": 5,
+      "task": "Create 3 drafts that sound like previous posts"
+    },
+    {
+      "id": 6,
+      "task": "Retrieve related notes for the theme “friction vs features”"
+    },
+    {
+      "id": 7,
+      "task": "Suggest which old idea should be resurfaced this week"
+    }
+  ]
+}

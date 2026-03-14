@@ -28,7 +28,6 @@ export class StorageService {
   ) {
     this.s3 = new S3Client({
       region: config.region,
-      forcePathStyle: true, // required for MinIO
       credentials: {
         accessKeyId: this.config.accessKeyId,
         secretAccessKey: this.config.secretAccessKey,
@@ -80,7 +79,7 @@ export class StorageService {
     file: FileEntity,
     options?: Omit<GetObjectCommandInput, 'Key' | 'Bucket'>,
   ) {
-    const fileName = file.name;
+    const fileName = file.ogName || file.name;
 
     return getSignedUrl(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

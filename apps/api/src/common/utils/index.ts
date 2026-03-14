@@ -6,4 +6,5 @@ export * from './sha256Async';
 export * from './sleep';
 export * from './stream';
 export * from './timestamps';
+export * from './trim-nl';
 export * from './with-latency';

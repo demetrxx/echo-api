@@ -1,8 +1,10 @@
-import { FileEntity, FileStatus, S3Folder } from '@app/db';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { FileDir, FileEntity, FileStatus } from '@app/db';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+
+import { S3Config } from '@/config';
 
 import { StorageService } from './storage.service';
 
@@ -12,14 +14,18 @@ export class FileService {
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly storageService: StorageService,
+    @Inject(S3Config.KEY)
+    private readonly config: S3Config,
   ) {}
 
-  async create(params: { mime: string; fileName?: string; folder: S3Folder }) {
-    const { mime, fileName, folder } = params;
+  async create(params: { mime: string; fileName?: string; folder: FileDir }) {
+    const { mime, folder, fileName } = params;
 
     const fileId = uuid();
+    const extension = fileName?.split('.').pop();
+    const uniqueFileName = `${fileId}.${extension}`;
 
-    const path = `/${folder}/${fileId}`;
+    const path = `/${folder}/${uniqueFileName}`;
 
     const fileRepository = this.dataSource.getRepository(FileEntity);
 
@@ -27,16 +33,22 @@ export class FileService {
       id: fileId,
       path,
       mime,
+      url:
+        folder === FileDir.Public
+          ? `${this.config.cloudFrontUrl}/${uniqueFileName}`
+          : null,
+      dir: folder,
+      ogName: params.fileName,
       uploadedAt: new Date(),
       status: FileStatus.PENDING,
-      name: fileName,
+      name: uniqueFileName,
     });
   }
 
   async createPresignedPost(params: {
     mime: string;
     fileName?: string;
-    folder: S3Folder;
+    folder: FileDir;
   }) {
     const file = await this.create(params);
 
@@ -72,15 +84,18 @@ export class FileService {
   }
 
   async uploadOne(params: {
-    folder: S3Folder;
+    folder: FileDir;
     mime: string;
     buffer: Buffer;
     fileName: string;
   }) {
     const { folder, mime, buffer, fileName } = params;
 
+    const extension = fileName.split('.').pop();
+
     const fileId = uuid();
-    const path = `/${folder}/${fileId}`;
+    const uniqueFileName = `${fileId}.${extension}`;
+    const path = `/${folder}/${fileName}`;
 
     const fileRepository = this.dataSource.getRepository(FileEntity);
 
@@ -88,7 +103,9 @@ export class FileService {
       id: fileId,
       path,
       mime,
-      name: fileName,
+      dir: folder,
+      name: uniqueFileName,
+      ogName: fileName,
       status: FileStatus.UPLOADED,
       uploadedAt: new Date(),
     });
@@ -98,7 +115,7 @@ export class FileService {
   }
 
   async uploadOneWithStream(params: {
-    folder: S3Folder;
+    folder: FileDir;
     file: Buffer;
     fileName: string;
     mime: string;
@@ -164,5 +181,9 @@ export class FileService {
     await fileRepository.delete({ id: file.id });
 
     return file;
+  }
+
+  async getBuffer(path: string): Promise<Buffer> {
+    return this.storageService.getBuffer(path);
   }
 }

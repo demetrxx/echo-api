@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 import * as process from 'node:process';
 
-import multipart from '@fastify/multipart';
 import cookie from '@fastify/cookie';
+import multipart from '@fastify/multipart';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -16,6 +16,7 @@ import { AppModule } from './app.module';
 import { configureRawBody } from './common/config';
 import { AppExceptionFilter } from './common/filters/app-exception.filter';
 import { LoggingInterceptor } from './common/interceptors';
+import { TelegramBot } from './modules/telegram';
 
 const logger = new Logger('Bootstrap');
 
@@ -72,6 +73,7 @@ async function bootstrap() {
     fastifyAdapter,
   );
 
+  // @ts-expect-error is ok
   await app.register(multipart, {
     attachFieldsToBody: 'keyValues',
     onFile: async (file) => {
@@ -87,6 +89,7 @@ async function bootstrap() {
       fileSize: 20_971_520,
     },
   });
+  // @ts-expect-error is ok
   await app.register(cookie);
 
   // Configure raw body capture for webhook routes (required for signature verification)
@@ -101,6 +104,13 @@ async function bootstrap() {
 
   await app.listen(port, () => {
     logger.log(`Server is running on port ${port}`);
+  });
+
+  const telegramBot = app.get(TelegramBot);
+
+  telegramBot.startBot().catch(async (error) => {
+    logger.error('Error starting Telegram bot', error);
+    await app.close();
   });
 }
 
