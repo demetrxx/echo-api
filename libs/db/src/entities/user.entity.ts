@@ -5,6 +5,7 @@ import { NoteEntity } from './note.entity';
 import { PostEntity } from './post.entity';
 import { ProfileEntity } from './profile.entity';
 import { RefreshSessionEntity } from './refresh-session.entity';
+import { StrategyEntity } from './strategy.entity';
 import { TgUserEntity } from './tg-user.entity';
 import { ThemeEntity } from './theme.entity';
 
@@ -96,4 +97,7 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => RefreshSessionEntity, (session) => session.user)
   refreshSessions: RefreshSessionEntity[];
+
+  @OneToMany(() => StrategyEntity, (strategy) => strategy.user)
+  strategies: StrategyEntity[];
 }

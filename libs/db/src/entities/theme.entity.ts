@@ -7,10 +7,10 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { sha256 } from '@/common/utils';
-
 import { AbstractEntity } from '../common/base.entity';
+import { NoteThemeEntity } from './note-theme.entity';
 import { PostEntity } from './post.entity';
+import { StrategyThemeEntity } from './strategy-theme.entity';
 import { UserEntity } from './user.entity';
 
 @Index('idx_unique_theme_name', ['name', 'userId'], {
@@ -24,6 +24,15 @@ export class ThemeEntity extends AbstractEntity {
     length: 255,
   })
   name: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'clean_name',
+    comment:
+      'System-generated clean name for the theme (lowercase, no spaces, special characters)',
+  })
+  cleanName: string;
 
   @Column({
     type: 'text',
@@ -50,12 +59,9 @@ export class ThemeEntity extends AbstractEntity {
   @OneToMany(() => PostEntity, (post) => post.theme)
   posts: PostEntity[];
 
-  static hash(theme: ThemeEntity): string {
-    return sha256(
-      JSON.stringify({
-        name: theme.name,
-        description: theme.description,
-      }),
-    );
-  }
+  @OneToMany(() => NoteThemeEntity, (noteTheme) => noteTheme.theme)
+  notes: NoteThemeEntity[];
+
+  @OneToMany(() => StrategyThemeEntity, (strategyTheme) => strategyTheme.theme)
+  strategies: StrategyThemeEntity[];
 }

@@ -31,7 +31,13 @@ export class NoteService {
       .getRepository(NoteEntity)
       .createQueryBuilder('note')
       .where('note.userId = :userId', { userId })
-      .select(['note.id', 'note.name', 'note.updatedAt', 'note.createdAt'])
+      .select([
+        'note.id',
+        'note.name',
+        'note.text',
+        'note.updatedAt',
+        'note.createdAt',
+      ])
       .orderBy(`note.${orderBy}`, order)
       .skip(skip)
       .take(take)

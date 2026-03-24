@@ -44,11 +44,6 @@ export class GeneratePostRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUUID()
-  angleId?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsUUID()
   profileId?: string;
 
   @ApiProperty({ enum: PlatformType })

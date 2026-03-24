@@ -9,6 +9,7 @@ import {
 
 import { AbstractEntity } from '../common/base.entity';
 import { NoteItemEntity } from './note-item.entity';
+import { NoteThemeEntity } from './note-theme.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('note')
@@ -44,4 +45,14 @@ export class NoteEntity extends AbstractEntity {
     default: '',
   })
   text: string;
+
+  @Column({
+    type: 'boolean',
+    name: 'should_suggest_themes',
+    default: true,
+  })
+  shouldSuggestThemes: boolean;
+
+  @OneToMany(() => NoteThemeEntity, (noteTheme) => noteTheme.note)
+  themes: NoteThemeEntity[];
 }

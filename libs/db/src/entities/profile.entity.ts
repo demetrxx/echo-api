@@ -1,4 +1,4 @@
-import { PlatformType, PostEntity } from '@app/db/entities/post.entity';
+import { PostEntity } from '@app/db/entities/post.entity';
 import {
   Column,
   Entity,
@@ -8,9 +8,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { sha256 } from '@/common/utils';
-
 import { AbstractEntity } from '../common/base.entity';
+import { StrategyEntity } from './strategy.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('profile')
@@ -38,10 +37,15 @@ export class ProfileEntity extends AbstractEntity {
   name: string;
 
   @Column({
-    type: 'text',
+    type: 'jsonb',
+  })
+  rules: string[];
+
+  @Column({
+    type: 'jsonb',
     nullable: true,
   })
-  prompt: string;
+  avoidRules: string[];
 
   @Column({
     type: 'jsonb',
@@ -51,27 +55,20 @@ export class ProfileEntity extends AbstractEntity {
   tov: string[];
 
   @Column({
+    type: 'text',
+    nullable: true,
+  })
+  examplesSummary: string;
+
+  @Column({
     type: 'jsonb',
     default: [],
   })
   examples: string[];
 
-  @Column({
-    type: 'jsonb',
-    default: () => "'[]'::jsonb",
-  })
-  isDefaultFor: PlatformType[];
-
   @OneToMany(() => PostEntity, (post) => post.profile)
   posts: PostEntity[];
 
-  static hash(profile: ProfileEntity): string {
-    return sha256(
-      JSON.stringify({
-        prompt: profile.prompt,
-        tov: profile.tov,
-        examples: profile.examples,
-      }),
-    );
-  }
+  @OneToMany(() => StrategyEntity, (strategy) => strategy.profile)
+  strategies: StrategyEntity[];
 }

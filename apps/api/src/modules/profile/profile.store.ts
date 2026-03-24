@@ -1,7 +1,7 @@
 import { PlatformType, ProfileEntity } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Raw } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 import { DS } from '@/common/types';
 import { PaginationSortingQuery } from '@/common/utils';
@@ -13,16 +13,10 @@ export class ProfileStore {
     private readonly dataSource: DataSource,
   ) {}
 
-  getDefaultProfile(
-    userId: string,
-    platform: PlatformType,
-  ): Promise<ProfileEntity | null> {
+  getDefaultProfile(userId: string): Promise<ProfileEntity | null> {
     return this.dataSource.getRepository(ProfileEntity).findOne({
       where: {
         userId,
-        isDefaultFor: Raw((alias) => `${alias} @> :v::jsonb`, {
-          v: JSON.stringify([platform]),
-        }),
       },
     });
   }
@@ -64,9 +58,7 @@ export class ProfileStore {
       userId: string;
       name: string;
       prompt?: string | null;
-      tov?: string[] | null;
       examples: string[];
-      isDefaultFor: PlatformType[];
     },
     ds: DS = this.dataSource,
   ): Promise<ProfileEntity> {
@@ -89,36 +81,5 @@ export class ProfileStore {
 
   async deleteOne(id: string) {
     await this.dataSource.getRepository(ProfileEntity).softDelete(id);
-  }
-
-  async clearDefaultForUser(
-    userId: string,
-    platforms: PlatformType[],
-    ds: DS = this.dataSource,
-  ) {
-    if (!platforms.length) {
-      return;
-    }
-
-    const repo = ds.getRepository(ProfileEntity);
-    const profiles = await repo.find({ where: { userId } });
-
-    const updates = profiles
-      .map((profile) => {
-        const next = profile.isDefaultFor.filter(
-          (platform) => !platforms.includes(platform),
-        );
-
-        if (next.length === profile.isDefaultFor.length) {
-          return null;
-        }
-
-        return Object.assign(profile, { isDefaultFor: next });
-      })
-      .filter(Boolean) as ProfileEntity[];
-
-    if (updates.length > 0) {
-      await repo.save(updates);
-    }
   }
 }

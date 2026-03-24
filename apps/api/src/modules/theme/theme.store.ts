@@ -17,7 +17,6 @@ export class ThemeStore {
     return this.dataSource
       .getRepository(ThemeEntity)
       .createQueryBuilder('theme')
-      .leftJoinAndSelect('theme.angles', 'angle')
       .where('theme.id = :id', { id })
       .andWhere('theme.userId = :userId', { userId })
       .getOne();

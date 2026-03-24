@@ -116,9 +116,6 @@ export class PostDetailsDto extends PostDto {
   generationId: string | null;
 
   @ApiProperty({ required: false })
-  angleId: string | null;
-
-  @ApiProperty({ required: false })
   finalVersionId: string | null;
 
   @ApiProperty({ type: PostVersionDto })
@@ -134,7 +131,6 @@ export class PostDetailsDto extends PostDto {
       platform: e.platform,
       themeId: e.themeId,
       generationId: e.generationId ?? null,
-      angleId: e.angleId ?? null,
       finalVersionId: e.finalVersionId ?? null,
       currentVersion: PostVersionDto.mapFromEntity(version),
     };
@@ -152,9 +148,6 @@ export class PostGeneratingDto extends PostDto {
   themeId: string;
 
   @ApiProperty({ required: false })
-  angleId: string | null;
-
-  @ApiProperty({ required: false })
   finalVersionId: string | null;
 
   static mapFromEntity(e: PostEntity): PostGeneratingDto {
@@ -163,7 +156,6 @@ export class PostGeneratingDto extends PostDto {
       postType: e.postType,
       platform: e.platform,
       themeId: e.themeId,
-      angleId: e.angleId ?? null,
       finalVersionId: e.finalVersionId ?? null,
     };
   }

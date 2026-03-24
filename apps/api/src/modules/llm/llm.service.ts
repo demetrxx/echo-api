@@ -31,7 +31,7 @@ export class LlmService {
   ) {
     this._client = new ChatOpenAI({
       apiKey: this.config.apiKey,
-      model: 'gpt-4',
+      model: 'gpt-5.4',
     });
 
     this._fastClient = new ChatOpenAI({

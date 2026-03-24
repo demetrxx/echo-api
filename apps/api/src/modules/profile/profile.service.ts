@@ -20,32 +20,13 @@ export class ProfileService {
     userId: string,
     dto: {
       name: string;
-      prompt?: string;
-      tov?: string[];
       examples?: string[];
-      isDefaultFor?: PlatformType[];
     },
   ) {
-    return this.dataSource.transaction(async (ds) => {
-      if (dto.isDefaultFor) {
-        await this.profileStore.clearDefaultForUser(
-          userId,
-          dto.isDefaultFor,
-          ds,
-        );
-      }
-
-      return this.profileStore.create(
-        {
-          userId,
-          name: dto.name,
-          prompt: dto.prompt ?? null,
-          tov: dto.tov ?? [],
-          examples: dto.examples ?? [],
-          isDefaultFor: dto.isDefaultFor ?? [],
-        },
-        ds,
-      );
+    return this.profileStore.create({
+      userId,
+      name: dto.name,
+      examples: dto.examples ?? [],
     });
   }
 
@@ -77,14 +58,6 @@ export class ProfileService {
     await this.getOne(id, userId);
 
     await this.dataSource.transaction(async (ds) => {
-      if (dto.isDefaultFor) {
-        await this.profileStore.clearDefaultForUser(
-          userId,
-          dto.isDefaultFor,
-          ds,
-        );
-      }
-
       await this.profileStore.updateOne(
         id,
         {

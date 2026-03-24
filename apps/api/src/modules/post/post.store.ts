@@ -14,13 +14,7 @@ import { PaginationSortingQuery } from '@/common/utils';
 
 type PostDto = Pick<
   PostEntity,
-  | 'userId'
-  | 'themeId'
-  | 'angleId'
-  | 'profileId'
-  | 'platform'
-  | 'postType'
-  | 'generationId'
+  'userId' | 'themeId' | 'profileId' | 'platform' | 'postType' | 'generationId'
 > & {
   status?: PostStatus;
   title?: string | null;

@@ -11,13 +11,6 @@ export class ProfileDto {
   @ApiProperty({ description: 'Tone of voice', type: [String] })
   tov: string[];
 
-  @ApiProperty({
-    description: 'Default platforms',
-    enum: PlatformType,
-    isArray: true,
-  })
-  isDefaultFor: PlatformType[];
-
   @ApiProperty({ description: 'Profile creation date' })
   createdAt: Date;
 
@@ -26,16 +19,12 @@ export class ProfileDto {
       id: e.id,
       name: e.name,
       tov: e.tov ?? [],
-      isDefaultFor: e.isDefaultFor ?? [],
       createdAt: e.createdAt,
     };
   }
 }
 
 export class ProfileDetailsDto extends ProfileDto {
-  @ApiProperty({ required: false })
-  prompt: string | null;
-
   @ApiProperty({ type: [String] })
   tov: string[];
 
@@ -45,7 +34,6 @@ export class ProfileDetailsDto extends ProfileDto {
   static mapFromEntity(e: ProfileEntity): ProfileDetailsDto {
     return {
       ...ProfileDto.mapFromEntity(e),
-      prompt: e.prompt ?? null,
       tov: e.tov ?? [],
       examples: e.examples ?? [],
     };
