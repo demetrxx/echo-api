@@ -40,6 +40,8 @@ const TOOL_TO_FIELD: Record<StrategyAgentTool, keyof StrategySnapshot | null> =
     [StrategyAgentTool.CreateVoice]: null,
     [StrategyAgentTool.UpdateVoice]: null,
     [StrategyAgentTool.LinkVoice]: null,
+
+    [StrategyAgentTool.UpdateContext]: null,
   };
 
 const TOOL_TYPE_TO_BUILDER: Record<StrategyAgentTool, ToolType> = {
@@ -70,6 +72,8 @@ const TOOL_TYPE_TO_BUILDER: Record<StrategyAgentTool, ToolType> = {
   [StrategyAgentTool.CreateVoice]: ToolType.Custom,
   [StrategyAgentTool.UpdateVoice]: ToolType.Custom,
   [StrategyAgentTool.LinkVoice]: ToolType.Custom,
+
+  [StrategyAgentTool.UpdateContext]: ToolType.Custom,
 };
 
 type ToolCustomAction = (state: StrategyAgentState, input: any) => void;

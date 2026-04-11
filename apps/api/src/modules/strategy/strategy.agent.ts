@@ -80,6 +80,8 @@ export class StrategyAgent {
         return this.action_createVoice.bind(this);
       case StrategyAgentTool.UpdateVoice:
         return this.action_updateVoice.bind(this);
+      case StrategyAgentTool.UpdateContext:
+        return this.action_updateContext.bind(this);
       default:
         return undefined;
     }
@@ -205,5 +207,25 @@ export class StrategyAgent {
     }
 
     state.updates.profileToUpdate = i;
+  }
+
+  action_updateContext(
+    state: StrategyAgentState,
+    i: {
+      block: StrategyContextBlockType;
+      field: string;
+      value: string | string[];
+    },
+  ) {
+    const block = state.snapshot.context[i.block];
+
+    if (!block) {
+      this.logger.error(
+        `Context block ${i.block} not found in strategy snapshot`,
+      );
+      return;
+    }
+
+    (block as any)[i.field] = i.value;
   }
 }

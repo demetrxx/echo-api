@@ -38,30 +38,97 @@ export enum StrategyAgentTool {
   CreateVoice = 'create_voice',
   UpdateVoice = 'update_voice',
   LinkVoice = 'link_voice',
+
+  UpdateContext = 'update_context',
 }
 
-// todo: описать значение каждого поля
+// todo: описать значение каждого поля, когда и зачем обновлять
 // todo: описать правила возвращения, вперед только по 1 этапу, назад можно на любой этап
+// todo: написать prompts для каждой stage, которые будут объяснять, что нужно делать на каждом этапе и какие инструменты доступны
 export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Diagnose]: [
     StrategyAgentTool.ChangeStage,
     StrategyAgentTool.AddContextBlock,
     StrategyAgentTool.RemoveContextBlock,
+
+    StrategyAgentTool.UpdateAudience,
+
+    StrategyAgentTool.AddGoal,
+    StrategyAgentTool.RemoveGoal,
+
+    StrategyAgentTool.AddPlatform,
+    StrategyAgentTool.RemovePlatform,
+
+    StrategyAgentTool.UpdatePlatformNote,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
   ],
   [StrategyStage.Context]: [
     StrategyAgentTool.ChangeStage,
+
+    StrategyAgentTool.UpdateContext,
+
     StrategyAgentTool.AddContextBlock,
     StrategyAgentTool.RemoveContextBlock,
+
+    StrategyAgentTool.UpdateContext,
+
+    StrategyAgentTool.AddNote,
+    StrategyAgentTool.RemoveNote,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
   ],
-  [StrategyStage.Direction]: [StrategyAgentTool.ChangeStage],
-  [StrategyStage.Themes]: [StrategyAgentTool.ChangeStage],
-  [StrategyStage.Voice]: [StrategyAgentTool.ChangeStage],
-  [StrategyStage.Sharpen]: [StrategyAgentTool.ChangeStage],
-  [StrategyStage.FreeRefine]: [
+  [StrategyStage.Direction]: [
+    StrategyAgentTool.ChangeStage,
+
+    StrategyAgentTool.AddGoal,
+    StrategyAgentTool.RemoveGoal,
+
+    StrategyAgentTool.AddProblem,
+    StrategyAgentTool.RemoveProblem,
+
+    StrategyAgentTool.AddNote,
+    StrategyAgentTool.RemoveNote,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
+  ],
+  [StrategyStage.Themes]: [
+    StrategyAgentTool.ChangeStage,
+
+    StrategyAgentTool.CreateTheme,
+    StrategyAgentTool.UpdateTheme,
+    StrategyAgentTool.LinkTheme,
+    StrategyAgentTool.UnlinkTheme,
+
+    StrategyAgentTool.AddNote,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
+  ],
+  [StrategyStage.Voice]: [
+    StrategyAgentTool.ChangeStage,
+
+    StrategyAgentTool.CreateVoice,
+    StrategyAgentTool.UpdateVoice,
+    StrategyAgentTool.LinkVoice,
+
+    StrategyAgentTool.AddVoiceAdjustment,
+    StrategyAgentTool.RemoveVoiceAdjustment,
+
+    StrategyAgentTool.AddNote,
+
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
+  ],
+  [StrategyStage.Sharpen]: [
     // all
     StrategyAgentTool.ChangeStage,
     StrategyAgentTool.AddContextBlock,
-    StrategyAgentTool.RemoveContextBlock,
     StrategyAgentTool.UpdateAudience,
     StrategyAgentTool.AddProblem,
     StrategyAgentTool.RemoveProblem,
@@ -85,6 +152,38 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
     StrategyAgentTool.CreateVoice,
     StrategyAgentTool.UpdateVoice,
     StrategyAgentTool.LinkVoice,
+
+    StrategyAgentTool.UpdateContext,
+  ],
+  [StrategyStage.FreeRefine]: [
+    // all
+    StrategyAgentTool.ChangeStage,
+    StrategyAgentTool.AddContextBlock,
+    StrategyAgentTool.UpdateAudience,
+    StrategyAgentTool.AddProblem,
+    StrategyAgentTool.RemoveProblem,
+    StrategyAgentTool.AddGoal,
+    StrategyAgentTool.RemoveGoal,
+    StrategyAgentTool.AddNote,
+    StrategyAgentTool.RemoveNote,
+    StrategyAgentTool.AddPlatform,
+    StrategyAgentTool.RemovePlatform,
+    StrategyAgentTool.UpdatePlatformNote,
+    StrategyAgentTool.AddUnresolvedQuestion,
+    StrategyAgentTool.RemoveUnresolvedQuestion,
+    StrategyAgentTool.AddVoiceAdjustment,
+    StrategyAgentTool.RemoveVoiceAdjustment,
+    // theme tools
+    StrategyAgentTool.LinkTheme,
+    StrategyAgentTool.UnlinkTheme,
+    StrategyAgentTool.CreateTheme,
+    StrategyAgentTool.UpdateTheme,
+    // voice tools
+    StrategyAgentTool.CreateVoice,
+    StrategyAgentTool.UpdateVoice,
+    StrategyAgentTool.LinkVoice,
+
+    StrategyAgentTool.UpdateContext,
   ],
 };
 
@@ -291,6 +390,20 @@ export const StrategyAgentToolInfo: Record<
     description: 'Link an existing voice to the strategy',
     schema: z.object({
       id: z.uuidv4().describe('Voice ID to link'),
+    }),
+  },
+  [StrategyAgentTool.UpdateContext]: {
+    name: StrategyAgentTool.UpdateContext,
+    description: 'Update strategy context field',
+    schema: z.object({
+      block: z.enum(StrategyContextBlockType).describe('Context block name'),
+      field: z.string().describe('Context block field name'),
+      value: z
+        .string()
+        .or(z.array(z.string()))
+        .describe(
+          'New full value for the context field (string or array of strings, depending on the field)',
+        ),
     }),
   },
 };
