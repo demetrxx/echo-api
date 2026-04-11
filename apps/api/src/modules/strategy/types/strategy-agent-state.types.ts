@@ -6,6 +6,18 @@ import {
   ThemeEntity,
 } from '@app/db';
 
+interface CreateStrategyProfileDto {
+  name: string;
+  description: string;
+  rules: string[];
+  avoidRules: string[];
+  tov: string;
+  evidencePreferences: string;
+  anglePreferences: string;
+}
+
+type UpdateStrategyProfileDto = Partial<CreateStrategyProfileDto>;
+
 export interface StrategyAgentState {
   snapshot: StrategySnapshot;
   history: ChatMessage[];
@@ -13,7 +25,7 @@ export interface StrategyAgentState {
   userMessage: string;
 
   themes: ThemeEntity[];
-  voice: ProfileEntity | null;
+  profile: ProfileEntity | null;
 
   updates: {
     themesToLink: string[];
@@ -21,8 +33,8 @@ export interface StrategyAgentState {
     themesToUpdate: { id: string; name?: string; description?: string }[];
     themesToRemove: string[];
 
-    voiceToSet: string | null | undefined;
-    voiceToCreate: { name: string; description: string } | null;
-    voiceToUpdate: { name?: string; description?: string } | null;
+    profileToSet: string | null | undefined;
+    profileToCreate: CreateStrategyProfileDto | null;
+    profileToUpdate: UpdateStrategyProfileDto | null;
   };
 }

@@ -31,7 +31,7 @@ export class StrategyAgent {
         snapshot: state.snapshot,
         currentStage: state.stage,
         themes: state.themes,
-        voice: state.voice,
+        voice: state.profile,
       }),
     });
 
@@ -66,6 +66,20 @@ export class StrategyAgent {
         return this.action_removeContextBlock.bind(this);
       case StrategyAgentTool.ChangeStage:
         return this.action_changeStage.bind(this);
+      case StrategyAgentTool.LinkTheme:
+        return this.action_linkTheme.bind(this);
+      case StrategyAgentTool.UnlinkTheme:
+        return this.action_unlinkTheme.bind(this);
+      case StrategyAgentTool.CreateTheme:
+        return this.action_createTheme.bind(this);
+      case StrategyAgentTool.UpdateTheme:
+        return this.action_updateTheme.bind(this);
+      case StrategyAgentTool.LinkVoice:
+        return this.action_linkVoice.bind(this);
+      case StrategyAgentTool.CreateVoice:
+        return this.action_createVoice.bind(this);
+      case StrategyAgentTool.UpdateVoice:
+        return this.action_updateVoice.bind(this);
       default:
         return undefined;
     }
@@ -108,7 +122,7 @@ export class StrategyAgent {
       return;
     }
 
-    state.updates.themesToAdd.push(i.id);
+    state.updates.themesToLink.push(i.id);
   }
 
   private action_unlinkTheme(state: StrategyAgentState, i: { id: string }) {
@@ -120,11 +134,76 @@ export class StrategyAgent {
     state.updates.themesToRemove.push(i.id);
   }
 
-  private action_createTheme(state: StrategyAgentState, i: { value: string }) {
-    // we create a theme with the given name and link it to the strategy
+  private action_createTheme(
+    state: StrategyAgentState,
+    i: { name: string; description: string },
+  ) {
+    state.updates.themesToCreate.push({
+      name: i.name,
+      description: i.description,
+    });
+  }
+
+  private action_updateTheme(
+    state: StrategyAgentState,
+    i: { id: string; name?: string; description?: string },
+  ) {
+    if (!state.themes.find((t) => t.id === i.id)) {
+      this.logger.error(`Theme with id ${i.id} is not in strategy themes`);
+      return;
+    }
+
+    state.updates.themesToUpdate.push({
+      id: i.id,
+      name: i.name,
+      description: i.description,
+    });
   }
 
   private action_linkVoice(state: StrategyAgentState, i: { id: string }) {
-    state.updates.voiceToSet = i.id;
+    state.updates.profileToSet = i.id;
+  }
+
+  private action_createVoice(
+    state: StrategyAgentState,
+    i: {
+      name: string;
+      description: string;
+      rules: string[];
+      avoidRules: string[];
+      tov: string;
+      evidencePreferences: string;
+      anglePreferences: string;
+    },
+  ) {
+    state.updates.profileToCreate = {
+      name: i.name,
+      description: i.description,
+      rules: i.rules,
+      avoidRules: i.avoidRules,
+      tov: i.tov,
+      evidencePreferences: i.evidencePreferences,
+      anglePreferences: i.anglePreferences,
+    };
+  }
+
+  private action_updateVoice(
+    state: StrategyAgentState,
+    i: {
+      name?: string;
+      description?: string;
+      rules?: string[];
+      avoidRules?: string[];
+      tov?: string;
+      evidencePreferences?: string;
+      anglePreferences?: string;
+    },
+  ) {
+    if (!state.profile) {
+      this.logger.error(`No profile linked to strategy, cannot update voice`);
+      return;
+    }
+
+    state.updates.profileToUpdate = i;
   }
 }

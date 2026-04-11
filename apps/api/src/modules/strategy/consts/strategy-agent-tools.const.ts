@@ -41,7 +41,6 @@ export enum StrategyAgentTool {
 }
 
 // todo: описать значение каждого поля
-
 // todo: описать правила возвращения, вперед только по 1 этапу, назад можно на любой этап
 export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Diagnose]: [
@@ -89,7 +88,6 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   ],
 };
 
-// todo: update descriptions
 export const StrategyAgentToolInfo: Record<
   StrategyAgentTool,
   {
@@ -244,32 +242,48 @@ export const StrategyAgentToolInfo: Record<
     description: 'Update the linked theme properties',
     schema: z.object({
       id: z.uuidv4().describe('Theme ID to update'),
-      name: z.string().describe('Updated theme name'),
-      description: z.string().describe('Updated theme description'),
-      // todo: add more theme properties
+      name: z.string().optional().describe('Updated theme name'),
+      description: z.string().optional().describe('Updated theme description'),
     }),
   },
   [StrategyAgentTool.CreateTheme]: {
     name: StrategyAgentTool.CreateTheme,
     description: 'Create a new theme and link it to the strategy',
     schema: z.object({
-      value: z.string().describe('Name of the new theme'),
+      name: z.string().describe('Name of the new theme'),
+      description: z.string().describe('Description of the new theme'),
     }),
   },
   [StrategyAgentTool.CreateVoice]: {
     name: StrategyAgentTool.CreateVoice,
     description: 'Create a new voice and link it to the strategy',
     schema: z.object({
-      value: z.string().describe('Name of the new voice'),
-      // todo: add more voice properties
+      name: z.string().describe('Name of the new voice'),
+      description: z.string().describe('Description of the new voice'),
+      rules: z.array(z.string()).describe('Rules for the new voice'),
+      avoidRules: z.array(z.string()).describe('Avoid rules for the new voice'),
+      tov: z.string().describe('Tone of voice for the new voice'),
+      evidencePreferences: z
+        .string()
+        .describe('Evidence preferences for the new voice'),
+      anglePreferences: z
+        .string()
+        .describe('Angle preferences for the new voice'),
     }),
   },
   [StrategyAgentTool.UpdateVoice]: {
     name: StrategyAgentTool.UpdateVoice,
     description: 'Update the linked voice properties',
     schema: z.object({
-      value: z.string().describe('Updated voice name'),
-      // todo: add more voice properties
+      name: z.string().describe('New voice name'),
+      description: z.string().describe('New voice description'),
+      rules: z.array(z.string()).describe('New voice rules'),
+      avoidRules: z.array(z.string()).describe('New voice avoid rules'),
+      tov: z.string().describe('New voice tone of voice'),
+      evidencePreferences: z
+        .string()
+        .describe('New voice evidence preferences'),
+      anglePreferences: z.string().describe('New voice angle preferences'),
     }),
   },
   [StrategyAgentTool.LinkVoice]: {

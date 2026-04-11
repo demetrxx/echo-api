@@ -1,12 +1,14 @@
 import {
+  ProfileEntity,
   StrategyConversationEntity,
   StrategyEntity,
   StrategySnapshot,
   StrategyThemeEntity,
+  ThemeEntity,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
@@ -118,11 +120,16 @@ export class StrategyService {
       userMessage: dto.content,
       stage: strategy.stage,
       themes: strategy.themes.map((st) => st.theme),
-      voice: strategy.profile,
+      profile: strategy.profile,
       updates: {
-        themesToAdd: [],
+        themesToLink: [],
+        themesToCreate: [],
+        themesToUpdate: [],
         themesToRemove: [],
-        voiceToSet: undefined,
+
+        profileToSet: undefined,
+        profileToCreate: null,
+        profileToUpdate: null,
       },
     };
 
@@ -141,31 +148,19 @@ export class StrategyService {
         });
 
       // handle themes updates
-      if (state.updates.themesToAdd.length > 0) {
-        const themesToAdd = state.updates.themesToAdd.map((themeId) => ({
-          strategyId: id,
-          themeId,
-        }));
-        await manager.getRepository(StrategyThemeEntity).insert(themesToAdd);
-      }
+      await this.linkThemes(manager, id, state.updates.themesToLink);
+      await this.unlinkThemes(manager, id, state.updates.themesToRemove);
+      await this.createThemes(manager, id, state.updates.themesToCreate);
+      await this.updateThemes(manager, state.updates.themesToUpdate);
 
-      if (state.updates.themesToRemove.length > 0) {
-        await manager
-          .getRepository(StrategyThemeEntity)
-          .createQueryBuilder()
-          .delete()
-          .where('strategyId = :strategyId', { strategyId: id })
-          .andWhere('themeId IN (:...themeIds)', {
-            themeIds: state.updates.themesToRemove,
-          })
-          .execute();
-      }
-
-      if (state.updates.voiceToSet !== undefined) {
-        await manager
-          .getRepository(StrategyEntity)
-          .update(id, { profileId: state.updates.voiceToSet });
-      }
+      // handle profile update
+      await this.setProfile(manager, state.updates.profileToSet, id);
+      await this.createProfile(manager, id, state.updates.profileToCreate);
+      await this.updateProfile(
+        manager,
+        state.profile?.id,
+        state.updates.profileToUpdate,
+      );
     });
 
     return await this.getOne(id, userId);
@@ -175,5 +170,112 @@ export class StrategyService {
     await this.getOne(id, userId);
 
     await this.dataSource.getRepository(StrategyEntity).softDelete(id);
+  }
+
+  // helper methods for agent updates
+
+  private async linkThemes(
+    ds: EntityManager,
+    strategyId: string,
+    themeIds: string[],
+  ) {
+    if (!themeIds.length) return;
+
+    const themesToAdd = themeIds.map((themeId) => ({
+      strategyId,
+      themeId,
+    }));
+    await ds.getRepository(StrategyThemeEntity).insert(themesToAdd);
+  }
+
+  private async unlinkThemes(
+    ds: EntityManager,
+    strategyId: string,
+    themeIds: string[],
+  ) {
+    if (!themeIds.length) return;
+
+    await ds
+      .getRepository(StrategyThemeEntity)
+      .createQueryBuilder()
+      .delete()
+      .where('strategyId = :strategyId', { strategyId })
+      .andWhere('themeId IN (:...themeIds)', {
+        themeIds,
+      })
+      .execute();
+  }
+
+  private async updateThemes(
+    ds: EntityManager,
+    dtos: StrategyAgentState['updates']['themesToUpdate'],
+  ) {
+    if (!dtos.length) return;
+
+    for (const dto of dtos) {
+      const { id, name, description } = dto;
+      await ds.getRepository(ThemeEntity).update(id, {
+        ...(name && { name }),
+        ...(description && { description }),
+      });
+    }
+  }
+
+  private async createThemes(
+    ds: EntityManager,
+    strategyId: string,
+    dtos: StrategyAgentState['updates']['themesToCreate'],
+  ) {
+    if (!dtos.length) return;
+
+    const themes = (await ds.save(
+      dtos.map((dto) => ({
+        name: dto.name,
+        description: dto.description,
+      })),
+    )) as ThemeEntity[];
+
+    const strategyThemes = themes.map((theme) => ({
+      strategyId,
+      themeId: theme.id,
+    }));
+
+    await ds.getRepository(StrategyThemeEntity).insert(strategyThemes);
+  }
+
+  private async setProfile(
+    ds: EntityManager,
+    profileId: string | null | undefined,
+    strategyId: string,
+  ) {
+    if (profileId === undefined) return;
+
+    await ds.getRepository(StrategyEntity).update(strategyId, { profileId });
+  }
+
+  private async createProfile(
+    ds: EntityManager,
+    strategyId: string,
+    profileData: StrategyAgentState['updates']['profileToCreate'],
+  ) {
+    if (!profileData) return;
+
+    const profile = await ds.getRepository(ProfileEntity).insert({
+      ...profileData,
+    });
+
+    await ds
+      .getRepository(StrategyEntity)
+      .update(strategyId, { profileId: profile.raw.id });
+  }
+
+  private async updateProfile(
+    ds: EntityManager,
+    profileId: string,
+    profileData: StrategyAgentState['updates']['profileToUpdate'],
+  ) {
+    if (!profileData) return;
+
+    await ds.getRepository(ProfileEntity).update(profileId, profileData);
   }
 }

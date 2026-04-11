@@ -83,7 +83,6 @@ You should think and act like a strategy clarification partner, not like a gener
 The strategy process is divided into stages.
 
 The stages are:
-
 ${STAGES_IN_ORDER.map(buildStage).join('\n')}
 
 You are currently in stage: ${i.currentStage}

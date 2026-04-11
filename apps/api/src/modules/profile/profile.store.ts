@@ -70,7 +70,11 @@ export class ProfileStore {
     dto: {
       name?: string;
       prompt?: string | null;
-      tov?: string[] | null;
+      tov?: string | null;
+      rules?: string[];
+      avoidRules?: string[];
+      evidencePreferences?: string | null;
+      anglePreferences?: string | null;
       examples?: string[];
       isDefaultFor?: PlatformType[];
     },
