@@ -19,6 +19,10 @@ export enum PlatformType {
   X = 'x',
   LinkedIn = 'linkedin',
   Instagram = 'instagram',
+  Facebook = 'facebook',
+  Newsletter = 'newsletter',
+  Blog = 'blog',
+  Custom = 'custom',
 }
 
 export enum PostStatus {

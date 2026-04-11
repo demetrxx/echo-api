@@ -1,0 +1,58 @@
+1. Diagnosis
+Note: Задать вопросы (always from scratch), определить стартовый контекст ""
+Description
+Goal
+Escalation trigger
+Available tools
+Guardrails
+Output: initial context + purpose
+
+--- build dynamic blocks ---
+
+2. Context
+Note: get context fields based on goals
+Description
+Goal
+Escalation trigger
+Available tools
+Guardrails
+
+3. Direction
+Description
+Goal
+Escalation trigger
+Available tools
+Guardrails
+Fields to fill: core problems
+
+
+4. Themes
+Description
+Goal
+Escalation trigger
+Available tools
+Guardrails
+
+5. Voice
+Note: Can use existing or create from scratch (give programmatic choice)
+Description
+Goal
+Escalation trigger
+Available tools
+Guardrails
+
+6. Sharpen
+Description:
+Goal
+Escalation trigger
+Available tools
+Guardrails
+
+7. Free Refine
+Note: Стратегия готова, тут мы можем вольно переписываться, вводить корректировки,
+давать новую информацию, инсайты, отклик. И прочее
+Description
+Goal
+Escalation trigger: none
+Available tools
+Guardrails

@@ -14,5 +14,5 @@ export class UpdateStrategyRequestDto {
 export class MessageAgentRequestDto {
   @ApiProperty()
   @IsString()
-  message: string;
+  content: string;
 }

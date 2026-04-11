@@ -50,15 +50,26 @@ export class ProfileEntity extends AbstractEntity {
   @Column({
     type: 'jsonb',
     nullable: true,
-    default: [],
   })
-  tov: string[];
+  tov: string;
 
   @Column({
     type: 'text',
     nullable: true,
   })
   examplesSummary: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  evidencePreferences: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  anglePreferences: string;
 
   @Column({
     type: 'jsonb',

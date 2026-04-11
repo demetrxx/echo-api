@@ -1,22 +1,26 @@
-import { StrategySnapshot, StrategyStage } from '@app/db';
+import {
+  ProfileEntity,
+  StrategySnapshot,
+  StrategyStage,
+  ThemeEntity,
+} from '@app/db';
 
-import { STRATEGY_STAGES } from '@/modules/strategy/consts/strategy-stage-info';
-
-import { StrategyAgentTool } from '../consts';
+import { STRATEGY_STAGES } from '../consts';
 
 interface StrategySystemPromptInput {
   currentStage: StrategyStage;
   snapshot: StrategySnapshot;
+  themes: ThemeEntity[];
+  voice: ProfileEntity;
 }
 
 export const STAGES_IN_ORDER = [
-  StrategyStage.Rapport,
-  StrategyStage.Inventory,
-  StrategyStage.Distillation,
-  StrategyStage.Structuring,
-  StrategyStage.TensionCheck,
-  StrategyStage.Readiness,
-  StrategyStage.Handoff,
+  StrategyStage.Diagnose,
+  StrategyStage.Context,
+  StrategyStage.Direction,
+  StrategyStage.Themes,
+  StrategyStage.Voice,
+  StrategyStage.Sharpen,
   StrategyStage.FreeRefine,
 ];
 
@@ -28,6 +32,41 @@ ${stageInfo.name}
 Description: ${stageInfo.description}
 Goal: ${stageInfo.goal}
 `;
+}
+
+function injectThemesBlock(themes: ThemeEntity[]) {
+  if (themes.length === 0) {
+    return 'No themes have been added yet.';
+  }
+
+  return `Themes:
+  <themes>
+${JSON.stringify(
+  themes.map((t) => ({
+    name: t.name,
+    summary: t.description,
+  })),
+)}
+</themes>`;
+}
+
+function injectVoiceBlock(voice?: ProfileEntity) {
+  if (!voice) {
+    return 'Voice has not been defined yet.';
+  }
+
+  return `Voice:
+<voice>
+${JSON.stringify({
+  name: voice.name,
+  summary: voice.examplesSummary,
+  rules: voice.rules,
+  avoidRules: voice.avoidRules,
+  tov: voice.anglePreferences,
+  anglePreferences: voice.anglePreferences,
+  evidencePreferences: voice.evidencePreferences,
+})}
+</voice>`;
 }
 
 export const STRATEGY_SYSTEM_PROMPT = (i: StrategySystemPromptInput) => `
@@ -58,8 +97,8 @@ ${STRATEGY_STAGES[i.currentStage].goal}
 Current stage guardrails:
 ${'- ' + STRATEGY_STAGES[i.currentStage].guardrails.join('\n')}
 
-Current stage transition condition:
-${STRATEGY_STAGES[i.currentStage].nextStageTrigger}
+Next stage transition condition:
+${STRATEGY_STAGES[i.currentStage].escalationTrigger}
 
 Behavior rules:
 - Keep the conversation natural and efficient.
@@ -78,6 +117,10 @@ Tool usage rules:
 - Do not change the stage prematurely.
 - Do not overwrite existing snapshot fields without good reason.
 - When updating a field, preserve useful existing information unless the user is clearly replacing it.
+
+${injectThemesBlock(i.themes)}
+
+${injectVoiceBlock(i.voice)}
 
 Current snapshot:
 <snapshot>

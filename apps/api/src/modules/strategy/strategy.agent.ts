@@ -1,21 +1,15 @@
-import { StrategySnapshot, StrategyStage } from '@app/db';
-import { BaseMessageLike } from '@langchain/core/messages';
+import { StrategyContextBlockType, StrategyStage } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { createAgent, tool } from 'langchain';
+import { createAgent } from 'langchain';
 import { DataSource } from 'typeorm';
 
 import { LlmService } from '@/modules/llm';
 
-import { StrategyAgentTool, StrategyAgentToolInfo } from './consts';
+import { STAGE_TOOLS, StrategyAgentTool } from './consts';
+import { buildTool, cleanMessages, getContextBlockDefault } from './lib';
 import { STRATEGY_SYSTEM_PROMPT } from './prompts';
-
-export interface StrategyAgentState {
-  snapshot: StrategySnapshot;
-  history: BaseMessageLike[];
-  stage: StrategyStage;
-  userMessage: string;
-}
+import { StrategyAgentState } from './types';
 
 @Injectable()
 export class StrategyAgent {
@@ -36,85 +30,101 @@ export class StrategyAgent {
       systemPrompt: STRATEGY_SYSTEM_PROMPT({
         snapshot: state.snapshot,
         currentStage: state.stage,
+        themes: state.themes,
+        voice: state.voice,
       }),
     });
 
-    state.history.push({
-      role: 'user',
-      content: state.userMessage,
+    const response = await agent.invoke({
+      // @ts-expect-error is ok
+      messages: [
+        ...state.history,
+        {
+          role: 'user',
+          content: state.userMessage,
+        },
+      ],
     });
 
-    const response = await agent.invoke(state.history as any);
-
-    state.history.push({
-      role: 'assistant',
-      content: response.messages[0].content as string,
-    });
-
-    this.logger.debug(state.history);
+    state.history = cleanMessages(response.messages);
   }
 
   private buildTools(state: StrategyAgentState) {
-    const availableTools = [
-      this.updateAudienceSummaryTool,
-      this.addCoreProblemTool,
-      this.removeCoreProblemTool,
-      this.addContentGoalTool,
-      this.removeContentGoalTool,
-    ];
+    const availableTools = STAGE_TOOLS[state.stage];
 
-    // todo: filter tools by stage
-
-    return availableTools.map((t) => t(state));
+    return availableTools.map((toolName) =>
+      buildTool(state, toolName, this.getCustomAction(toolName)),
+    );
   }
 
-  updateAudienceSummaryTool(state: StrategyAgentState) {
-    return tool((i: { summary: string }) => {
-      state.snapshot.audienceSummary = i.summary;
-      state.history.push({
-        role: 'tool',
-        content: `Updated audience summary to: ${i.summary}`,
-      });
-    }, StrategyAgentToolInfo[StrategyAgentTool.UpdateAudienceSummary]);
+  // actions
+  private getCustomAction(toolName: StrategyAgentTool) {
+    switch (toolName) {
+      case StrategyAgentTool.AddContextBlock:
+        return this.action_addContextBlock.bind(this);
+      case StrategyAgentTool.RemoveContextBlock:
+        return this.action_removeContextBlock.bind(this);
+      case StrategyAgentTool.ChangeStage:
+        return this.action_changeStage.bind(this);
+      default:
+        return undefined;
+    }
   }
 
-  addCoreProblemTool(state: StrategyAgentState) {
-    return tool((i: { problem: string; idx: number }) => {
-      state.snapshot.coreProblems.splice(i.idx, 0, i.problem);
-      state.history.push({
-        role: 'tool',
-        content: `Added core problem: ${i.problem}`,
-      });
-    }, StrategyAgentToolInfo[StrategyAgentTool.AddCoreProblem]);
+  private action_addContextBlock(
+    state: StrategyAgentState,
+    i: { value: StrategyContextBlockType },
+  ) {
+    state.snapshot.context[i.value] = getContextBlockDefault(i.value) as any;
   }
 
-  removeCoreProblemTool(state: StrategyAgentState) {
-    return tool((i: { idx: number }) => {
-      state.snapshot.coreProblems.splice(i.idx, 1);
-      state.history.push({
-        role: 'tool',
-        content: `Removed core problem: ${i.idx}`,
-      });
-    }, StrategyAgentToolInfo[StrategyAgentTool.RemoveCoreProblem]);
+  private action_removeContextBlock(
+    state: StrategyAgentState,
+    i: { idx: number },
+  ) {
+    const value = state.snapshot.contextBlocks[i.idx];
+
+    if (!value) {
+      throw new Error('Context block not found at index ' + i.idx);
+    }
+
+    if (!state.snapshot.context[value]) {
+      throw new Error('Context block value not found: ' + value);
+    }
+
+    delete state.snapshot.context[value];
   }
 
-  addContentGoalTool(state: StrategyAgentState) {
-    return tool((i: { goal: string; idx: number }) => {
-      state.snapshot.contentGoals.splice(i.idx, 0, i.goal);
-      state.history.push({
-        role: 'tool',
-        content: `Added content goal: ${i.goal}`,
-      });
-    }, StrategyAgentToolInfo[StrategyAgentTool.AddContentGoal]);
+  private action_changeStage(
+    state: StrategyAgentState,
+    i: { value: StrategyStage },
+  ) {
+    state.stage = i.value;
   }
 
-  removeContentGoalTool(state: StrategyAgentState) {
-    return tool((i: { idx: number }) => {
-      state.snapshot.contentGoals.splice(i.idx, 1);
-      state.history.push({
-        role: 'tool',
-        content: `Removed content goal: ${i.idx}`,
-      });
-    }, StrategyAgentToolInfo[StrategyAgentTool.RemoveContentGoal]);
+  private action_linkTheme(state: StrategyAgentState, i: { id: string }) {
+    if (state.themes.find((t) => t.id === i.id)) {
+      this.logger.error(`Theme with id ${i.id} is already in strategy themes`);
+      return;
+    }
+
+    state.updates.themesToAdd.push(i.id);
+  }
+
+  private action_unlinkTheme(state: StrategyAgentState, i: { id: string }) {
+    if (!state.themes.find((t) => t.id === i.id)) {
+      this.logger.error(`Theme with id ${i.id} is not in strategy themes`);
+      return;
+    }
+
+    state.updates.themesToRemove.push(i.id);
+  }
+
+  private action_createTheme(state: StrategyAgentState, i: { value: string }) {
+    // we create a theme with the given name and link it to the strategy
+  }
+
+  private action_linkVoice(state: StrategyAgentState, i: { id: string }) {
+    state.updates.voiceToSet = i.id;
   }
 }

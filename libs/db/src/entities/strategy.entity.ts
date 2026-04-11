@@ -9,27 +9,11 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { StrategySnapshot } from '../common/strategy';
 import { ProfileEntity } from './profile.entity';
 import { StrategyConversationEntity } from './strategy-conversation.entity';
 import { StrategyThemeEntity } from './strategy-theme.entity';
 import { UserEntity } from './user.entity';
-
-export interface StrategySnapshot {
-  audienceSummary?: string;
-  coreProblems?: string[];
-  contentGoals?: string[];
-  channels: string[];
-
-  preferredAngles?: string[];
-
-  preferredFormats?: string[];
-  anglePreferences: string[];
-  evidencePreferences: string[];
-  avoidPatterns?: string[];
-  voiceAdjustments: string[]; // todo: maybe remove
-
-  notes?: string;
-}
 
 export enum StrategyStatus {
   Draft = 'draft',
@@ -44,13 +28,12 @@ export enum StrategyCompletenessLevel {
 }
 
 export enum StrategyStage {
-  Rapport = 'rapport',
-  Inventory = 'inventory',
-  Distillation = 'distillation',
-  Structuring = 'structuring',
-  TensionCheck = 'tension_check',
-  Readiness = 'readiness',
-  Handoff = 'handoff',
+  Diagnose = 'diagnose',
+  Context = 'context',
+  Direction = 'direction',
+  Themes = 'themes',
+  Voice = 'voice',
+  Sharpen = 'sharpen',
   FreeRefine = 'free_refine',
 }
 
@@ -66,7 +49,7 @@ export class StrategyEntity extends AbstractEntity {
   @Column({
     type: 'enum',
     enum: StrategyStage,
-    default: StrategyStage.Rapport,
+    default: StrategyStage.Diagnose,
   })
   stage: StrategyStage;
 
@@ -112,7 +95,7 @@ export class StrategyEntity extends AbstractEntity {
     name: 'profile_id',
     referencedColumnName: 'id',
   })
-  profile: ProfileEntity;
+  profile?: ProfileEntity;
 
   @Index('idx_strategy_profile')
   @Column({

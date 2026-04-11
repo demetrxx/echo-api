@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -50,7 +51,8 @@ export class StrategiesAppController {
 
   @Post()
   async create(@User() user: User) {
-    return this.strategyService.create(user.id);
+    const strategy = await this.strategyService.create(user.id);
+    return StrategyDetailsDto.mapFromEntity(strategy);
   }
 
   @Patch(':id')
@@ -70,5 +72,11 @@ export class StrategiesAppController {
     @User() user: User,
   ) {
     return this.strategyService.messageAgent(id, user.id, body);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string, @User() user: User) {
+    await this.strategyService.deleteOne(id, user.id);
+    return { success: true };
   }
 }

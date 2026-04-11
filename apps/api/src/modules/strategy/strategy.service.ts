@@ -2,6 +2,7 @@ import {
   StrategyConversationEntity,
   StrategyEntity,
   StrategySnapshot,
+  StrategyThemeEntity,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -10,8 +11,9 @@ import { DataSource } from 'typeorm';
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
 
-import { STRATEGY_SNAPSHOT_DEFAULT } from './consts';
-import { StrategyAgent, StrategyAgentState } from './strategy.agent';
+import { STRATEGY_SNAPSHOT_DEFAULT } from './lib';
+import { StrategyAgent } from './strategy.agent';
+import { StrategyAgentState } from './types';
 
 @Injectable()
 export class StrategyService {
@@ -34,6 +36,11 @@ export class StrategyService {
         'strategy.status',
         'strategy.completenessLevel',
       ])
+      .leftJoinAndSelect('strategy.profile', 'profile')
+      .addSelect(['profile.id', 'profile.name'])
+      .leftJoinAndSelect('strategy.themes', 'strategy_theme')
+      .leftJoinAndSelect('strategy_theme.theme', 'theme')
+      .addSelect(['theme.id', 'theme.name'])
       .orderBy(`strategy.${query.orderBy}`, query.order)
       .skip(query.skip)
       .take(query.take);
@@ -56,7 +63,7 @@ export class StrategyService {
       .getRepository(StrategyEntity)
       .findOne({
         where: { id, userId },
-        relations: ['conversation', 'themes'],
+        relations: ['conversation', 'themes', 'themes.theme', 'profile'],
       });
 
     if (!strategy) {
@@ -78,10 +85,13 @@ export class StrategyService {
         snapshot: STRATEGY_SNAPSHOT_DEFAULT,
       });
 
-      await conversationRepository.save({
+      const conversation = await conversationRepository.save({
         strategyId: strategy.id,
         history: [],
       });
+
+      strategy.themes = [];
+      strategy.conversation = conversation;
 
       return strategy;
     });
@@ -99,14 +109,21 @@ export class StrategyService {
     return;
   }
 
-  async messageAgent(id: string, userId: string, dto: { message: string }) {
+  async messageAgent(id: string, userId: string, dto: { content: string }) {
     const strategy = await this.getOne(id, userId);
 
     const state: StrategyAgentState = {
       snapshot: strategy.snapshot,
       history: strategy.conversation.history,
-      userMessage: dto.message,
+      userMessage: dto.content,
       stage: strategy.stage,
+      themes: strategy.themes.map((st) => st.theme),
+      voice: strategy.profile,
+      updates: {
+        themesToAdd: [],
+        themesToRemove: [],
+        voiceToSet: undefined,
+      },
     };
 
     await this.strategyAgent.process(state);
@@ -114,6 +131,7 @@ export class StrategyService {
     await this.dataSource.transaction(async (manager) => {
       await manager.getRepository(StrategyEntity).update(id, {
         snapshot: state.snapshot,
+        stage: state.stage,
       });
 
       await manager
@@ -121,8 +139,41 @@ export class StrategyService {
         .update(strategy.conversation.id, {
           history: state.history,
         });
+
+      // handle themes updates
+      if (state.updates.themesToAdd.length > 0) {
+        const themesToAdd = state.updates.themesToAdd.map((themeId) => ({
+          strategyId: id,
+          themeId,
+        }));
+        await manager.getRepository(StrategyThemeEntity).insert(themesToAdd);
+      }
+
+      if (state.updates.themesToRemove.length > 0) {
+        await manager
+          .getRepository(StrategyThemeEntity)
+          .createQueryBuilder()
+          .delete()
+          .where('strategyId = :strategyId', { strategyId: id })
+          .andWhere('themeId IN (:...themeIds)', {
+            themeIds: state.updates.themesToRemove,
+          })
+          .execute();
+      }
+
+      if (state.updates.voiceToSet !== undefined) {
+        await manager
+          .getRepository(StrategyEntity)
+          .update(id, { profileId: state.updates.voiceToSet });
+      }
     });
 
     return await this.getOne(id, userId);
+  }
+
+  async deleteOne(id: string, userId: string) {
+    await this.getOne(id, userId);
+
+    await this.dataSource.getRepository(StrategyEntity).softDelete(id);
   }
 }

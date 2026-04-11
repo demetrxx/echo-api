@@ -1,4 +1,5 @@
 import {
+  ChatMessage,
   StrategyCompletenessLevel,
   StrategyConversationEntity,
   StrategyEntity,
@@ -9,6 +10,7 @@ import { BaseMessageLike } from '@langchain/core/messages';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { ProfileDto } from '@/api/app/profiles';
+import { ThemeDto } from '@/api/app/themes';
 
 export class StrategyDto {
   @ApiProperty({
@@ -38,6 +40,16 @@ export class StrategyDto {
   completenessLevel: StrategyCompletenessLevel;
 
   @ApiProperty({
+    description: 'Strategy profile',
+  })
+  profile: ProfileDto;
+
+  @ApiProperty({
+    description: 'Strategy themes',
+  })
+  themes: ThemeDto[];
+
+  @ApiProperty({
     description: 'Strategy creation date',
     example: '2023-01-01T00:00:00.000Z',
   })
@@ -54,7 +66,9 @@ export class StrategyDto {
       id: e.id,
       name: e.name,
       status: e.status,
+      themes: e.themes.map((theme) => ThemeDto.mapFromEntity(theme.theme)),
       completenessLevel: e.completenessLevel,
+      profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
     };
@@ -65,7 +79,7 @@ export class StrategyConversationDto {
   @ApiProperty({
     description: 'Strategy conversation history',
   })
-  history: BaseMessageLike[];
+  history: ChatMessage[];
 
   static mapFromEntity(e: StrategyConversationEntity): StrategyConversationDto {
     return {
@@ -81,11 +95,6 @@ export class StrategyDetailsDto extends StrategyDto {
   snapshot: StrategySnapshot;
 
   @ApiProperty({
-    description: 'Strategy profile',
-  })
-  profile: ProfileDto;
-
-  @ApiProperty({
     description: 'Strategy conversation',
   })
   conversation: StrategyConversationDto;
@@ -94,7 +103,6 @@ export class StrategyDetailsDto extends StrategyDto {
     return {
       ...super.mapFromEntity(e),
       snapshot: e.snapshot,
-      profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
       conversation: StrategyConversationDto.mapFromEntity(e.conversation),
     };
   }

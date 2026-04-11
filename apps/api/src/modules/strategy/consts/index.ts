@@ -1,2 +1,2 @@
 export * from './strategy-agent-tools.const';
-export * from './strategy-snapshot-default.const';
+export * from './strategy-stage-info';
