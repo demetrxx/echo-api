@@ -9,6 +9,7 @@ enum ToolType {
   ArrayRemove = 'arrayRemove',
   StringUpdate = 'stringUpdate',
   ObjectUpdate = 'objectUpdate',
+  QueryDb = 'queryDatabase',
   Custom = 'custom',
 }
 
@@ -32,11 +33,13 @@ const TOOL_TO_FIELD: Record<StrategyAgentTool, keyof StrategySnapshot | null> =
     [StrategyAgentTool.AddPlatform]: 'platforms',
     [StrategyAgentTool.RemovePlatform]: 'platforms',
 
+    [StrategyAgentTool.QueryThemes]: null,
     [StrategyAgentTool.LinkTheme]: null,
     [StrategyAgentTool.UnlinkTheme]: null,
     [StrategyAgentTool.CreateTheme]: null,
     [StrategyAgentTool.UpdateTheme]: null,
 
+    [StrategyAgentTool.QueryVoices]: null,
     [StrategyAgentTool.CreateVoice]: null,
     [StrategyAgentTool.UpdateVoice]: null,
     [StrategyAgentTool.LinkVoice]: null,
@@ -64,11 +67,13 @@ const TOOL_TYPE_TO_BUILDER: Record<StrategyAgentTool, ToolType> = {
 
   [StrategyAgentTool.ChangeStage]: ToolType.Custom,
 
+  [StrategyAgentTool.QueryThemes]: ToolType.QueryDb,
   [StrategyAgentTool.LinkTheme]: ToolType.Custom,
   [StrategyAgentTool.UnlinkTheme]: ToolType.Custom,
   [StrategyAgentTool.CreateTheme]: ToolType.Custom,
   [StrategyAgentTool.UpdateTheme]: ToolType.Custom,
 
+  [StrategyAgentTool.QueryVoices]: ToolType.QueryDb,
   [StrategyAgentTool.CreateVoice]: ToolType.Custom,
   [StrategyAgentTool.UpdateVoice]: ToolType.Custom,
   [StrategyAgentTool.LinkVoice]: ToolType.Custom,
@@ -95,6 +100,8 @@ export function buildTool(
       return buildStringUpdateTool(state, field, toolName, action);
     case ToolType.ObjectUpdate:
       return buildObjectUpdateTool(state, field, toolName, action);
+    case ToolType.QueryDb:
+      return buildQueryDbTool(state, field, toolName, action);
     case ToolType.Custom:
       return buildCustomTool(state, field, toolName, action);
   }
@@ -171,4 +178,13 @@ function buildCustomTool(
       action(state, i);
     }
   }, StrategyAgentToolInfo[toolName]);
+}
+
+function buildQueryDbTool(
+  state: StrategyAgentState,
+  _field: keyof StrategySnapshot,
+  toolName: StrategyAgentTool,
+  action?: ToolCustomAction,
+) {
+  return tool(() => action!(state, undefined), StrategyAgentToolInfo[toolName]);
 }

@@ -30,11 +30,13 @@ export enum StrategyAgentTool {
 
   ChangeStage = 'change_stage',
 
+  QueryThemes = 'query_themes',
   LinkTheme = 'link_theme',
   UnlinkTheme = 'unlink_theme',
   CreateTheme = 'create_theme',
   UpdateTheme = 'update_theme',
 
+  QueryVoices = 'query_voices',
   CreateVoice = 'create_voice',
   UpdateVoice = 'update_voice',
   LinkVoice = 'link_voice',
@@ -45,6 +47,8 @@ export enum StrategyAgentTool {
 // todo: описать значение каждого поля, когда и зачем обновлять
 // todo: описать правила возвращения, вперед только по 1 этапу, назад можно на любой этап
 // todo: написать prompts для каждой stage, которые будут объяснять, что нужно делать на каждом этапе и какие инструменты доступны
+// todo: добавить tools для получения voice и themes из базы данных, чтобы не перегружать контекст
+// todo: later: добавить voice creation based on posts.
 export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Diagnose]: [
     StrategyAgentTool.ChangeStage,
@@ -98,6 +102,7 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Themes]: [
     StrategyAgentTool.ChangeStage,
 
+    StrategyAgentTool.QueryThemes,
     StrategyAgentTool.CreateTheme,
     StrategyAgentTool.UpdateTheme,
     StrategyAgentTool.LinkTheme,
@@ -113,6 +118,7 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Voice]: [
     StrategyAgentTool.ChangeStage,
 
+    StrategyAgentTool.QueryVoices,
     StrategyAgentTool.CreateVoice,
     StrategyAgentTool.UpdateVoice,
     StrategyAgentTool.LinkVoice,
@@ -174,11 +180,13 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
     StrategyAgentTool.AddVoiceAdjustment,
     StrategyAgentTool.RemoveVoiceAdjustment,
     // theme tools
+    StrategyAgentTool.QueryThemes,
     StrategyAgentTool.LinkTheme,
     StrategyAgentTool.UnlinkTheme,
     StrategyAgentTool.CreateTheme,
     StrategyAgentTool.UpdateTheme,
     // voice tools
+    StrategyAgentTool.QueryVoices,
     StrategyAgentTool.CreateVoice,
     StrategyAgentTool.UpdateVoice,
     StrategyAgentTool.LinkVoice,
@@ -405,5 +413,15 @@ export const StrategyAgentToolInfo: Record<
           'New full value for the context field (string or array of strings, depending on the field)',
         ),
     }),
+  },
+  [StrategyAgentTool.QueryThemes]: {
+    name: StrategyAgentTool.QueryThemes,
+    description: 'Query database for existing user themes',
+    schema: z.void(),
+  },
+  [StrategyAgentTool.QueryVoices]: {
+    name: StrategyAgentTool.QueryVoices,
+    description: 'Query database for existing user voices',
+    schema: z.void(),
   },
 };

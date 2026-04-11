@@ -27,6 +27,8 @@ export interface StrategyAgentState {
   themes: ThemeEntity[];
   profile: ProfileEntity | null;
 
+  userId: string;
+
   updates: {
     themesToLink: string[];
     themesToCreate: { name: string; description: string }[];

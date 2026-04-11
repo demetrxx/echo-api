@@ -1,4 +1,9 @@
-import { StrategyContextBlockType, StrategyStage } from '@app/db';
+import {
+  ProfileEntity,
+  StrategyContextBlockType,
+  StrategyStage,
+  ThemeEntity,
+} from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { createAgent } from 'langchain';
@@ -82,9 +87,48 @@ export class StrategyAgent {
         return this.action_updateVoice.bind(this);
       case StrategyAgentTool.UpdateContext:
         return this.action_updateContext.bind(this);
+      case StrategyAgentTool.QueryThemes:
+        return this.action_queryThemes.bind(this);
+      case StrategyAgentTool.QueryVoices:
+        return this.action_queryVoices.bind(this);
       default:
         return undefined;
     }
+  }
+
+  private async action_queryThemes(state: StrategyAgentState) {
+    const themes = await this.dataSource.getRepository(ThemeEntity).find({
+      where: {
+        userId: state.userId,
+      },
+    });
+
+    return JSON.stringify(
+      themes.map((i) => ({
+        id: i.id,
+        name: i.name,
+        description: i.description,
+      })),
+    );
+  }
+
+  private async action_queryVoices(state: StrategyAgentState) {
+    const themes = await this.dataSource.getRepository(ProfileEntity).find({
+      where: { userId: state.userId },
+    });
+
+    return JSON.stringify(
+      themes.map((i) => ({
+        id: i.id,
+        name: i.name,
+        tov: i.tov,
+        examplesSummary: i.examplesSummary,
+        anglePreferences: i.anglePreferences,
+        rules: i.rules,
+        avoidRules: i.avoidRules,
+        evidencePreferences: i.evidencePreferences,
+      })),
+    );
   }
 
   private action_addContextBlock(
