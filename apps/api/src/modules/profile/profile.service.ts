@@ -50,7 +50,7 @@ export class ProfileService {
     dto: {
       name?: string;
       prompt?: string | null;
-      tov?: string[] | null;
+      tov?: string | null;
       examples?: string[];
       isDefaultFor?: PlatformType[];
     },

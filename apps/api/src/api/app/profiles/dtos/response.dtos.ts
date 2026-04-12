@@ -1,4 +1,4 @@
-import { PlatformType, ProfileEntity } from '@app/db';
+import { ProfileEntity } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ProfileDto {
@@ -9,7 +9,7 @@ export class ProfileDto {
   name: string;
 
   @ApiProperty({ description: 'Tone of voice', type: [String] })
-  tov: string[];
+  tov: string;
 
   @ApiProperty({ description: 'Profile creation date' })
   createdAt: Date;
@@ -18,7 +18,7 @@ export class ProfileDto {
     return {
       id: e.id,
       name: e.name,
-      tov: e.tov ?? [],
+      tov: e.tov ?? '',
       createdAt: e.createdAt,
     };
   }
@@ -26,15 +26,11 @@ export class ProfileDto {
 
 export class ProfileDetailsDto extends ProfileDto {
   @ApiProperty({ type: [String] })
-  tov: string[];
-
-  @ApiProperty({ type: [String] })
   examples: string[];
 
   static mapFromEntity(e: ProfileEntity): ProfileDetailsDto {
     return {
       ...ProfileDto.mapFromEntity(e),
-      tov: e.tov ?? [],
       examples: e.examples ?? [],
     };
   }

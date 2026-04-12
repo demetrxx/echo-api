@@ -17,11 +17,18 @@ import { UserEntity } from './user.entity';
 export enum PlatformType {
   Telegram = 'telegram',
   X = 'x',
+  Threads = 'threads',
   LinkedIn = 'linkedin',
   Instagram = 'instagram',
+  TikTok = 'tiktok',
+  YouTube = 'youtube',
   Facebook = 'facebook',
   Newsletter = 'newsletter',
   Blog = 'blog',
+  Substack = 'substack',
+  Medium = 'medium',
+  Reddit = 'reddit',
+  Discord = 'discord',
   Custom = 'custom',
 }
 

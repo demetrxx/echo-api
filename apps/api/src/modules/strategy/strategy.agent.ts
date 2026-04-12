@@ -29,15 +29,19 @@ export class StrategyAgent {
   async process(state: StrategyAgentState) {
     const tools = this.buildTools(state);
 
+    const systemPrompt = STRATEGY_SYSTEM_PROMPT({
+      snapshot: state.snapshot,
+      currentStage: state.stage,
+      themes: state.themes,
+      voice: state.profile,
+    });
+
+    this.logger.log(systemPrompt);
+
     const agent = createAgent({
       model: this.llmService.client,
       tools,
-      systemPrompt: STRATEGY_SYSTEM_PROMPT({
-        snapshot: state.snapshot,
-        currentStage: state.stage,
-        themes: state.themes,
-        voice: state.profile,
-      }),
+      systemPrompt,
     });
 
     const response = await agent.invoke({

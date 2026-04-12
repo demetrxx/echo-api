@@ -1,4 +1,5 @@
 import {
+  PlatformType,
   ProfileEntity,
   StrategySnapshot,
   StrategyStage,
@@ -24,11 +25,15 @@ export const STAGES_IN_ORDER = [
   StrategyStage.FreeRefine,
 ];
 
-function buildStage(stage: StrategyStage, snapshot: StrategySnapshot) {
+function buildStage(
+  stage: StrategyStage,
+  idx: number,
+  snapshot: StrategySnapshot,
+) {
   const stageInfo = STRATEGY_STAGES({ snapshot })[stage];
 
   return `
-${stageInfo.name}
+${idx + 1}. ${stageInfo.name}
 Description: ${stageInfo.description}
 Goal: ${stageInfo.goal}
 `;
@@ -87,10 +92,13 @@ You should think and act like a strategy clarification partner, not like a gener
 The strategy process is divided into stages.
 
 The stages are:
-${STAGES_IN_ORDER.map((stage) => buildStage(stage, i.snapshot)).join('\n')}
+<stages>
+${STAGES_IN_ORDER.map((stage, idx) => buildStage(stage, idx, i.snapshot)).join('\n')}
+</stages>
 
 You are currently in stage: ${i.currentStage}
 
+<current_stage_info>
 Current stage description:
 ${currentStageInfo.description}
 
@@ -102,6 +110,7 @@ ${currentStageInfo.guardrails.map((g) => `- ${g}`).join('\n')}
 
 Next stage transition condition:
 ${currentStageInfo.escalationTrigger}
+</current_stage_info>
 
 Behavior rules:
 - Keep the conversation natural and efficient.
@@ -141,6 +150,7 @@ Tool usage rules:
 - When updating a field, preserve useful existing information unless the user is clearly replacing it.
 
 Global snapshot field guidance:
+<global_snapshot_guidance>
 - strategyNotes:
   Use notes only for strategically relevant nuance that does not yet belong in a more structured field.
   Do not duplicate goals, problems, themes, or context fields inside notes.
@@ -149,6 +159,7 @@ Global snapshot field guidance:
 - platforms:
   Platforms represent where this strategy will actually be expressed or distributed.
   Treat them as high-level publishing surfaces, not as post formats or execution plans.
+  Supported Platform types: ${Object.values(PlatformType).join(', ')}.
 
 - platformNotes:
   Platform notes store only strategy-level channel nuance that will materially affect later ideation or writing.
@@ -158,17 +169,24 @@ Global snapshot field guidance:
   Use unresolved questions only for gaps that still matter for downstream strategic quality.
   Do not add unresolved questions for every ambiguity.
   Prefer a small number of meaningful unresolved questions over a long list of weak ones.
+</global_snapshot_guidance>
 
 Available tools for the current stage:
+<current_stage_tools>
 ${STAGE_TOOLS[i.currentStage].map((tool) => `- ${tool}`).join('\n')}
+</current_stage_tools>
 
+<themes>
 ${injectThemesBlock(i.themes)}
+</themes>
 
+<voice>
 ${injectVoiceBlock(i.voice)}
+</voice>
 
 Current snapshot:
 <snapshot>
-${JSON.stringify(i.snapshot)}
+${JSON.stringify(i.snapshot, null, 2)}
 </snapshot>
 `;
 };

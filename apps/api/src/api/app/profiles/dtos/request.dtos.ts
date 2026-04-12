@@ -19,8 +19,8 @@ export class CreateProfileRequestDto {
   @ApiProperty({ required: false, type: [String] })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  tov?: string[];
+  @IsString()
+  tov?: string;
 
   @ApiProperty({ required: false, type: [String] })
   @IsOptional()
@@ -49,8 +49,8 @@ export class UpdateProfileRequestDto {
   @ApiProperty({ required: false, type: [String] })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  tov?: string[] | null;
+  @IsString()
+  tov?: string;
 
   @ApiProperty({ required: false, type: [String] })
   @IsOptional()

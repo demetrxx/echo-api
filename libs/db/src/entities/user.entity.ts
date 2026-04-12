@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { IdeaEntity } from './idea.entity';
 import { NoteEntity } from './note.entity';
 import { PostEntity } from './post.entity';
 import { ProfileEntity } from './profile.entity';
@@ -100,4 +101,7 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => StrategyEntity, (strategy) => strategy.user)
   strategies: StrategyEntity[];
+
+  @OneToMany(() => IdeaEntity, (idea) => idea.user)
+  ideas: IdeaEntity[];
 }

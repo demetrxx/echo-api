@@ -6,7 +6,6 @@ import {
   StrategyThemeEntity,
   ThemeEntity,
 } from '@app/db';
-import { AIMessage } from '@langchain/core/messages';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, EntityManager } from 'typeorm';
@@ -38,7 +37,6 @@ export class StrategyService {
         'strategy.createdAt',
         'strategy.updatedAt',
         'strategy.status',
-        'strategy.completenessLevel',
       ])
       .leftJoinAndSelect('strategy.profile', 'profile')
       .addSelect(['profile.id', 'profile.name'])
@@ -92,9 +90,10 @@ export class StrategyService {
       const conversation = await conversationRepository.save({
         strategyId: strategy.id,
         history: [
-          new AIMessage({
+          {
+            role: 'assistant',
             content: FIRST_AI_MESSAGE,
-          }),
+          },
         ],
       });
 

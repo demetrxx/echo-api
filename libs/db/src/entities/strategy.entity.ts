@@ -10,6 +10,7 @@ import {
 
 import { AbstractEntity } from '../common/base.entity';
 import { StrategySnapshot } from '../common/strategy';
+import { IdeaEntity } from './idea.entity';
 import { ProfileEntity } from './profile.entity';
 import { StrategyConversationEntity } from './strategy-conversation.entity';
 import { StrategyThemeEntity } from './strategy-theme.entity';
@@ -19,12 +20,6 @@ export enum StrategyStatus {
   Draft = 'draft',
   Active = 'active',
   Archived = 'archived',
-}
-
-export enum StrategyCompletenessLevel {
-  Minimal = 'minimal',
-  Refined = 'refined',
-  Advanced = 'advanced',
 }
 
 export enum StrategyStage {
@@ -59,13 +54,6 @@ export class StrategyEntity extends AbstractEntity {
     default: StrategyStatus.Draft,
   })
   status: StrategyStatus;
-
-  @Column({
-    type: 'enum',
-    enum: StrategyCompletenessLevel,
-    default: StrategyCompletenessLevel.Minimal,
-  })
-  completenessLevel: StrategyCompletenessLevel;
 
   @Column({
     type: 'jsonb',
@@ -110,6 +98,9 @@ export class StrategyEntity extends AbstractEntity {
     (strategyTheme) => strategyTheme.strategy,
   )
   themes: StrategyThemeEntity[];
+
+  @OneToMany(() => IdeaEntity, (idea) => idea.strategy)
+  ideas: IdeaEntity[];
 
   @OneToOne(
     () => StrategyConversationEntity,

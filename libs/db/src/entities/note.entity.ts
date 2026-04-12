@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { NoteIdeaEntity } from './note-idea.entity';
 import { NoteItemEntity } from './note-item.entity';
 import { NoteThemeEntity } from './note-theme.entity';
 import { UserEntity } from './user.entity';
@@ -55,4 +56,7 @@ export class NoteEntity extends AbstractEntity {
 
   @OneToMany(() => NoteThemeEntity, (noteTheme) => noteTheme.note)
   themes: NoteThemeEntity[];
+
+  @OneToMany(() => NoteIdeaEntity, (noteIdea) => noteIdea.note)
+  ideas: NoteIdeaEntity[];
 }

@@ -1,12 +1,10 @@
 import {
   ChatMessage,
-  StrategyCompletenessLevel,
   StrategyConversationEntity,
   StrategyEntity,
   StrategySnapshot,
   StrategyStatus,
 } from '@app/db';
-import { BaseMessageLike } from '@langchain/core/messages';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { ProfileDto } from '@/api/app/profiles';
@@ -31,13 +29,6 @@ export class StrategyDto {
     enum: StrategyStatus,
   })
   status: StrategyStatus;
-
-  @ApiProperty({
-    description: 'Strategy completeness level',
-    example: StrategyCompletenessLevel.Minimal,
-    enum: StrategyCompletenessLevel,
-  })
-  completenessLevel: StrategyCompletenessLevel;
 
   @ApiProperty({
     description: 'Strategy profile',
@@ -67,7 +58,6 @@ export class StrategyDto {
       name: e.name,
       status: e.status,
       themes: e.themes.map((theme) => ThemeDto.mapFromEntity(theme.theme)),
-      completenessLevel: e.completenessLevel,
       profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,

@@ -1,0 +1,40 @@
+No Strategy
+No Themes
+No Notes
+No Voice
+---
+X
+
+No Strategy
+No Themes
+No Notes
+Voice
+---
+Voice => Ideas[]
+
+
+No Strategy
+No Themes
+Notes
+Voice
+---
+Voice + Notes => Ideas[]
+
+
+No Strategy
+Themes
+Notes
+Voice
+---
+
+Theme 1 => Idea[]
+Theme 2 => Idea[]
+
+
+QA
+How voice shapes ideas?
+
+Should ideas be platform-agnostic? Yes?
+Try to be
+
+How not to repeat ourselves?
