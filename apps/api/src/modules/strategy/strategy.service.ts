@@ -6,6 +6,7 @@ import {
   StrategyThemeEntity,
   ThemeEntity,
 } from '@app/db';
+import { AIMessage } from '@langchain/core/messages';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, EntityManager } from 'typeorm';
@@ -13,6 +14,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
 
+import { FIRST_AI_MESSAGE } from './consts';
 import { STRATEGY_SNAPSHOT_DEFAULT } from './lib';
 import { StrategyAgent } from './strategy.agent';
 import { StrategyAgentState } from './types';
@@ -89,7 +91,11 @@ export class StrategyService {
 
       const conversation = await conversationRepository.save({
         strategyId: strategy.id,
-        history: [],
+        history: [
+          new AIMessage({
+            content: FIRST_AI_MESSAGE,
+          }),
+        ],
       });
 
       strategy.themes = [];
@@ -121,6 +127,7 @@ export class StrategyService {
       stage: strategy.stage,
       themes: strategy.themes.map((st) => st.theme),
       profile: strategy.profile,
+      userId,
       updates: {
         themesToLink: [],
         themesToCreate: [],

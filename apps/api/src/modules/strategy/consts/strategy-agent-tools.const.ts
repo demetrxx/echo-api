@@ -44,11 +44,8 @@ export enum StrategyAgentTool {
   UpdateContext = 'update_context',
 }
 
-// todo: описать значение каждого поля, когда и зачем обновлять
-// todo: описать правила возвращения, вперед только по 1 этапу, назад можно на любой этап
-// todo: написать prompts для каждой stage, которые будут объяснять, что нужно делать на каждом этапе и какие инструменты доступны
-// todo: добавить tools для получения voice и themes из базы данных, чтобы не перегружать контекст
 // todo: later: добавить voice creation based on posts.
+// todo: later: добавить переход на ideation
 export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Diagnose]: [
     StrategyAgentTool.ChangeStage,
@@ -207,7 +204,7 @@ export const StrategyAgentToolInfo: Record<
     name: StrategyAgentTool.ChangeStage,
     description: 'Change strategy stage',
     schema: z.object({
-      value: z.enum(StrategyStage).describe('New strategy stage'),
+      value: z.enum(StrategyStage).describe('Strategy stage to change to'),
     }),
   },
   [StrategyAgentTool.AddContextBlock]: {
