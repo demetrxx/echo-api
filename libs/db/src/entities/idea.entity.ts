@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
-import { IdeaThemeEntity } from './idea-theme.entity';
 import { NoteIdeaEntity } from './note-idea.entity';
 import { StrategyEntity } from './strategy.entity';
+import { ThemeEntity } from './theme.entity';
 import { UserEntity } from './user.entity';
 
 export enum IdeaStatus {
@@ -52,8 +52,21 @@ export class IdeaEntity extends AbstractEntity {
   })
   strategyId: string;
 
-  @OneToMany(() => IdeaThemeEntity, (ideaTheme) => ideaTheme.theme)
-  themes: IdeaThemeEntity[];
+  @ManyToOne(() => ThemeEntity, (theme) => theme.ideas, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({
+    name: 'theme_id',
+    referencedColumnName: 'id',
+  })
+  theme: ThemeEntity;
+
+  @Index('idx_idea_theme')
+  @Column({
+    type: 'uuid',
+    name: 'theme_id',
+  })
+  themeId: string;
 
   @OneToMany(() => NoteIdeaEntity, (noteIdea) => noteIdea.idea)
   notes: NoteIdeaEntity[];

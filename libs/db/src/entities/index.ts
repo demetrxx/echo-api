@@ -2,6 +2,7 @@ export * from './auth-token.entity';
 export * from './file.entity';
 export * from './idea.entity';
 export * from './note.entity';
+export * from './note-idea.entity';
 export * from './note-item.entity';
 export * from './note-theme.entity';
 export * from './post.entity';

@@ -1,56 +1,92 @@
-import { NoteEntity, PlatformType, ThemeEntity } from '@app/db';
+import {
+  IdeaEntity,
+  NoteEntity,
+  NoteIdeaEntity,
+  ProfileEntity,
+  StrategyEntity,
+  ThemeEntity,
+} from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, In } from 'typeorm';
+import { DataSource } from 'typeorm';
+import { z } from 'zod';
 
-import { Err } from '@/common/errors/app-error';
 import { LlmService } from '@/modules/llm';
 
-import { IdeaService } from './idea.service';
+import { IDEA_GENERATION_PROMPT } from './idea-generation.prompt';
+
+const schema = z
+  .array(
+    z.object({
+      name: z.string().describe('The name of the idea'),
+      angle: z.string().describe('The angle of the idea'),
+      noteIds: z
+        .array(z.string())
+        .optional()
+        .describe('The notes that support or inspired the idea'),
+    }),
+  )
+  .describe('An array of ideas');
 
 @Injectable()
 export class IdeaGeneratorService {
   constructor(
     private readonly llmService: LlmService,
-    private readonly ideaService: IdeaService,
     @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
 
-  async suggestForNotes(
+  async suggest(
     userId: string,
     dto: {
-      themeId?: string;
-      noteIds?: string[];
-      profileId?: string;
-      platform?: PlatformType;
+      profile?: ProfileEntity;
+      notes?: NoteEntity[];
+      strategy?: StrategyEntity;
+      theme?: ThemeEntity;
     },
+    count: number,
   ) {
-    const { themeId, noteIds, profileId, platform } = dto;
+    const { profile, notes, strategy, theme } = dto;
 
-    let theme: ThemeEntity | null = null;
+    const systemPrompt = IDEA_GENERATION_PROMPT({
+      notes,
+      theme,
+      profile,
+      strategy,
+      count,
+    });
 
-    if (themeId) {
-      theme = await this.dataSource.getRepository(ThemeEntity).findOne({
-        where: { id: themeId, userId },
-      });
-      if (!theme) {
-        throw Err.notFound('Theme not found');
+    const response = await this.llmService.client
+      .withStructuredOutput(schema)
+      .invoke([{ role: 'user', content: systemPrompt }]);
+
+    return await this.dataSource.transaction(async (ds) => {
+      const ideaRepository = ds.getRepository(IdeaEntity);
+      const noteIdeaRepository = ds.getRepository(NoteIdeaEntity);
+
+      const ideas = await ideaRepository.save(
+        response.map((i) => ({
+          name: i.name,
+          angle: i.angle,
+          strategyId: strategy.id,
+          userId,
+          themeId: theme.id,
+        })),
+      );
+
+      if (notes?.length) {
+        const noteIdeas = response.flatMap((i, idx) =>
+          i.noteIds.map((noteId) => ({
+            noteId,
+            ideaId: ideas[idx].id,
+          })),
+        );
+
+        await noteIdeaRepository.save(noteIdeas);
       }
-    }
 
-    let notes: NoteEntity[] = [];
-
-    if (dto.noteIds?.length) {
-      notes = await this.dataSource.getRepository(NoteEntity).find({
-        where: { id: In(dto.noteIds), userId },
-      });
-      if (notes.length !== dto.noteIds.length) {
-        throw Err.notFound('Some notes not found');
-      }
-    } else {
-      notes = await this.getNoteCandidates(userId, dto.themeId);
-    }
+      return ideas;
+    });
   }
 
   async suggestForTheme() {}
