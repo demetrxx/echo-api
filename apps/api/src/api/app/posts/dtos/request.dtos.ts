@@ -1,5 +1,5 @@
-import { PlatformType, PostStatus, PostType } from '@app/db';
-import { ApiProperty } from '@nestjs/swagger';
+import { PlatformType, PostStatus } from '@app/db';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 
 import { PaginationSortingQuery } from '@/common/utils';
@@ -15,11 +15,6 @@ export class GetPostsQueryParams extends PaginationSortingQuery {
   @IsEnum(PostStatus)
   status?: PostStatus;
 
-  @ApiProperty({ required: false, enum: PostType })
-  @IsOptional()
-  @IsEnum(PostType)
-  postType?: PostType;
-
   @ApiProperty({ required: false, enum: PlatformType })
   @IsOptional()
   @IsEnum(PlatformType)
@@ -34,6 +29,22 @@ export class GetPostsQueryParams extends PaginationSortingQuery {
   @IsOptional()
   @IsUUID()
   profileId?: string;
+}
+
+export class CreatePostRequestDto {
+  @ApiPropertyOptional()
+  @IsUUID()
+  themeId: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  profileId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  ideaId?: string;
 }
 
 export class GeneratePostRequestDto {

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { IdeaEntity } from './idea.entity';
 import { PostVersionEntity } from './post-version.entity';
 import { ProfileEntity } from './profile.entity';
 import { ThemeEntity } from './theme.entity';
@@ -40,13 +41,6 @@ export enum PostStatus {
   Archived = 'archived',
 }
 
-export enum PostType {
-  Summary = 'summary',
-  Opinion = 'opinion',
-  Howto = 'howto',
-  News = 'news',
-}
-
 @Entity('post')
 export class PostEntity extends AbstractEntity {
   @ManyToOne(() => UserEntity, (user) => user.posts, {
@@ -65,27 +59,35 @@ export class PostEntity extends AbstractEntity {
   })
   userId: string;
 
-  @ManyToOne(() => ThemeEntity, (theme) => theme.posts)
+  @ManyToOne(() => IdeaEntity, (idea) => idea.posts, { nullable: true })
+  @JoinColumn({
+    name: 'idea_id',
+    referencedColumnName: 'id',
+  })
+  idea?: IdeaEntity;
+
+  @Index('idx_post_idea')
+  @Column({
+    type: 'uuid',
+    name: 'idea_id',
+    nullable: true,
+  })
+  ideaId?: string;
+
+  @ManyToOne(() => ThemeEntity, (theme) => theme.posts, { nullable: true })
   @JoinColumn({
     name: 'theme_id',
     referencedColumnName: 'id',
   })
-  theme: ThemeEntity;
+  theme?: ThemeEntity;
 
   @Index('idx_post_theme')
   @Column({
     type: 'uuid',
     name: 'theme_id',
-  })
-  themeId: string;
-
-  @Index('idx_post_angle')
-  @Column({
-    type: 'uuid',
-    name: 'angle_id',
     nullable: true,
   })
-  angleId: string | null;
+  themeId?: string;
 
   @ManyToOne(() => ProfileEntity, (profile) => profile.posts, {
     nullable: true,
@@ -103,14 +105,6 @@ export class PostEntity extends AbstractEntity {
     nullable: true,
   })
   profileId: string | null;
-
-  @Index('idx_post_type')
-  @Column({
-    type: 'enum',
-    enum: PostType,
-    name: 'post_type',
-  })
-  postType: PostType;
 
   @Index('idx_post_status')
   @Column({
@@ -168,11 +162,4 @@ export class PostEntity extends AbstractEntity {
     nullable: true,
   })
   finalVersionId: string | null;
-
-  @Column({
-    type: 'uuid',
-    name: 'generation_id',
-    nullable: true,
-  })
-  generationId: string | null;
 }

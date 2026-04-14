@@ -2,7 +2,6 @@ import {
   PlatformType,
   PostEntity,
   PostStatus,
-  PostType,
   PostVersionAction,
   PostVersionEntity,
 } from '@app/db';
@@ -10,19 +9,22 @@ import { Injectable } from '@nestjs/common';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
+import { ProfileService } from '@/modules/profile';
 
 import { PostStore } from './post.store';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postStore: PostStore) {}
+  constructor(
+    private readonly postStore: PostStore,
+    private readonly profileService: ProfileService,
+  ) {}
 
   async getMany(
     userId: string,
     query: PaginationSortingQuery & {
       themeId?: string;
       status?: PostStatus;
-      postType?: PostType;
       platform?: PlatformType;
       search?: string;
       profileId?: string;
@@ -105,6 +107,18 @@ export class PostService {
     }
 
     return { version, post: { ...res.post, currentVersionId: version.id } };
+  }
+
+  async create(userId: string, dto: { themeId?: string; ideaId?: string }) {
+    const profile = await this.profileService.getDetault(userId);
+
+    const post = await this.postStore.createPost({
+      userId,
+      themeId: dto.themeId,
+      profileId: profile.id,
+      ideaId: dto.ideaId,
+    });
+    return post;
   }
 
   async deleteOne(id: string, userId: string) {

@@ -16,6 +16,10 @@ export class ProfileService {
     private readonly dataSource: DataSource,
   ) {}
 
+  async getDetault(userId: string) {
+    return this.profileStore.getDefaultProfile(userId);
+  }
+
   async create(
     userId: string,
     dto: {

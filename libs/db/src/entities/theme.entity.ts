@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
-import { IdeaThemeEntity } from './idea-theme.entity';
+import { IdeaEntity } from './idea.entity';
 import { NoteThemeEntity } from './note-theme.entity';
 import { PostEntity } from './post.entity';
 import { StrategyThemeEntity } from './strategy-theme.entity';
@@ -66,6 +66,6 @@ export class ThemeEntity extends AbstractEntity {
   @OneToMany(() => StrategyThemeEntity, (strategyTheme) => strategyTheme.theme)
   strategies: StrategyThemeEntity[];
 
-  @OneToMany(() => IdeaThemeEntity, (ideaTheme) => ideaTheme.theme)
-  ideas: IdeaThemeEntity[];
+  @OneToMany(() => IdeaEntity, (idea) => idea.theme)
+  ideas: IdeaEntity[];
 }

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { IdeaEntity } from './idea.entity';
 import { StrategyEntity } from './strategy.entity';
 import { UserEntity } from './user.entity';
 
@@ -77,9 +78,18 @@ export class ProfileEntity extends AbstractEntity {
   })
   examples: string[];
 
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  isDefault: boolean;
+
   @OneToMany(() => PostEntity, (post) => post.profile)
   posts: PostEntity[];
 
   @OneToMany(() => StrategyEntity, (strategy) => strategy.profile)
   strategies: StrategyEntity[];
+
+  @OneToMany(() => IdeaEntity, (idea) => idea.profile)
+  ideas: IdeaEntity[];
 }

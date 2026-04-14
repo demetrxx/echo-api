@@ -120,3 +120,14 @@ export const RegeneratePostOpenApi = () =>
       description: 'Post regenerated successfully',
     }),
   );
+
+export const CreatePostOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Create post',
+      description: 'Create a new post',
+    }),
+    ApiOkResponse({
+      description: 'Post created successfully',
+    }),
+  );

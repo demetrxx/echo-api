@@ -28,6 +28,7 @@ const schema = z
   )
   .describe('An array of ideas');
 
+// todo: add generation
 @Injectable()
 export class IdeaGeneratorService {
   constructor(

@@ -9,6 +9,8 @@ import {
 
 import { AbstractEntity } from '../common/base.entity';
 import { NoteIdeaEntity } from './note-idea.entity';
+import { PostEntity } from './post.entity';
+import { ProfileEntity } from './profile.entity';
 import { StrategyEntity } from './strategy.entity';
 import { ThemeEntity } from './theme.entity';
 import { UserEntity } from './user.entity';
@@ -35,7 +37,6 @@ export class IdeaEntity extends AbstractEntity {
   angle?: string;
 
   // relations
-
   @ManyToOne(() => StrategyEntity, (strategy) => strategy.ideas, {
     onDelete: 'SET NULL',
   })
@@ -68,8 +69,21 @@ export class IdeaEntity extends AbstractEntity {
   })
   themeId: string;
 
-  @OneToMany(() => NoteIdeaEntity, (noteIdea) => noteIdea.idea)
-  notes: NoteIdeaEntity[];
+  @ManyToOne(() => ProfileEntity, (profile) => profile.ideas, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({
+    name: 'profile_id',
+    referencedColumnName: 'id',
+  })
+  profile?: ProfileEntity;
+
+  @Index('idx_idea_profile')
+  @Column({
+    type: 'uuid',
+    name: 'profile_id',
+  })
+  profileId?: string;
 
   @ManyToOne(() => UserEntity, (user) => user.ideas, {
     onDelete: 'CASCADE',
@@ -86,4 +100,10 @@ export class IdeaEntity extends AbstractEntity {
     name: 'user_id',
   })
   userId: string;
+
+  @OneToMany(() => NoteIdeaEntity, (noteIdea) => noteIdea.idea)
+  notes: NoteIdeaEntity[];
+
+  @OneToMany(() => PostEntity, (post) => post.idea)
+  posts: PostEntity[];
 }

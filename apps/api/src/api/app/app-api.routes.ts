@@ -1,6 +1,7 @@
 import { RouteTree } from '@nestjs/core';
 
 import { FilesApiModule } from './files';
+import { IdeasApiModule } from './ideas';
 import { NotesApiModule } from './notes';
 import { PostsApiModule } from './posts';
 import { ProfilesApiModule } from './profiles';
@@ -10,6 +11,7 @@ import { UserApiModule } from './user';
 
 const routes: [string, any][] = [
   ['files', FilesApiModule],
+  ['ideas', IdeasApiModule],
   ['notes', NotesApiModule],
   ['posts', PostsApiModule],
   ['profiles', ProfilesApiModule],

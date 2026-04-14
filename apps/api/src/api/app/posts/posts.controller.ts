@@ -15,6 +15,7 @@ import { Protected, User } from '@/modules/auth';
 import { PostService } from '@/modules/post';
 
 import {
+  CreatePostRequestDto,
   EditPostTextRequestDto,
   GetPostsQueryParams,
   PostDetailsDto,
@@ -24,6 +25,7 @@ import {
   UpdatePostRequestDto,
 } from './dtos';
 import {
+  CreatePostOpenApi,
   EditPostTextOpenApi,
   GetPostOpenApi,
   GetPostsOpenApi,
@@ -38,6 +40,13 @@ import {
 @Protected()
 export class PostsAppController {
   constructor(private readonly postService: PostService) {}
+
+  @CreatePostOpenApi()
+  @Post()
+  async create(@Body() body: CreatePostRequestDto, @User() user: User) {
+    await this.postService.create(user.id, body);
+    return { success: true };
+  }
 
   @GetPostsOpenApi()
   @Get()

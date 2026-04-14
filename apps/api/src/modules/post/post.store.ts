@@ -2,7 +2,6 @@ import {
   PlatformType,
   PostEntity,
   PostStatus,
-  PostType,
   PostVersionEntity,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
@@ -14,7 +13,7 @@ import { PaginationSortingQuery } from '@/common/utils';
 
 type PostDto = Pick<
   PostEntity,
-  'userId' | 'themeId' | 'profileId' | 'platform' | 'postType' | 'generationId'
+  'userId' | 'themeId' | 'profileId' | 'ideaId'
 > & {
   status?: PostStatus;
   title?: string | null;
@@ -67,7 +66,6 @@ export class PostStore {
     query: PaginationSortingQuery & {
       themeId?: string;
       status?: PostStatus;
-      postType?: PostType;
       platform?: PlatformType;
       search?: string;
       profileId?: string;
@@ -80,7 +78,6 @@ export class PostStore {
       take,
       themeId,
       status,
-      postType,
       platform,
       profileId,
       search,
@@ -115,10 +112,6 @@ export class PostStore {
           PostStatus.Failed,
         ],
       });
-    }
-
-    if (postType) {
-      qb.andWhere('post.postType = :postType', { postType });
     }
 
     if (platform) {
@@ -171,7 +164,6 @@ export class PostStore {
       finalVersionId?: string | null;
       currentVersionId?: string | null;
       profileId?: string | null;
-      postType?: PostType;
     },
     ds: DS = this.dataSource,
   ) {
