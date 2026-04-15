@@ -10,6 +10,7 @@ export enum StrategyContextBlockType {
   Journey = 'journey',
   Destination = 'destination',
   Opportunity = 'opportunity',
+  Custom = 'custom',
 }
 
 export interface StrategySnapshot {
@@ -22,19 +23,7 @@ export interface StrategySnapshot {
   platformNotes: Partial<Record<PlatformType, string>>;
   unresolvedQuestions: string[];
   voiceAdjustments: string[]; // only if existing voice
-
-  contextBlocks: StrategyContextBlockType[];
-  context: {
-    product?: ProductContextBlock;
-    expertise?: ExpertiseContextBlock;
-    growth?: GrowthContextBlock;
-    identity?: IdentityContextBlock;
-    community?: CommunityContextBlock;
-    clarity?: ClarityContextBlock;
-    journey?: JourneyContextBlock;
-    destination?: DestinationContextBlock;
-    opportunity?: OpportunityContextBlock;
-  };
+  context: Partial<Record<StrategyContextBlockType, string | string[]>>;
 }
 
 // ---------- context blocks ----------

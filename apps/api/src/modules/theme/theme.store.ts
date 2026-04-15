@@ -63,6 +63,7 @@ export class ThemeStore {
     userId: string;
     name: string;
     description?: string;
+    cleanName: string;
   }): Promise<ThemeEntity> {
     return this.dataSource.getRepository(ThemeEntity).save(theme);
   }

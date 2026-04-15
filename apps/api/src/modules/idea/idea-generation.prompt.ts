@@ -79,18 +79,7 @@ function injectStrategy(strategy?: StrategyEntity) {
     problems: strategy.snapshot.problems,
     goals: strategy.snapshot.goals,
     platforms: strategy.snapshot.platforms,
-    contextBlocks: strategy.snapshot.contextBlocks,
-    context: {
-      product: strategy.snapshot.context.product,
-      expertise: strategy.snapshot.context.expertise,
-      growth: strategy.snapshot.context.growth,
-      identity: strategy.snapshot.context.identity,
-      community: strategy.snapshot.context.community,
-      clarity: strategy.snapshot.context.clarity,
-      journey: strategy.snapshot.context.journey,
-      destination: strategy.snapshot.context.destination,
-      opportunity: strategy.snapshot.context.opportunity,
-    },
+    context: strategy.snapshot.context,
     unresolvedQuestions: strategy.snapshot.unresolvedQuestions,
     voiceAdjustments: strategy.snapshot.voiceAdjustments,
   };
@@ -110,30 +99,39 @@ Your job is to generate strong, distinct content ideas grounded in the provided 
 
 Generate exactly ${i.count} ideas.
 
-Core rules:
-- Stay grounded in the provided notes, theme, and strategy when they exist.
-- Do not generate posts, hooks, outlines, or platform-specific execution.
-- Generate ideas, not finished content.
-- Each idea must be meaningfully different from the others.
-- Prefer sharp, specific, non-generic ideas over broad or safe ones.
-- Do not invent fake facts, fake examples, or unsupported specifics.
-- If notes are provided, use them as the main source material.
-- If a theme is provided, every idea must clearly fit that theme.
-- If a strategy is provided, ideas should align with the audience, problems, goals, and context in the strategy.
-- If a profile is provided, use it to shape the phrasing and framing of the ideas, but not to override the actual subject matter.
+What an idea is:
+- "name" is a short, clear title or gist.
+- "angle" is one sharp sentence.
+- The angle is the core take, tension, reframing, or lens behind the idea.
+- The angle is not a paragraph, not an outline, and not a post draft.
 
-What a good idea looks like:
-- "name" is a short, clear, compelling title or gist.
-- "angle" explains the core take or tension in 1-3 sentences.
-- The angle should make clear why this idea is interesting, useful, or worth developing further.
-${i.notes.length ? '- "noteIds" must include only the IDs of notes that genuinely informed the idea.' : ''}
+Core rules:
+- Stay grounded in the provided notes, theme, strategy, and voice when they exist.
+- If notes are provided, use them as the primary source material.
+- If a theme is provided, every idea must clearly fit that theme.
+- If a strategy is provided, align the ideas with the audience, problems, goals, and strategic context.
+- If a voice profile is provided, use it only to shape phrasing and framing, not to override the subject matter.
+- Generate ideas, not posts.
+- Do not generate hooks, outlines, CTAs, or platform-specific execution.
+- Each idea must be meaningfully different from the others.
+- Prefer sharp, specific, non-generic ideas over broad, safe, or obvious ones.
+- Do not invent fake facts, fake stories, or unsupported specifics.
+${i.notes.length ? '- If notes are provided, include only the note IDs that genuinely informed the idea.' : ''}
 
 Quality bar:
-- Avoid generic advice.
-- Avoid repeating the same angle with small wording changes.
-- Avoid obvious filler ideas that do not clearly connect to the context.
-- Avoid turning the idea into a ready-made post.
-- Avoid high-level themes disguised as ideas.
+- Avoid generic advice disguised as insight.
+- Avoid repeating the same idea with small wording changes.
+- Avoid broad themes disguised as ideas.
+- Avoid angles that contain multiple unrelated claims.
+- Prefer one strong lens per idea.
+
+Angle rules:
+- "angle" must be exactly one sentence.
+- Keep it short and sharp.
+- It should sound like a clear take, not an explanation.
+- Good angle shape: "X is usually really Y", "Most people think X, but Y", "The real issue is Y, not X", "What looks like X is often Y".
+- Bad angle shape: long summaries, mini-paragraphs, outlines, or post-like wording.
+
 
 ${injectStrategy(i.strategy)}
 
@@ -151,10 +149,12 @@ ${injectTheme(i.theme)}
 </response_requirements>
 
 <response_format>
-Array<{
-  name: string;
-  angle: string;${i.notes.length ? '\n  noteIds: string[];' : ''}
-}>
+{
+  ideas: {
+    name: string;
+    angle: string;${i.notes.length ? '\n  noteIds: string[];' : ''}
+  }[]
+}
 </response_format>
 
 Ideas JSON array:

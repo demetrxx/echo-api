@@ -25,6 +25,9 @@ export enum StrategyAgentTool {
   RemoveVoiceAdjustment = 'remove_voice_adjustment',
 
   // Custom
+  AddContextBlock = 'add_context_block',
+  RemoveContextBlock = 'remove_context_block',
+
   ChangeStage = 'change_stage',
 
   QueryThemes = 'query_themes',
@@ -46,6 +49,8 @@ export enum StrategyAgentTool {
 export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Diagnose]: [
     StrategyAgentTool.ChangeStage,
+    StrategyAgentTool.AddContextBlock,
+    StrategyAgentTool.RemoveContextBlock,
 
     StrategyAgentTool.UpdateAudience,
 
@@ -65,6 +70,9 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
 
     StrategyAgentTool.UpdateContext,
 
+    StrategyAgentTool.AddContextBlock,
+    StrategyAgentTool.RemoveContextBlock,
+
     StrategyAgentTool.UpdateContext,
 
     StrategyAgentTool.AddNote,
@@ -75,8 +83,6 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   ],
   [StrategyStage.Direction]: [
     StrategyAgentTool.ChangeStage,
-
-    StrategyAgentTool.UpdateContext,
 
     StrategyAgentTool.AddGoal,
     StrategyAgentTool.RemoveGoal,
@@ -92,8 +98,6 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   ],
   [StrategyStage.Themes]: [
     StrategyAgentTool.ChangeStage,
-
-    StrategyAgentTool.UpdateContext,
 
     StrategyAgentTool.QueryThemes,
     StrategyAgentTool.CreateTheme,
@@ -127,6 +131,7 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.Sharpen]: [
     // all
     StrategyAgentTool.ChangeStage,
+    StrategyAgentTool.AddContextBlock,
     StrategyAgentTool.UpdateAudience,
     StrategyAgentTool.AddProblem,
     StrategyAgentTool.RemoveProblem,
@@ -156,6 +161,7 @@ export const STAGE_TOOLS: Record<StrategyStage, StrategyAgentTool[]> = {
   [StrategyStage.FreeRefine]: [
     // all
     StrategyAgentTool.ChangeStage,
+    StrategyAgentTool.AddContextBlock,
     StrategyAgentTool.UpdateAudience,
     StrategyAgentTool.AddProblem,
     StrategyAgentTool.RemoveProblem,
@@ -199,6 +205,21 @@ export const StrategyAgentToolInfo: Record<
     description: 'Change strategy stage',
     schema: z.object({
       value: z.enum(StrategyStage).describe('Strategy stage to change to'),
+    }),
+  },
+  [StrategyAgentTool.AddContextBlock]: {
+    name: StrategyAgentTool.AddContextBlock,
+    description: 'Add a context block',
+    schema: z.object({
+      value: z.enum(StrategyContextBlockType).describe('New context block'),
+      idx: z.number().describe('Index to insert at'),
+    }),
+  },
+  [StrategyAgentTool.RemoveContextBlock]: {
+    name: StrategyAgentTool.RemoveContextBlock,
+    description: 'Remove a context block',
+    schema: z.object({
+      idx: z.number().describe('Index to remove'),
     }),
   },
   [StrategyAgentTool.UpdateAudience]: {
@@ -378,24 +399,15 @@ export const StrategyAgentToolInfo: Record<
   },
   [StrategyAgentTool.UpdateContext]: {
     name: StrategyAgentTool.UpdateContext,
-    description:
-      'Create or update strategically relevant context inside a context category. Use this only when the context materially affects strategy. Standard categories are preferred patterns, not mandatory schema. Use custom only when the needed context does not fit the standard categories well.',
+    description: 'Update strategy context field',
     schema: z.object({
-      block: z
-        .enum(StrategyContextBlockType)
-        .describe(
-          'Context category to write into. Prefer a standard category when it clearly fits. Use custom only when the needed context does not fit a standard category well.',
-        ),
-      field: z
-        .string()
-        .describe(
-          'Context field name inside the selected category. Keep it short, clear, and strategically meaningful. Do not create decorative or overly granular fields.',
-        ),
+      block: z.enum(StrategyContextBlockType).describe('Context block name'),
+      field: z.string().describe('Context block field name'),
       value: z
         .string()
         .or(z.array(z.string()))
         .describe(
-          'Full value for this context field. Use a string for single statements and an array of strings for lists. Store only context that materially improves strategic clarity.',
+          'New full value for the context field (string or array of strings, depending on the field)',
         ),
     }),
   },

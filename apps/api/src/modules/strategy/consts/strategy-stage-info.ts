@@ -19,132 +19,52 @@ interface StrategyStageInfo {
 
 interface ContextBlockSelectionRule {
   block: StrategyContextBlockType;
-  whenToAdd: string;
+  purpose: string;
+  whenToUse: string;
+  whenNotToUse: string[];
   strongSignals: string[];
-  whenNotToAdd: string[];
   nearbyBlocks: StrategyContextBlockType[];
 }
 
-export const CONTEXT_BLOCK_FILL_RULES: Record<
-  StrategyContextBlockType,
-  string
-> = {
-  [StrategyContextBlockType.Product]: `
-Fill this block only until the commercial context is usable for later strategy work.
+export const CONTEXT_BLOCK_SELECTION_GUIDANCE = `
+Context blocks are a flexible support structure for capturing situational context that materially affects strategy.
 
-Good enough means:
-- the offer or product is clear enough to name without vagueness,
-- the transformation or result is understandable,
-- the desired action is clear,
-- the main objections or hesitations are visible,
-- the proof this audience needs is visible at a high level.
+Standard context blocks are preferred patterns, not an exhaustive taxonomy.
+Prefer using a standard block when it clearly fits.
+Use a custom block only when the needed context does not fit any standard block well.
 
-Do not overbuild a sales framework.
-Do not invent objections or proof needs if the user has not implied them.
-`,
+General rules:
+- Add context only when it will materially change what the strategy needs to capture.
+- Do not add context just because it might be useful later.
+- Prefer the smallest amount of context structure needed to preserve what matters.
+- If the signal is weak or mixed, ask a clarifying question instead of creating context immediately.
+- Nearby blocks are alternatives or secondary candidates, not automatic additions.
+`;
 
-  [StrategyContextBlockType.Expertise]: `
-Fill this block only until the authority context is usable for later strategy work.
+export const CONTEXT_BLOCK_USAGE_GUIDANCE = `
+When adding or updating context, do not try to exhaustively fill a block.
 
-Good enough means:
-- it is clear what the user wants to be known for,
-- it is clear where proof or examples matter,
-- it is clear which myths, misconceptions, or weak assumptions are worth challenging.
+Use only the fields that materially matter for this case.
+Capture the smallest amount of context that will make the strategy more truthful and useful.
 
-Do not turn this into a full positioning framework.
-Do not add proof areas that are not grounded in the user's actual expertise.
-`,
+Good context is:
+- real
+- decision-shaping
+- specific enough to matter
+- minimal enough to stay natural
 
-  [StrategyContextBlockType.Growth]: `
-Fill this block only until the growth context is usable for later strategy work.
-
-Good enough means:
-- the main attention or growth objective is clear,
-- acceptable novelty or framing style is clear enough,
-- there is at least a rough sense of how to avoid stale repetition.
-
-Do not optimize for platform tactics too early.
-Do not force viral mechanics if the user does not actually care about them.
-`,
-
-  [StrategyContextBlockType.Identity]: `
-Fill this block only until the identity context is usable for later strategy work.
-
-Good enough means:
-- the desired associations are clear,
-- the repeated worldview threads are becoming visible,
-- the main non-negotiables are explicit enough to protect the user's identity later.
-
-Do not make this overly abstract or philosophical.
-Do not fabricate identity language that feels more polished than true.
-`,
-
-  [StrategyContextBlockType.Community]: `
-Fill this block only until the community context is usable for later strategy work.
-
-Good enough means:
-- the kind of interaction the user wants is clear,
-- the preferred conversation style is visible,
-- any important audience language cues are captured if they materially affect tone or participation.
-
-Do not confuse community with generic engagement.
-Do not optimize for replies if the user actually wants trust or clarity more than interaction.
-`,
-
-  [StrategyContextBlockType.Clarity]: `
-Fill this block only until the thinking and exploration context is usable for later strategy work.
-
-Good enough means:
-- recurring questions are visible,
-- unresolved tensions are visible,
-- the main lines of inquiry are clear enough to support exploratory content later.
-
-Do not force tidy conclusions.
-Do not collapse half-formed thinking into fake certainty.
-`,
-
-  [StrategyContextBlockType.Journey]: `
-Fill this block only until the journey context is usable for later strategy work.
-
-Good enough means:
-- it is clear what ongoing process, project, or journey is being documented,
-- the main progress arcs are visible,
-- the main update types are clear enough to support future posts.
-
-Do not turn this into a timeline or project plan.
-Do not add progress arcs unless the process is genuinely time-based.
-`,
-
-  [StrategyContextBlockType.Destination]: `
-Fill this block only until the destination context is usable for later strategy work.
-
-Good enough means:
-- the main destination channels or endpoints are clear,
-- the intended bridge actions are clear,
-- any important nuance about the handoff is captured.
-
-Do not design a funnel here.
-Do not add destinations unless the user actually wants content to move people somewhere specific.
-`,
-
-  [StrategyContextBlockType.Opportunity]: `
-Fill this block only until the opportunity context is usable for later strategy work.
-
-Good enough means:
-- the desired opportunities are clear,
-- the main credibility signals are visible,
-- the role or professional narrative the user wants to reinforce is understandable.
-
-Do not turn this into a resume or positioning exercise.
-Do not invent opportunity goals the user has not expressed.
-`,
-};
+Do not fill context like a questionnaire.
+Do not create fields just because they seem standard.
+Do not force completeness when partial but truthful context is enough.
+`;
 
 export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
   {
     block: StrategyContextBlockType.Product,
-    whenToAdd:
-      'Add when the user clearly writes to drive leads, sales, conversions, or movement toward an offer.',
+    purpose:
+      'Capture what is being offered, what action content should drive, and what buying friction matters.',
+    whenToUse:
+      'Use when the strategy is meaningfully tied to sales, leads, conversion, or movement toward an offer.',
     strongSignals: [
       'I want clients',
       'I want sales',
@@ -152,10 +72,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I need to address objections before people buy',
       'I sell a service, product, course, or offer',
     ],
-    whenNotToAdd: [
-      'The user only wants general audience growth',
-      'The user is mostly exploring ideas or clarifying thinking',
-      'Trust-building is present, but there is no real offer or action path yet',
+    whenNotToUse: [
+      'The user is only exploring ideas or clarifying thinking',
+      'There is no real offer, action path, or conversion intent yet',
+      'Trust-building is present, but product movement is not',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Expertise,
@@ -165,8 +85,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Expertise,
-    whenToAdd:
-      'Add when the user wants to build authority, trust, or recognition as someone who deeply understands a topic.',
+    purpose:
+      'Capture what the user wants to be known for, where proof matters, and what misconceptions they may need to challenge.',
+    whenToUse:
+      'Use when the strategy is substantially about trust, authority, credibility, or being recognized for expertise.',
     strongSignals: [
       'I want people to see me as an expert',
       'I want to build trust',
@@ -174,32 +96,34 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I want to explain complex things clearly',
       'I want to show that I know what I am talking about',
     ],
-    whenNotToAdd: [
-      'The user is primarily focused on self-expression without authority goals',
-      'The user is purely sales-driven and expertise is not part of the value path',
+    whenNotToUse: [
+      'The user is mainly writing for expression without authority goals',
+      'The strategy is purely transactional and expertise is not part of the value path',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Identity,
-      StrategyContextBlockType.Product,
       StrategyContextBlockType.Opportunity,
+      StrategyContextBlockType.Product,
     ],
   },
 
   {
     block: StrategyContextBlockType.Growth,
-    whenToAdd:
-      'Add when attention, reach, discoverability, or audience growth is a primary objective.',
+    purpose:
+      'Capture how the strategy thinks about attention, reach, discoverability, and acceptable growth tradeoffs.',
+    whenToUse:
+      'Use when growth, reach, performance, or discoverability is a real objective rather than a minor side effect.',
     strongSignals: [
       'I want more reach',
       'I want to grow my audience',
-      'I care about performance and traction',
+      'I care about traction',
       'I want more shares, saves, or distribution',
       'I want content that gets picked up more often',
     ],
-    whenNotToAdd: [
-      'Growth is only a nice-to-have, not a real priority',
-      'The user mainly wants clarity, trust, or expression',
-      'The user is not concerned with content performance at all',
+    whenNotToUse: [
+      'Growth is only a nice-to-have',
+      'The user mainly cares about clarity, trust, or expression',
+      'The user does not care about content performance',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Community,
@@ -210,8 +134,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Identity,
-    whenToAdd:
-      'Add when the user wants to shape how they are perceived, what they are associated with, and what should feel unmistakably theirs.',
+    purpose:
+      'Capture how the user wants to be perceived, what should feel unmistakably theirs, and what must remain true in expression.',
+    whenToUse:
+      'Use when the strategy is substantially about personal brand, recognizability, worldview, or protecting a specific identity in content.',
     strongSignals: [
       'I want to build a personal brand',
       'I want people to associate me with certain ideas',
@@ -219,9 +145,9 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I do not want to lose myself in content',
       'I want my voice or worldview to be recognizable',
     ],
-    whenNotToAdd: [
+    whenNotToUse: [
       'The user only cares about utility, performance, or sales outcomes',
-      'Identity is not part of the stated purpose of writing',
+      'Identity is not part of the actual purpose of writing',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Expertise,
@@ -232,8 +158,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Community,
-    whenToAdd:
-      'Add when the user wants content to create dialogue, interaction, belonging, or repeated audience participation.',
+    purpose:
+      'Capture the kind of dialogue, interaction, or audience relationship the user wants to build.',
+    whenToUse:
+      'Use when the strategy is meaningfully about conversation, belonging, audience closeness, or repeated participation.',
     strongSignals: [
       'I want conversations, not just broadcasting',
       'I want a closer relationship with my audience',
@@ -241,9 +169,9 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I want to build a community',
       'I care about interaction quality, not just reach',
     ],
-    whenNotToAdd: [
-      'The user is mainly focused on one-way authority or publishing',
-      'The user only cares about growth metrics, not community dynamics',
+    whenNotToUse: [
+      'The user mainly wants one-way authority or publishing',
+      'The user only cares about growth metrics, not interaction dynamics',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Growth,
@@ -254,8 +182,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Clarity,
-    whenToAdd:
-      'Add when the user writes to think, clarify, explore, or better understand their own ideas.',
+    purpose:
+      'Capture the recurring questions, tensions, and lines of inquiry the user is writing to think through.',
+    whenToUse:
+      'Use when the strategy is substantially about clarifying thinking, exploring ideas, or understanding what the user believes.',
     strongSignals: [
       'I write to clarify my thinking',
       'Writing helps me understand what I believe',
@@ -263,9 +193,9 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I keep circling certain questions',
       'I want to structure my thoughts',
     ],
-    whenNotToAdd: [
+    whenNotToUse: [
       'The user is purely focused on sales or performance outcomes',
-      'Thinking clarity is not part of the user’s stated motivation',
+      'Thinking clarity is not part of the user’s actual motivation',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Identity,
@@ -276,8 +206,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Journey,
-    whenToAdd:
-      'Add when the user is documenting a process, sharing progress, or building in public over time.',
+    purpose:
+      'Capture the ongoing process, progress arcs, and update logic when the strategy includes documenting change over time.',
+    whenToUse:
+      'Use when the strategy is materially about documenting a process, building in public, or sharing progress over time.',
     strongSignals: [
       'I want to document my journey',
       'I am building in public',
@@ -285,9 +217,9 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I want to post updates, lessons, and tradeoffs',
       'My content follows an ongoing process or project',
     ],
-    whenNotToAdd: [
+    whenNotToUse: [
       'There is no real time-based process being documented',
-      'The user is not sharing progress, only conclusions or advice',
+      'The user is sharing conclusions only, not an unfolding journey',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Clarity,
@@ -298,8 +230,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Destination,
-    whenToAdd:
-      'Add when the user wants content to move people into an owned channel or a next-step destination.',
+    purpose:
+      'Capture where the content should move people next when the strategy depends on an owned destination or handoff.',
+    whenToUse:
+      'Use when content is meant to bridge people into a newsletter, Telegram, waitlist, website, or another owned destination.',
     strongSignals: [
       'I want people to join my newsletter',
       'I want people to move to Telegram',
@@ -307,7 +241,7 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I want an owned audience, not just platform followers',
       'I want posts to bridge into another channel',
     ],
-    whenNotToAdd: [
+    whenNotToUse: [
       'The content has no real downstream destination',
       'The user is not trying to move people anywhere specific',
     ],
@@ -320,8 +254,10 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
 
   {
     block: StrategyContextBlockType.Opportunity,
-    whenToAdd:
-      'Add when the user writes to attract career, reputation, speaking, consulting, hiring, or partnership opportunities.',
+    purpose:
+      'Capture the reputation, credibility, and narrative conditions needed to attract valuable external opportunities.',
+    whenToUse:
+      'Use when the strategy is materially about attracting career, speaking, consulting, hiring, partnership, or reputation-driven opportunities.',
     strongSignals: [
       'I want to attract opportunities',
       'I want people to invite me to speak or consult',
@@ -329,9 +265,9 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       'I want to be discoverable for partnerships or roles',
       'I want my content to reinforce my professional narrative',
     ],
-    whenNotToAdd: [
+    whenNotToUse: [
       'The user is only focused on self-expression or thinking clarity',
-      'The desired outcome is clearly sales/product conversion instead',
+      'The desired outcome is clearly product conversion instead',
     ],
     nearbyBlocks: [
       StrategyContextBlockType.Expertise,
@@ -339,177 +275,200 @@ export const CONTEXT_BLOCK_SELECTION_RULES: ContextBlockSelectionRule[] = [
       StrategyContextBlockType.Product,
     ],
   },
+
+  {
+    block: StrategyContextBlockType.Custom,
+    purpose:
+      'Capture strategically important situational context that does not fit any standard context block well.',
+    whenToUse:
+      'Use only when the needed context is clearly real, clearly important, and clearly does not fit the standard blocks without distortion.',
+    strongSignals: [
+      'The user’s situation is materially shaped by context that does not fit product, expertise, growth, identity, community, clarity, journey, destination, or opportunity',
+      'Forcing a standard block would make the strategy less truthful',
+    ],
+    whenNotToUse: [
+      'A standard block already fits well enough',
+      'The custom block would only rename an existing standard block',
+      'The context is too weak, temporary, or vague to justify its own block',
+    ],
+    nearbyBlocks: [
+      StrategyContextBlockType.Product,
+      StrategyContextBlockType.Expertise,
+      StrategyContextBlockType.Identity,
+      StrategyContextBlockType.Clarity,
+    ],
+  },
 ];
 
-export const STRATEGY_STAGES: (i: {
-  snapshot: StrategySnapshot;
-}) => Record<StrategyStage, StrategyStageInfo> = (i) => ({
+export const STRATEGY_STAGES: Record<StrategyStage, StrategyStageInfo> = {
   [StrategyStage.Diagnose]: {
     name: StrategyStage.Diagnose,
     description:
-      'Identify why the user wants to blog, what kind of content context they need, and which strategy scaffold should be created before deeper strategy work begins.',
-    goal: 'Understand the user’s intent, starting point, channels, and available source material well enough to infer the relevant strategy context blocks and set up the initial snapshot structure.',
+      'Understand why the user wants to write, what kind of strategy they need, and whether any additional situational context should be captured before deeper strategy work begins.',
+    goal: 'Understand the user’s intent, starting point, channels, and available source material well enough to define the initial strategic direction and decide whether any additional context is materially needed.',
     escalationTrigger:
-      'The user’s primary purpose is clear enough to infer the initial strategy scaffold, including the necessary context blocks, relevant goals, and any obvious early context such as platforms or audience.',
-
+      'The user’s purpose is clear enough to identify the initial direction of the strategy, capture any obvious early context, such as goals, platforms, or a rough audience summary, where it is already clear, and decide whether any additional situational context should be captured.',
     guardrails: [
       'Do not try to fully define the strategy yet.',
       'Do not generate themes, ideas, or posts.',
-      'Do not create or refine a voice unless the user explicitly brings strong writing examples this early.',
-      'Keep the diagnostic phase tight: ask only the most useful next question.',
-      'Do not fill branch-specific blocks deeply; only determine whether they are needed.',
-      'Do not mutate unrelated snapshot fields beyond what is needed to set up the scaffold.',
+      'Do not create or refine a voice unless the user explicitly brings strong writing material this early.',
+      'Keep diagnosis tight: ask only the most useful next question.',
+      'Do not add context unless it will materially change what the strategy needs to capture next.',
+      'Do not create context just because it might become useful later.',
+      'Do not fill context deeply here; only capture the minimum truth needed to move forward.',
+      'Do not mutate unrelated snapshot fields beyond what is needed to establish the initial shape of the strategy.',
     ],
-
-    expectedSnapshotEffects: [
-      'selected goals are present and reasonably prioritized',
-      'necessary context blocks are present in the snapshot',
-      'clearly irrelevant context blocks are absent or removed',
-      'platforms are added if the user already knows them',
-      'audience may have a rough early summary if it is already clear',
-      'unresolved questions are captured only when they block correct branching',
-    ],
-
     primaryActions: [
-      'Identify the user’s primary and secondary blogging goals.',
+      'Identify the user’s primary and secondary reasons for writing.',
       'Understand the user’s starting point: from scratch, from notes, from past posts, or from an already formed direction.',
       'Understand where the user writes or wants to write.',
-      'Infer which strategy context blocks are necessary for this case.',
-      'Add missing context blocks and remove clearly irrelevant ones if needed.',
+      'Capture obvious early strategic signals such as goals, platforms, or a rough audience summary if they are already clear.',
+      'Decide whether any additional situational context is needed before broader strategy work begins.',
+      'Use context only when it materially affects the shape or truth of the strategy.',
       'Capture only the minimum useful context needed for the next stage.',
     ],
-
+    expectedSnapshotEffects: [
+      'goals are present if the user’s purpose is already clear',
+      'platforms are present if the user already knows where they write',
+      'audience may have a rough early summary if it is already clear',
+      'relevant situational context may be added when it materially affects strategy',
+      'unnecessary context is not added prematurely',
+      'unresolved questions are captured only when they block truthful progress',
+    ],
     operationalGuidance: `
-Use Diagnose to determine the shape of the strategy, not to fully fill it.
+Use Diagnose to understand the shape of the strategy, not to complete it.
 
-Use these rules as a decision rubric, not as a checklist.
+Diagnose-stage priorities:
+- Clarify why the user is writing before deciding what structure is needed.
+- Prefer understanding the real use case over classifying it too early.
+- Capture only the early context that will materially improve the next step.
+- Standard context categories are preferred patterns, not mandatory structure.
+- Use custom context only when a real strategic need does not fit the standard categories well.
+- If the signal is mixed or weak, ask a clarifying question instead of adding context immediately.
+- If no additional context is clearly needed yet, continue without forcing it.
+if the user has not yet provided rich context, begin with a broad intake prompt
+invite the user to share raw context, notes, docs, links, or rough thoughts
+after a broad intake, synthesize what matters and ask the single most useful next question
 
-Add a context block only when:
-- the user's purpose clearly supports it, and
-- the block will materially change what strategy information must be captured next.
+What "good enough" means here:
+- The user’s purpose is clear enough to guide the next stage.
+- The dominant purpose of the strategy is clear, along with any important secondary motives.- Any added context is clearly justified and minimal.
+- The strategy can move forward without pretending to know more than it actually does.
 
-Prefer at most one primary block and one secondary block during Diagnose.
-If the signal is weak or mixed, ask a clarifying question instead of adding the block.
-Nearby blocks are alternatives or secondary candidates, not automatic additions.
-
-Selection rules:
-${CONTEXT_BLOCK_SELECTION_RULES.map(
-  (r) => `
-- ${r.block}
-  - When to add: ${r.whenToAdd}
-  - Strong signals: ${r.strongSignals.join('; ')}
-  - When not to add: ${r.whenNotToAdd.join('; ')}
-`,
-).join('\n')}
+Do not treat this stage like a form.
+Do not talk like you are building internal structure.
+Do not over-commit too early.
 `,
   },
 
   [StrategyStage.Context]: {
     name: StrategyStage.Context,
     description:
-      'Fill the branch-specific context blocks that were enabled during diagnosis. This stage captures only the situational context that is necessary for this case before building the broader strategic core.',
-    goal: 'Populate the enabled context blocks with enough real, decision-shaping information so that the later strategy core is built on accurate situational context rather than generic assumptions.',
+      'Capture any additional situational context that materially affects the strategy before building the broader strategic core.',
+    goal: 'Add or refine only the context that meaningfully changes how the strategy should be understood, without turning the conversation into a rigid context-filling exercise.',
     escalationTrigger:
-      'All enabled context blocks are either sufficiently filled to support the next stage, intentionally skipped, or clearly marked as unresolved where missing context still matters.',
+      'All strategically important situational context is either clear enough to support the next stage, intentionally left out, or explicitly marked as unresolved where it still matters.',
     guardrails: [
-      'Do not re-open broad diagnosis unless the original scaffold is clearly wrong.',
-      'Do not drift into general audience, problem, or goal definition unless it is strictly needed to complete a context block.',
+      'Do not turn this stage into a form or checklist.',
+      'Do not add context just because it might be useful later.',
+      'Do not fill context exhaustively; aim for usable truth, not completeness.',
+      'Do not drift into broad audience, problem, or goal definition unless it is strictly needed to clarify important context.',
       'Do not create themes or voice here.',
-      'Do not fill optional fields just because they exist; only capture what materially matters.',
-      'Do not over-infer missing business or personal context from weak signals.',
-      'Do not try to make the context blocks exhaustive; aim for usable clarity, not completeness.',
+      'Do not over-infer business, identity, or growth context from weak signals.',
+      'Do not force standard context categories when the situation is better captured with a small amount of custom context.',
     ],
     primaryActions: [
-      'Review which context blocks were enabled during Diagnose.',
-      'Ask targeted follow-up questions only for the enabled blocks.',
-      'Fill each enabled block with the minimum context needed for downstream strategy work.',
-      'Mark missing but important context as unresolved instead of forcing weak assumptions.',
-      'Correct the block scaffold only if Diagnose clearly enabled the wrong block or missed a necessary one.',
-      'Capture supporting notes only when they help preserve nuance that should not yet be normalized into the core strategy.',
+      'Review whether any additional situational context is needed before broader strategy work continues.',
+      'Ask targeted follow-up questions only where missing context would materially weaken the strategy.',
+      'Add or refine standard context when it clearly fits the case.',
+      'Use custom context when the important situational truth does not fit the standard patterns well.',
+      'Keep context minimal and decision-shaping rather than exhaustive.',
+      'Record unresolved questions only when missing context still matters for downstream strategy quality.',
     ],
     expectedSnapshotEffects: [
-      'enabled context blocks contain meaningful branch-specific context',
-      'irrelevant or mistakenly enabled blocks may be removed if clearly unnecessary',
-      'notes may capture important nuance that does not belong in the core strategy yet',
-      'unresolved questions exist only where missing context still blocks good downstream strategy work',
-      'the snapshot is ready to move from situational context into broader direction-building',
+      'the snapshot contains only the situational context that materially affects strategy',
+      'context remains minimal, truthful, and useful rather than exhaustive',
+      'standard context is used when it clearly fits',
+      'custom context may be used when standard context would distort the case',
+      'unresolved questions remain only where missing context still matters',
+      'the strategy is ready to move into broader direction-building',
     ],
     operationalGuidance: `
-Use this stage to fill branch-specific context, not the whole strategy.
+Use this stage to capture strategically important situational truth, not to fill predefined sections.
 
 Context-stage priorities:
-- Work only on enabled context blocks unless Diagnose was clearly wrong.
-- Prefer the smallest set of questions that unlocks a usable block.
-- Capture only the context that will materially change later strategic decisions.
-- If a block is relevant but the user does not yet know the answer, record an unresolved question instead of forcing a guess.
-- If a block turns out to be unnecessary, remove it rather than filling it with weak content.
+- Add context only when it materially changes how the strategy should be built.
+- Prefer the smallest amount of context structure that preserves what matters.
+- If standard context fits clearly, use it.
+- If the important context does not fit the standard patterns well, use custom context instead of forcing a bad fit.
+- If no additional context is needed, move on rather than manufacturing it.
+- If the user is unsure, help them think with focused options or contrast instead of demanding a perfect answer.
+- If important situational context is still sparse, first ask for a broad context dump before asking narrow follow-ups
+- Let the user share product / company / personal / market context in raw form
+- Only then narrow into materially important context
 
-<context_filling_rules>
 What "good enough" means here:
+- The strategy now includes the key situational truth that would otherwise distort later decisions.
+- Context is specific enough to matter, but not bloated.
+- The user would recognize the captured context as real and relevant.
+- The next stage can build broader direction without relying on weak assumptions.
 
-${i.snapshot.contextBlocks.map((b) => CONTEXT_BLOCK_FILL_RULES[b]).join('\n\n')}
-</context_filling_rules>
-
-Do not treat this stage as a place to polish wording.
-Do not turn this stage into a second Diagnose.
-Do not move into themes, voice, or ideation from here.
+Do not treat this stage like schema completion.
+Do not make the user feel that you are filling internal boxes.
+Do not use context as a substitute for the strategic core.
 `,
   },
 
   [StrategyStage.Direction]: {
     name: StrategyStage.Direction,
-
     description:
-      'Build the strategic core of the snapshot. This stage turns the diagnosed intent and any branch-specific context into a clear audience summary, a prioritized set of core problems or tensions, and a prioritized set of content goals.',
-
-    goal: 'Produce a usable strategic core that explains who the content is for, what real problems or tensions it should orbit around, and what the content is trying to achieve.',
-
+      'Build the strategic core of the snapshot. This stage clarifies who the content is for, what real problems or tensions it should orbit around, and what the content is trying to achieve.',
+    goal: 'Produce a usable strategic core that explains the real audience, the most important problems or tensions, and the main strategic goals of the content.',
     escalationTrigger:
-      'The snapshot contains a clear enough audience summary, multiple meaningful problems or tensions, and multiple meaningful goals with wording strong enough to support theme-building in the next stage.',
-
+      'The snapshot contains a clear enough audience summary, a small set of meaningful problems or tensions, and a small set of meaningful goals strong enough to support theme-building in the next stage.',
     guardrails: [
       'Do not create themes yet.',
       'Do not create or refine voice here.',
       'Do not generate ideas or posts.',
       'Do not settle for vague, generic, or purely aspirational wording.',
       'Do not create too many weak or overlapping problems or goals.',
-      'Do not ignore already captured context blocks if they materially shape the core direction.',
+      'Do not let context dominate the strategy if it is only secondary.',
       'Do not over-polish wording; aim for usable clarity, not final copy.',
     ],
-
     primaryActions: [
-      'Write or refine the audience summary so it reflects the real target reader, not a vague demographic placeholder.',
-      'Identify the main recurring problems or tensions that the content should address.',
-      'Identify the main content goals and order them by practical importance.',
-      'Use branch-specific context blocks to sharpen the direction when relevant.',
+      'Write or refine the audience summary so it reflects the real target reader, not a vague placeholder.',
+      'Identify the main recurring problems or tensions that the content should repeatedly engage with.',
+      'Identify the main strategic goals the content is meant to support.',
+      'Use any relevant context only to sharpen the strategic core, not to replace it.',
       'Remove or avoid weak, repetitive, or generic problem and goal statements.',
       'Capture unresolved questions only if they still block a truthful audience, problem, or goal definition.',
     ],
-
     expectedSnapshotEffects: [
       'audience is defined as a usable strategic summary',
-      'problems contain a small set of meaningful, prioritized tensions',
-      'goals contain a small set of meaningful, prioritized outcomes',
-      'branch-specific context is reflected in the strategic core where relevant',
+      'problems contain a small set of meaningful tensions or recurring frictions',
+      'goals contain a small set of meaningful strategic outcomes',
+      'relevant context is reflected in the strategic core where it truly matters',
       'generic or redundant direction statements are removed or avoided',
       'the snapshot is ready for theme construction',
     ],
-
     operationalGuidance: `
-Use this stage to define the strategic core, not the full content system.
+Use this stage to define the strategic core, not the whole content system.
 
 Direction-stage priorities:
 - Make the audience summary concrete enough to guide future writing decisions.
-- Focus on the tensions and problems that actually deserve repeated attention in content.
+- Focus on the problems and tensions that actually deserve repeated attention in content.
 - Treat goals as strategic outcomes, not vanity labels.
 - Prefer a small number of strong problems and goals over a long list of weak ones.
-- Use context blocks to sharpen direction, not to replace it.
+- Use context to sharpen direction only when it materially changes the truth of the strategy.
+- If context is present but secondary, keep the strategic core centered on the broader direction.
+- If the strategic core is still thin, briefly widen before narrowing.
+- Prefer one sharp synthesis after rich context over many small extraction questions.
 
 What "good enough" means here:
-- Audience is clear enough that the user would recognize it as the real reader.
-- Problems are specific enough to generate strong themes later.
-- Goals are clear enough to bias future ideation and writing decisions.
-- The strategic core reflects the user’s actual intent, not generic creator language.
+- The audience is clear enough that the user would recognize it as the real reader.
+- The problems are specific enough to support strong themes later.
+- The goals are clear enough to bias future ideation and writing decisions.
+- The strategic core reflects the user’s actual intent rather than generic creator language.
 
 Do not use this stage to create themes.
 Do not use this stage to define tone or voice.
@@ -519,57 +478,50 @@ Do not use this stage to jump into ideation.
 
   [StrategyStage.Themes]: {
     name: StrategyStage.Themes,
-
     description:
       'Turn the strategic core into a coherent set of long-running conversation lines. This stage defines the themes the user should repeatedly speak through over time.',
-
-    goal: 'Create, refine, or link a small set of active themes that express the user’s audience, problems, and goals in a repeatable way.',
-
+    goal: 'Create, refine, or link a small set of active themes that express the audience, tensions, and goals of the strategy in a repeatable way.',
     escalationTrigger:
-      'The strategy has a coherent, non-redundant set of active themes that clearly map back to the strategic core and are strong enough to support later angle and idea generation.',
-
+      'The strategy has a coherent, non-redundant set of active themes that clearly reflect the strategic core and are strong enough to support later angle and idea generation.',
     guardrails: [
       'Do not generate ideas or posts here.',
       'Do not use themes as one-off post topics.',
       'Do not create themes that are too broad, too generic, or too similar to each other.',
-      'Do not create more themes when prioritizing or merging would be better.',
-      'Do not invent themes that are not grounded in the current direction.',
+      'Do not create more themes when narrowing, merging, or reusing would be better.',
+      'Do not invent themes that are not grounded in the current strategic core.',
       'Do not move into tone, voice, or post execution.',
     ],
-
     primaryActions: [
       'Review the audience, problems, and goals already present in the strategic core.',
       'Identify the long-running conversation lines that naturally emerge from that core.',
       'Link existing themes when they already fit the strategy well.',
-      'Create new themes only when no existing theme captures the needed line clearly enough.',
-      'Update themes when a partially fitting theme needs sharper wording or a more accurate scope.',
-      'Prioritize active themes so the strategy has a usable center of gravity.',
+      'Create a new theme only when the strategy needs a genuinely distinct lane.',
+      'Update themes when the idea is right but the wording or scope is wrong.',
+      'Keep the set of active themes small, distinct, and strategically central.',
     ],
-
     expectedSnapshotEffects: [
-      'the snapshot contains a coherent set of active themes',
-      'themes are clearly connected to the strategic core',
+      'the strategy contains a coherent set of active themes',
+      'themes clearly reflect the strategic core rather than drifting away from it',
       'redundant, weak, or overlapping themes are avoided or removed',
-      'existing themes are reused where appropriate instead of duplicating them',
-      'theme priorities are clear enough to guide future angle and idea generation',
+      'existing themes are reused where appropriate instead of duplicated',
+      'the active theme set is strong enough to support downstream ideation',
       'the strategy is ready to move into voice and expression work',
     ],
-
     operationalGuidance: `
-Use this stage to define repeatable content lanes, not individual content pieces.
+Use this stage to define repeatable conversation lanes, not individual content pieces.
 
 Theme-stage priorities:
-- Derive themes from the strategic core, especially the strongest problems and goals.
+- Derive themes from the strategic core, especially the strongest tensions and goals.
 - Prefer a small number of strong themes over a larger set of weak ones.
 - Reuse existing themes when they already express the right line of conversation.
-- Create a new theme only when the current strategy needs a distinct lane that does not already exist.
-- Update a theme if the concept is right but the wording or scope is off.
-- Prioritize themes based on how central they are to this strategy, not based on novelty alone.
+- Create a new theme only when the strategy needs a genuinely distinct lane.
+- Update a theme if the idea is right but the wording or scope is wrong.
+- Treat themes as durable lines of thinking, not labels for isolated topics.
 
 What "good enough" means here:
 - Each theme is distinct enough to support its own family of future angles.
 - The set of themes feels coherent rather than scattered.
-- The user could recognize these themes as the main lines they want to speak through.
+- The user would recognize these as the main lines they want to speak through.
 - The themes are narrow enough to be useful, but broad enough to support repeated content over time.
 
 Do not use this stage to define one-off post topics.
@@ -580,41 +532,34 @@ Do not use this stage to solve voice or expression questions.
 
   [StrategyStage.Voice]: {
     name: StrategyStage.Voice,
-
     description:
-      'Define how this strategy should sound. This stage selects, creates, or refines a usable voice profile and captures the strategy-specific expression adjustments needed for downstream writing.',
-
-    goal: 'Establish a usable voice foundation for the strategy by linking an existing voice or creating/refining one, then capture the key adjustments that will make future writing sound natural and aligned.',
-
+      'Define how this strategy should sound. This stage links, creates, or refines a usable voice foundation and captures only the expression guidance that materially improves downstream writing.',
+    goal: 'Establish a usable voice foundation for the strategy by linking an existing voice or creating/refining one, then capture the key adjustments that make future writing feel natural and aligned.',
     escalationTrigger:
-      'The strategy has a usable voice foundation: an appropriate voice is linked or consciously skipped, and any important strategy-specific voice adjustments have been captured.',
-
+      'The strategy has a usable expression foundation: an appropriate voice is linked or consciously left minimal, and any important strategy-specific voice adjustments have been captured.',
     guardrails: [
       'Do not generate ideas or posts here.',
       'Do not overfit the voice to one specific future post.',
       'Do not confuse stable voice identity with temporary strategy context.',
-      'Do not create generic rules that would fit almost anyone.',
-      'Do not force voice creation if the user does not have enough material yet; a consciously minimal or unresolved state is better than a fake voice.',
-      'Do not drift into broad strategy definition, themes, or audience work unless it is strictly needed to clarify voice.',
+      'Do not create generic voice rules that could apply to almost anyone.',
+      'Do not force voice creation if the user does not have enough material yet; a minimal but truthful voice state is better than a fake one.',
+      'Do not drift back into broad strategy, audience, or theme work unless it is strictly needed to clarify expression.',
     ],
-
     primaryActions: [
       'Check whether an existing voice already fits this strategy well enough.',
-      'If needed, query existing voices before creating a new one.',
-      'Create a new voice only when no existing voice is a good fit or when the user clearly needs a distinct one.',
-      'Refine or update voice only when the user provides enough signal through examples, preferences, or corrections.',
-      'Capture strategy-level voice adjustments that should shape writing in this context.',
-      'Record unresolved questions only if missing voice clarity would materially hurt downstream writing.',
+      'Query existing voices before creating a new one when appropriate.',
+      'Create a new voice only when no existing voice is a meaningful fit or the user clearly needs a distinct one.',
+      'Refine voice only when the user provides enough signal through examples, preferences, or corrections.',
+      'Capture only the strategy-level voice adjustments that will materially shape downstream writing.',
+      'Keep expression guidance minimal if stronger voice definition is not yet necessary.',
     ],
-
     expectedSnapshotEffects: [
-      'a usable voice is linked to the strategy, or the lack of voice is consciously acknowledged',
+      'a usable voice is linked to the strategy, or the lack of a strong voice is consciously acknowledged',
       'voice adjustments reflect this strategy’s context rather than replacing the base voice',
-      'stable voice rules are stored in the voice profile, not scattered across the strategy',
-      'generic, weak, or contradictory voice instructions are avoided',
+      'stable voice traits are kept in the voice profile, not scattered across the strategy',
+      'generic, weak, or contradictory expression instructions are avoided',
       'the strategy is ready to move into sharpening with a clear enough expression foundation',
     ],
-
     operationalGuidance: `
 Use this stage to establish expression discipline, not to imitate a person perfectly.
 
@@ -622,14 +567,16 @@ Voice-stage priorities:
 - Prefer linking an existing voice when it already matches the strategy well enough.
 - Create a new voice only when the difference is real and meaningful.
 - If the user provides writing examples, extract stable style signals from them.
-- Put stable style identity into the voice profile.
-- Put only contextual expression changes into strategy voice adjustments.
+- Put stable voice identity into the voice profile.
+- Put only contextual expression shifts into strategy voice adjustments.
 - If voice is still unclear but not blocking progress, keep it minimal rather than over-designing it.
+- If voice is unclear, first ask for examples, old posts, references, or rough style signals
+- Do not start with abstract tone questions if concrete examples would work better
 
 What "good enough" means here:
 - There is a base voice that would make downstream drafts sound directionally right.
 - Important strategy-specific adjustments are captured.
-- The voice is specific enough to avoid generic output.
+- The expression guidance is specific enough to avoid generic output.
 - The voice is not so narrow that it only fits one post.
 
 Use examples to extract:
@@ -639,134 +586,122 @@ Use examples to extract:
 - preferred proof style
 - recurring avoid patterns
 
-Do not use this stage to write sample posts unless that is the only way to clarify a real voice distinction.
+Do not use this stage to write sample posts unless that is the only realistic way to clarify a true voice distinction.
 Do not use this stage to solve themes, angles, or ideation.
 `,
   },
 
   [StrategyStage.Sharpen]: {
     name: StrategyStage.Sharpen,
-
     description:
       'Stress-test and refine the strategy snapshot so it becomes coherent, specific, and usable for downstream angle or idea generation.',
-
-    goal: 'Remove vagueness, duplication, weak framing, and internal contradictions so the strategy has a clear center of gravity and can support strong ideation later.',
-
+    goal: 'Remove vagueness, duplication, weak framing, and internal contradictions so the strategy has a clear center of gravity and can support strong downstream ideation.',
     escalationTrigger:
-      'The snapshot is coherent, sufficiently specific, and complete enough that angle or idea generation would likely produce focused, non-generic outputs.',
-
+      'The snapshot is coherent, sufficiently specific, and truthfully complete enough that angle or idea generation would likely produce focused, non-generic outputs.',
     guardrails: [
       'Do not turn this stage into a new broad discovery phase.',
       'Do not generate ideas or posts here.',
       'Do not rewrite everything just to make it sound prettier.',
       'Do not keep refining forever in pursuit of perfection.',
-      'Do not introduce brand-new major branches unless the existing strategy is clearly missing something critical.',
+      'Do not introduce brand-new major context unless the existing strategy is clearly missing something important.',
       'Do not remove important nuance just to make the snapshot look cleaner.',
+      'Do not expand the strategy when narrowing or clarifying would be better.',
     ],
-
     primaryActions: [
-      'Review the full strategy snapshot as one system rather than as isolated blocks.',
-      'Identify vague, generic, repetitive, or weakly differentiated fields.',
-      'Check for contradictions between goals, themes, channels, voice, and context blocks.',
-      'Reduce overlap by removing, merging, or narrowing weak items.',
+      'Review the full strategy snapshot as one system rather than as isolated fields.',
+      'Identify vague, generic, repetitive, or weakly differentiated elements.',
+      'Check for contradictions between audience, goals, problems, themes, voice, platforms, and context.',
+      'Reduce overlap by removing, merging, or narrowing weak elements.',
       'Sharpen wording where the current phrasing is too broad to guide future ideation.',
-      'Keep unresolved questions only where they still matter for downstream quality.',
-      'Decide whether the strategy is strong enough to move into ideation or still needs targeted refinement.',
+      'Keep unresolved questions only where they still materially affect downstream quality.',
+      'Decide whether the strategy is strong enough to move forward or still needs targeted refinement.',
     ],
-
     expectedSnapshotEffects: [
       'the snapshot has a clear strategic center of gravity',
-      'weak, generic, or duplicate items are removed or sharpened',
-      'themes, goals, and voice no longer conflict with each other',
+      'weak, generic, or duplicate elements are removed or sharpened',
+      'themes, goals, voice, context, and platforms no longer conflict with each other',
       'only meaningful unresolved questions remain',
       'the strategy is materially stronger and ready for downstream ideation work',
     ],
-
     operationalGuidance: `
 Use this stage to improve strategic quality, not to expand scope.
 
 Sharpen-stage priorities:
 - Prefer a smaller number of strong elements over a larger number of weak ones.
-- Remove overlap when two items do almost the same job.
+- Remove overlap when two elements do almost the same job.
 - Narrow overly broad language until it becomes operationally useful.
 - Preserve nuance when it is strategically important.
 - Use unresolved questions honestly instead of pretending clarity where none exists.
 - Treat coherence as more important than completeness.
 
 What to look for:
-- audience summary that could apply to almost anyone
+- audience language that could apply to almost anyone
 - problems that sound like generic niche pain points rather than real tensions
 - goals that are too broad, too many, or mutually conflicting
 - themes that overlap or feel like labels instead of real conversation lanes
-- voice instructions that are generic, contradictory, or disconnected from the strategy
-- context blocks that exist but do not actually shape the strategy
+- voice guidance that is generic, contradictory, or disconnected from the strategy
+- context that exists but does not actually shape the strategy
+- platform notes that are too tactical or too vague to matter
 
 What "good enough" means here:
 - the user could read the snapshot and recognize it as true
 - the strategy feels focused rather than scattered
-- future angle generation would have enough clarity to produce distinct outputs
-- no major block is fake-clear or misleadingly polished
+- downstream ideation would have enough clarity to produce distinct outputs
+- no major part of the snapshot is fake-clear or misleadingly polished
 
 Do not use this stage to start ideation.
-Do not expand the strategy unless a genuinely missing structural piece is discovered.
+Do not use this stage to keep polishing when the strategy is already good enough to move forward.
 `,
   },
 
   [StrategyStage.FreeRefine]: {
     name: StrategyStage.FreeRefine,
-
     description:
-      'Refine an existing strategy through natural conversation. This stage allows the user to revisit, correct, expand, narrow, or reframe any part of the strategy snapshot over time.',
-
-    goal: 'Keep the strategy alive and truthful by applying local or global updates through conversation while preserving coherence across the snapshot.',
-
+      'Refine an existing strategy through natural conversation. This stage allows the user to revisit, correct, expand, narrow, or reframe any part of the strategy over time.',
+    goal: 'Keep the strategy alive and truthful by applying local or broader updates through conversation while preserving coherence across the snapshot.',
     escalationTrigger:
       'None. This stage remains available as an ongoing refinement mode after the strategy has been initially built.',
-
     guardrails: [
       'Do not assume the user wants a full rebuild when they mention a local change.',
       'Do not silently overwrite unrelated parts of the strategy.',
       'Do not remove important existing structure without clear conversational evidence.',
-      'Do not keep broadening the strategy when narrowing would be better.',
+      'Do not broaden the strategy when narrowing or clarifying would be better.',
       'Do not drift into post execution or ideation unless the user explicitly wants to leave strategy work.',
-      'Do not force every refinement into a large structural change.',
+      'Do not turn every refinement into a large structural rewrite.',
     ],
-
     primaryActions: [
-      'Understand whether the user wants a local refinement, a broader reframing, or a structural update.',
-      'Apply changes to the relevant snapshot fields while preserving the integrity of the rest of the strategy.',
-      'Ask clarifying questions when a requested change would have downstream effects on multiple blocks.',
-      'Make local updates directly when the user’s intent is clear.',
-      'Allow major reorientation when the user clearly signals that the strategy itself has changed.',
+      'Determine whether the user wants a local refinement, a cross-cutting refinement, or a structural shift.',
+      'Apply the smallest truthful update that satisfies the user’s intent.',
+      'Ask clarifying questions when a requested change would materially affect multiple connected parts of the strategy.',
+      'Update only the relevant parts directly when the user’s intent is already clear.',
+      'Allow deeper restructuring when the user clearly signals that the strategy itself has changed.',
       'Preserve unresolved questions only when they still matter after the refinement.',
     ],
-
     expectedSnapshotEffects: [
-      'the snapshot reflects the user’s latest understanding without losing important prior structure',
+      'the snapshot reflects the user’s latest understanding without losing still-valid structure',
       'local refinements stay local unless broader changes are truly required',
-      'major strategic changes are applied coherently across affected blocks',
+      'broader strategic shifts are applied coherently across affected parts of the snapshot',
       'the strategy remains usable for downstream ideation after refinement',
       'the snapshot stays truthful rather than artificially stable',
     ],
-
     operationalGuidance: `
 Use this stage as an ongoing strategy maintenance mode, not as a fresh onboarding flow.
 
 FreeRefine priorities:
-- First determine the scope of the requested change: local, cross-block, or structural.
+- First determine the scope of the requested change: local, cross-cutting, or structural.
 - Prefer the smallest truthful update over an unnecessary full rewrite.
-- If one change logically affects other parts of the snapshot, clarify before changing them.
+- If one change logically affects other parts of the snapshot, clarify before propagating it.
 - Preserve working parts of the strategy whenever they still remain true.
 - Allow the strategy to evolve when the user has genuinely learned something new.
 
 How to think about refinement:
-- Local refinement: one field or one block changes, while the rest of the strategy still holds.
-- Cross-block refinement: one insight affects multiple connected blocks and should be propagated carefully.
-- Structural refinement: the user’s goals, branches, or overall direction have materially changed and the strategy should be restructured.
+- Local refinement: one field, one area, or one small part changes while the rest still holds.
+- Cross-cutting refinement: one new insight affects multiple connected parts and should be propagated carefully.
+- Structural refinement: the user’s goals, context, direction, or overall shape have materially changed and the strategy should be restructured.
 
 What "good enough" means here:
 - the requested refinement is accurately reflected in the snapshot
-- related blocks remain coherent
+- related parts remain coherent
 - the strategy still feels like one system rather than a pile of edits
 - no unnecessary rewrite was performed
 
@@ -774,4 +709,4 @@ Do not treat every new user message as evidence that the whole strategy is wrong
 Do not preserve outdated structure just to avoid making changes.
 `,
   },
-});
+};

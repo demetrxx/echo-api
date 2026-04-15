@@ -39,6 +39,7 @@ export class IdeaEntity extends AbstractEntity {
   // relations
   @ManyToOne(() => StrategyEntity, (strategy) => strategy.ideas, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
   @JoinColumn({
     name: 'strategy_id',
@@ -50,11 +51,13 @@ export class IdeaEntity extends AbstractEntity {
   @Column({
     type: 'uuid',
     name: 'strategy_id',
+    nullable: true,
   })
   strategyId: string;
 
   @ManyToOne(() => ThemeEntity, (theme) => theme.ideas, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
   @JoinColumn({
     name: 'theme_id',
@@ -66,11 +69,13 @@ export class IdeaEntity extends AbstractEntity {
   @Column({
     type: 'uuid',
     name: 'theme_id',
+    nullable: true,
   })
   themeId: string;
 
   @ManyToOne(() => ProfileEntity, (profile) => profile.ideas, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
   @JoinColumn({
     name: 'profile_id',
@@ -82,6 +87,7 @@ export class IdeaEntity extends AbstractEntity {
   @Column({
     type: 'uuid',
     name: 'profile_id',
+    nullable: true,
   })
   profileId?: string;
 

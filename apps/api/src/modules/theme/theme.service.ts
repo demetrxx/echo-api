@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
+import { slugify } from '@/common/utils';
 
 import { ThemeStore } from './theme.store';
 
@@ -23,7 +24,11 @@ export class ThemeService {
       throw Err.conflict('Theme with this name already exists');
     }
 
-    const theme = await this.themeStore.create({ ...dto, userId });
+    const theme = await this.themeStore.create({
+      ...dto,
+      userId,
+      cleanName: slugify(dto.name),
+    });
 
     return theme;
   }

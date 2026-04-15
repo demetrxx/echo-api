@@ -15,18 +15,34 @@ import { LlmService } from '@/modules/llm';
 
 import { IDEA_GENERATION_PROMPT } from './idea-generation.prompt';
 
-const schema = z
-  .array(
-    z.object({
-      name: z.string().describe('The name of the idea'),
-      angle: z.string().describe('The angle of the idea'),
-      noteIds: z
-        .array(z.string())
-        .optional()
-        .describe('The notes that support or inspired the idea'),
-    }),
-  )
+const shemaNoNotes = z
+  .object({
+    ideas: z.array(
+      z.object({
+        name: z.string().max(255).describe('The name of the idea'),
+        angle: z.string().max(255).describe('The angle of the idea'),
+      }),
+    ),
+  })
   .describe('An array of ideas');
+
+const schemaWithNotes = z
+  .object({
+    ideas: z.array(
+      z.object({
+        name: z.string().describe('The name of the idea'),
+        angle: z.string().describe('The angle of the idea'),
+        noteIds: z
+          .array(z.string())
+          .optional()
+          .describe('The notes that support or inspired the idea'),
+      }),
+    ),
+  })
+  .describe('An array of ideas');
+
+const schema = (withNotes: boolean) =>
+  withNotes ? schemaWithNotes : shemaNoNotes;
 
 // todo: add generation
 @Injectable()
@@ -57,8 +73,10 @@ export class IdeaGeneratorService {
       count,
     });
 
+    const wihtNotes = !!notes?.length;
+
     const response = await this.llmService.client
-      .withStructuredOutput(schema)
+      .withStructuredOutput(schema(wihtNotes))
       .invoke([{ role: 'user', content: systemPrompt }]);
 
     return await this.dataSource.transaction(async (ds) => {
@@ -66,17 +84,18 @@ export class IdeaGeneratorService {
       const noteIdeaRepository = ds.getRepository(NoteIdeaEntity);
 
       const ideas = await ideaRepository.save(
-        response.map((i) => ({
+        response.ideas.map((i) => ({
           name: i.name,
           angle: i.angle,
-          strategyId: strategy.id,
+          strategyId: strategy?.id,
           userId,
-          themeId: theme.id,
+          themeId: theme?.id,
         })),
       );
 
       if (notes?.length) {
-        const noteIdeas = response.flatMap((i, idx) =>
+        const noteIdeas = response.ideas.flatMap((i, idx) =>
+          // @ts-expect-error - noteIds is optional
           i.noteIds.map((noteId) => ({
             noteId,
             ideaId: ideas[idx].id,

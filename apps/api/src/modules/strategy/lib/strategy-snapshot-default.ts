@@ -8,7 +8,6 @@ export const STRATEGY_SNAPSHOT_DEFAULT: StrategySnapshot = {
   platforms: [],
   platformNotes: {},
   unresolvedQuestions: [],
-  contextBlocks: [],
   voiceAdjustments: [],
   context: {},
 };

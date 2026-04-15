@@ -69,10 +69,6 @@ export class StrategyAgent {
   // actions
   private getCustomAction(toolName: StrategyAgentTool) {
     switch (toolName) {
-      case StrategyAgentTool.AddContextBlock:
-        return this.action_addContextBlock.bind(this);
-      case StrategyAgentTool.RemoveContextBlock:
-        return this.action_removeContextBlock.bind(this);
       case StrategyAgentTool.ChangeStage:
         return this.action_changeStage.bind(this);
       case StrategyAgentTool.LinkTheme:
@@ -133,30 +129,6 @@ export class StrategyAgent {
         evidencePreferences: i.evidencePreferences,
       })),
     );
-  }
-
-  private action_addContextBlock(
-    state: StrategyAgentState,
-    i: { value: StrategyContextBlockType },
-  ) {
-    state.snapshot.context[i.value] = getContextBlockDefault(i.value) as any;
-  }
-
-  private action_removeContextBlock(
-    state: StrategyAgentState,
-    i: { idx: number },
-  ) {
-    const value = state.snapshot.contextBlocks[i.idx];
-
-    if (!value) {
-      throw new Error('Context block not found at index ' + i.idx);
-    }
-
-    if (!state.snapshot.context[value]) {
-      throw new Error('Context block value not found: ' + value);
-    }
-
-    delete state.snapshot.context[value];
   }
 
   private action_changeStage(

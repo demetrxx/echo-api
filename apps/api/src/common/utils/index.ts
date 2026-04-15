@@ -4,6 +4,7 @@ export * from './person';
 export * from './safe-num';
 export * from './sha256Async';
 export * from './sleep';
+export * from './slugify';
 export * from './stream';
 export * from './timestamps';
 export * from './trim-nl';

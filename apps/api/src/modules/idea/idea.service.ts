@@ -36,7 +36,8 @@ export class IdeaService {
         'idea.createdAt',
         'idea.updatedAt',
       ])
-      .leftJoin('idea.notes', 'note')
+      .leftJoin('idea.notes', 'idea_note')
+      .leftJoin('idea_note.note', 'note')
       .addSelect(['note.id', 'note.name'])
       .leftJoin('idea.theme', 'theme')
       .addSelect(['theme.id', 'theme.name'])

@@ -2,7 +2,6 @@ import {
   PlatformType,
   PostEntity,
   PostStatus,
-  PostType,
   PostVersionAction,
   PostVersionEntity,
 } from '@app/db';
@@ -103,17 +102,11 @@ export class PostVersionDetailsDto extends PostVersionDto {
 }
 
 export class PostDetailsDto extends PostDto {
-  @ApiProperty({ enum: PostType })
-  postType: PostType;
-
   @ApiProperty({ enum: PlatformType })
   platform: PlatformType;
 
   @ApiProperty()
   themeId: string;
-
-  @ApiProperty({ required: false })
-  generationId: string | null;
 
   @ApiProperty({ required: false })
   finalVersionId: string | null;
@@ -127,10 +120,8 @@ export class PostDetailsDto extends PostDto {
   ): PostDetailsDto {
     return {
       ...super.mapFromEntity(e),
-      postType: e.postType,
       platform: e.platform,
       themeId: e.themeId,
-      generationId: e.generationId ?? null,
       finalVersionId: e.finalVersionId ?? null,
       currentVersion: PostVersionDto.mapFromEntity(version),
     };
@@ -138,9 +129,6 @@ export class PostDetailsDto extends PostDto {
 }
 
 export class PostGeneratingDto extends PostDto {
-  @ApiProperty({ enum: PostType })
-  postType: PostType;
-
   @ApiProperty({ enum: PlatformType })
   platform: PlatformType;
 
@@ -153,7 +141,6 @@ export class PostGeneratingDto extends PostDto {
   static mapFromEntity(e: PostEntity): PostGeneratingDto {
     return {
       ...super.mapFromEntity(e),
-      postType: e.postType,
       platform: e.platform,
       themeId: e.themeId,
       finalVersionId: e.finalVersionId ?? null,
