@@ -1,4 +1,4 @@
-import { PostEntity, ThemeEntity } from '@app/db';
+import { PostEntity, StrategyEntity, ThemeEntity } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { PostDto } from '@/api/app/posts';
@@ -17,19 +17,32 @@ export class ThemeDto {
   name: string;
 
   @ApiProperty({
+    description: 'Theme description',
+    example: 'Large language models',
+  })
+  description: string;
+
+  @ApiProperty({
+    description: 'Theme strategies',
+    type: [Object],
+  })
+  strategies: { id: string; name: string }[];
+
+  @ApiProperty({
     description: 'Theme creation date',
     example: '2023-01-01T00:00:00.000Z',
   })
   createdAt: Date;
 
-  static mapFromEntity(e: {
-    id: string;
-    name: string;
-    createdAt: Date;
-  }): ThemeDto {
+  static mapFromEntity(e: ThemeEntity): ThemeDto {
     return {
       id: e.id,
       name: e.name,
+      strategies: e.strategies.map((i) => ({
+        id: i.strategy.id,
+        name: i.strategy.name,
+      })),
+      description: e.description,
       createdAt: e.createdAt,
     };
   }
@@ -42,12 +55,7 @@ export class ThemeWithRecentPostsCountDto extends ThemeDto {
   })
   recentPostsCount: number;
 
-  static mapFromEntity(e: {
-    id: string;
-    name: string;
-    createdAt: Date;
-    recentPostsCount: number;
-  }): ThemeWithRecentPostsCountDto {
+  static mapFromEntity(e: any): ThemeWithRecentPostsCountDto {
     return {
       ...super.mapFromEntity(e),
       recentPostsCount: e.recentPostsCount,
@@ -56,16 +64,9 @@ export class ThemeWithRecentPostsCountDto extends ThemeDto {
 }
 
 export class ThemeDetailsDto extends ThemeDto {
-  @ApiProperty({
-    description: 'Theme description',
-    example: 'Large language models',
-  })
-  description: string;
-
-  static mapFromEntity(e: ThemeEntity): ThemeDetailsDto {
+  static mapFromEntity(e: any): ThemeDetailsDto {
     return {
       ...super.mapFromEntity(e),
-      description: e.description,
     };
   }
 }

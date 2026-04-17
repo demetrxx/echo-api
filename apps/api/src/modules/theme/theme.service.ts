@@ -16,10 +16,7 @@ export class ThemeService {
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
-  async create(
-    userId: string,
-    dto: { name: string; description?: string; defaultAngle?: string },
-  ) {
+  async create(userId: string, dto: { name: string; description?: string }) {
     if (!(await this.themeStore.isUnique({ name: dto.name, userId }))) {
       throw Err.conflict('Theme with this name already exists');
     }
@@ -66,7 +63,12 @@ export class ThemeService {
     dto: { name?: string; description?: string },
   ) {
     if (dto.name) {
-      if (!(await this.themeStore.isUnique({ name: dto.name, userId }))) {
+      const isUnique = await this.themeStore.isUnique({
+        name: dto.name,
+        userId,
+      });
+
+      if (!isUnique) {
         throw Err.conflict('Theme with this name already exists');
       }
     }

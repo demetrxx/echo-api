@@ -18,31 +18,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": [
-        "apps/api/src/*"
-      ],
-      "@/modules/*": [
-        "apps/api/src/modules/*"
-      ],
-      "@/common/*": [
-        "apps/api/src/common/*"
-      ],
-      "@/api/*": [
-        "apps/api/src/api/*"
-      ],
-      "@app/db": [
-        "libs/db/src"
-      ],
-      "@app/db/*": [
-        "libs/db/src/*"
-      ],
-      "@app/queue": [
-        "libs/queue/src"
-      ],
-      "@app/queue/*": [
-        "libs/queue/src/*"
-      ],
-
-    },
+      "@/*": ["apps/api/src/*"],
+      "@/modules/*": ["apps/api/src/modules/*"],
+      "@/common/*": ["apps/api/src/common/*"],
+      "@/api/*": ["apps/api/src/api/*"],
+      "@app/db": ["libs/db/src"],
+      "@app/db/*": ["libs/db/src/*"],
+      "@app/queue": ["libs/queue/src"],
+      "@app/queue/*": ["libs/queue/src/*"]
+    }
   }
 }

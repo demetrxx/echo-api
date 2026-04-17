@@ -19,6 +19,7 @@ import {
   GetThemesQueryParams,
   ThemeDetailsWithRecentPostsDto,
   ThemeDto,
+  ThemeWithRecentPostsCountDto,
   UpdateThemeRequestDto,
 } from './dtos';
 import { GetThemesOpenApi } from './themes.openapi';
@@ -43,7 +44,7 @@ export class ThemesAppController {
 
     return {
       total,
-      data: data.map(ThemeDto.mapFromEntity),
+      data: data.map(ThemeWithRecentPostsCountDto.mapFromEntity),
       skip,
       take,
     };

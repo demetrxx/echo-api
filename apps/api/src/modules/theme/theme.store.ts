@@ -1,4 +1,4 @@
-import { ThemeEntity } from '@app/db';
+import { StrategyThemeEntity, ThemeEntity } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
@@ -14,12 +14,10 @@ export class ThemeStore {
   }): Promise<ThemeEntity | null> {
     const { id, userId } = i;
 
-    return this.dataSource
-      .getRepository(ThemeEntity)
-      .createQueryBuilder('theme')
-      .where('theme.id = :id', { id })
-      .andWhere('theme.userId = :userId', { userId })
-      .getOne();
+    return this.dataSource.getRepository(ThemeEntity).findOne({
+      where: { id, userId },
+      relations: ['strategies', 'strategies.strategy'],
+    });
   }
 
   async getManyPaginated(userId: string, query: PaginationSortingQuery) {
@@ -30,9 +28,14 @@ export class ThemeStore {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
 
-    const themes = await themesRepo
+    const themesQb = await themesRepo
       .createQueryBuilder('theme')
-      .select(['theme.id', 'theme.name', 'theme.createdAt'])
+      .select([
+        'theme.id',
+        'theme.name',
+        'theme.description',
+        'theme.createdAt',
+      ])
       .addSelect('COUNT(post.id)', 'recentPostsCount')
       .leftJoin('theme.posts', 'post', 'post.createdAt >= :weekAgo', {
         weekAgo,
@@ -40,20 +43,41 @@ export class ThemeStore {
       .where('theme.userId = :userId', { userId })
       .groupBy('theme.id')
       .addGroupBy('theme.name')
+      .addGroupBy('theme.description')
       .addGroupBy('theme.createdAt')
       .orderBy(`theme.${orderBy}`, order)
       .skip(skip)
-      .take(take)
-      .getRawMany();
+      .take(take);
+
+    const themes = await themesQb.getRawMany();
+
+    const themesCount = await themesQb.getCount();
+
+    const strategies = await this.dataSource
+      .getRepository(StrategyThemeEntity)
+      .createQueryBuilder('strategyTheme')
+      .leftJoin('strategyTheme.strategy', 'strategy')
+      .addSelect(['strategy.id', 'strategy.name', 'strategy.userId'])
+      .where('strategyTheme.themeId IN (:...themeIds)', {
+        themeIds: themes.map((theme) => theme.id),
+      })
+      .andWhere('strategy.userId = :userId', { userId })
+      .getMany();
+
+    const data = themes.map((theme) => ({
+      id: theme.theme_id,
+      name: theme.theme_name,
+      description: theme.theme_description,
+      createdAt: theme.theme_createdAt,
+      recentPostsCount: Number(theme.recentPostsCount) || 0,
+      strategies: strategies.filter(
+        (strategy) => strategy.themeId === theme.id,
+      ),
+    }));
 
     return {
-      total: themes.length,
-      data: themes.map((theme) => ({
-        id: theme.theme_id,
-        name: theme.theme_name,
-        createdAt: theme.theme_createdAt,
-        recentPostsCount: Number(theme.recentPostsCount) || 0,
-      })),
+      total: themesCount,
+      data,
       skip,
       take,
     };
