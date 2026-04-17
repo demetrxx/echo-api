@@ -11,7 +11,12 @@ import {
 
 import { PaginationSortingQuery } from '@/common/utils';
 
-export class GetNotesQueryParams extends PaginationSortingQuery {}
+export class GetNotesQueryParams extends PaginationSortingQuery {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  search?: string;
+}
 
 export class CreateNoteRequestDto {
   @ApiProperty({ required: false })
@@ -78,4 +83,10 @@ export class UpdateNoteItemRequestDto {
   @IsOptional()
   @IsString()
   value?: string;
+}
+
+export class DeleteNotesRequestDto {
+  @ApiProperty({ type: [String] })
+  @IsUUID('4', { each: true })
+  ids: string[];
 }

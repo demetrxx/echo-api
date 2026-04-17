@@ -34,9 +34,12 @@ export class StrategyService {
       .select([
         'strategy.id',
         'strategy.name',
+        'strategy.stage',
+
         'strategy.createdAt',
         'strategy.updatedAt',
         'strategy.status',
+        'strategy.snapshot',
       ])
       .leftJoinAndSelect('strategy.profile', 'profile')
       .addSelect(['profile.id', 'profile.name'])
@@ -120,6 +123,7 @@ export class StrategyService {
     const strategy = await this.getOne(id, userId);
 
     const state: StrategyAgentState = {
+      name: strategy.name,
       snapshot: strategy.snapshot,
       history: strategy.conversation.history,
       userMessage: dto.content,

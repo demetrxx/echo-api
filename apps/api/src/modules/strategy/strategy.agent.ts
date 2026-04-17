@@ -14,6 +14,7 @@ import { LlmService } from '@/modules/llm';
 import { STAGE_TOOLS, StrategyAgentTool } from './consts';
 import { buildTool, cleanMessages, getContextBlockDefault } from './lib';
 import { STRATEGY_SYSTEM_PROMPT } from './prompts';
+import { STRATEGY_NAME_PROMPT } from './prompts';
 import { StrategyAgentState } from './types';
 
 @Injectable()
@@ -56,6 +57,38 @@ export class StrategyAgent {
     });
 
     state.history = cleanMessages(response.messages);
+
+    this.generateName(state);
+  }
+
+  async generateName(state: StrategyAgentState) {
+    if (state.name) return;
+
+    const hasAudience = !!state.snapshot.audience?.length;
+    const hasGoals = !!state.snapshot.goals?.length;
+    const hasProblems = !!state.snapshot.problems?.length;
+    const hasThemes = !!state.themes?.length;
+
+    // wait until have at least one audience, one goal, and either themes or problems
+    if (!hasAudience || !hasGoals || !(hasThemes || hasProblems)) {
+      return;
+    }
+
+    const response = await this.llmService.fastClient.invoke([
+      {
+        role: 'user',
+        content: STRATEGY_NAME_PROMPT({
+          audience: state.snapshot.audience,
+          goals: state.snapshot.goals,
+          problems: state.snapshot.problems,
+          themes: state.themes.map((t) => t.name),
+        }),
+      },
+    ]);
+
+    const name = (response.content as string).trim();
+
+    state.name = name;
   }
 
   private buildTools(state: StrategyAgentState) {

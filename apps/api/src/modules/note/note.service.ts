@@ -6,7 +6,7 @@ import {
 } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery, trimNL } from '@/common/utils';
@@ -24,10 +24,13 @@ export class NoteService {
     private readonly fileService: FileService,
   ) {}
 
-  async getMany(userId: string, query: PaginationSortingQuery) {
-    const { orderBy, order, skip, take } = query;
+  async getMany(
+    userId: string,
+    query: PaginationSortingQuery & { search?: string },
+  ) {
+    const { order, skip, take, search } = query;
 
-    const [notes, total] = await this.dataSource
+    const qb = this.dataSource
       .getRepository(NoteEntity)
       .createQueryBuilder('note')
       .where('note.userId = :userId', { userId })
@@ -38,10 +41,20 @@ export class NoteService {
         'note.updatedAt',
         'note.createdAt',
       ])
-      .orderBy(`note.${orderBy}`, order)
+      .leftJoin('note.items', 'note_item')
+      .addSelect(['note_item.id', 'note_item.type'])
+      .orderBy(`note.updatedAt`, order)
       .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .take(take);
+
+    if (search) {
+      // name or text
+      qb.andWhere('note.name ILIKE :search OR note.text ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    const [notes, total] = await qb.getManyAndCount();
 
     return {
       total,
@@ -99,6 +112,18 @@ export class NoteService {
     await this.getOne(id, userId);
 
     await this.dataSource.getRepository(NoteEntity).softDelete(id);
+  }
+
+  async deleteMany(userId: string, ids: string[]) {
+    const notes = await this.dataSource.getRepository(NoteEntity).find({
+      where: { id: In(ids), userId },
+    });
+
+    if (notes.length !== ids.length) {
+      throw Err.notFound('Notes not found');
+    }
+
+    await this.dataSource.getRepository(NoteEntity).softDelete(ids);
   }
 
   async generateTitle(id, userId: string, text: string) {

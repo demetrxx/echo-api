@@ -13,6 +13,17 @@ export const GetNotesOpenApi = () =>
     ApiPaginatedResponse(NoteDto),
   );
 
+export const DeleteNotesOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Delete notes',
+      description: 'Delete a list of notes',
+    }),
+    ApiOkResponse({
+      description: 'Notes deleted successfully',
+    }),
+  );
+
 export const GetNoteOpenApi = () =>
   applyDecorators(
     ApiOperation({

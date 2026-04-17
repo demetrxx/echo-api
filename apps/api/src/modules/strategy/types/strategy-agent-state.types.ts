@@ -19,6 +19,7 @@ interface CreateStrategyProfileDto {
 type UpdateStrategyProfileDto = Partial<CreateStrategyProfileDto>;
 
 export interface StrategyAgentState {
+  name: string;
   snapshot: StrategySnapshot;
   history: ChatMessage[];
   stage: StrategyStage;

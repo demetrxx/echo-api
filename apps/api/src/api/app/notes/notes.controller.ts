@@ -10,13 +10,14 @@ import {
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
-import { PaginatedResponse } from '@/common/utils';
+import { PaginatedResponse, sleep } from '@/common/utils';
 import { Protected, User } from '@/modules/auth';
 import { NoteService } from '@/modules/note';
 
 import {
   CreateNoteItemRequestDto,
   CreateNoteRequestDto,
+  DeleteNotesRequestDto,
   GetNotesQueryParams,
   NoteDetailsDto,
   NoteDto,
@@ -28,6 +29,7 @@ import {
   CreateNoteOpenApi,
   DeleteNoteItemOpenApi,
   DeleteNoteOpenApi,
+  DeleteNotesOpenApi,
   GetNoteOpenApi,
   GetNotesOpenApi,
   UpdateNoteItemOpenApi,
@@ -93,6 +95,13 @@ export class NotesAppController {
   @Delete(':id')
   async delete(@Param('id') id: string, @User() user: User) {
     await this.noteService.deleteOne(id, user.id);
+    return { success: true };
+  }
+
+  @DeleteNotesOpenApi()
+  @Delete()
+  async deleteMany(@Body() body: DeleteNotesRequestDto, @User() user: User) {
+    await this.noteService.deleteMany(user.id, body.ids);
     return { success: true };
   }
 

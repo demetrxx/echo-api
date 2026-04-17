@@ -1,8 +1,10 @@
 import {
   ChatMessage,
+  PlatformType,
   StrategyConversationEntity,
   StrategyEntity,
   StrategySnapshot,
+  StrategyStage,
   StrategyStatus,
 } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
@@ -41,6 +43,33 @@ export class StrategyDto {
   themes: ThemeDto[];
 
   @ApiProperty({
+    description: 'Strategy goals',
+  })
+  goals: string[];
+
+  @ApiProperty({
+    description: 'Strategy problems',
+  })
+  problems: string[];
+
+  @ApiProperty({
+    description: 'Strategy channels',
+  })
+  platforms: PlatformType[];
+
+  @ApiProperty({
+    description: 'Strategy audience',
+  })
+  audience: string;
+
+  @ApiProperty({
+    description: 'Strategy stage',
+    enum: StrategyStage,
+    example: StrategyStage.Diagnose,
+  })
+  stage: StrategyStage;
+
+  @ApiProperty({
     description: 'Strategy creation date',
     example: '2023-01-01T00:00:00.000Z',
   })
@@ -56,7 +85,12 @@ export class StrategyDto {
     return {
       id: e.id,
       name: e.name,
+      stage: e.stage,
       status: e.status,
+      platforms: e.snapshot.platforms,
+      goals: e.snapshot.goals,
+      problems: e.snapshot.problems,
+      audience: e.snapshot.audience,
       themes: e.themes.map((theme) => ThemeDto.mapFromEntity(theme.theme)),
       profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
       createdAt: e.createdAt,

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
+import { Err } from '@/common/errors/app-error';
 import { PaginatedResponse } from '@/common/utils';
 import { Protected, User } from '@/modules/auth';
 import { IdeaService } from '@/modules/idea';

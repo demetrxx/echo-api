@@ -63,6 +63,9 @@ export class NoteDto {
   @ApiProperty()
   text: string;
 
+  @ApiProperty({ type: [NoteItemDto] })
+  items: NoteItemDto[];
+
   @ApiProperty()
   createdAt: Date;
 
@@ -74,6 +77,9 @@ export class NoteDto {
       id: entity.id,
       name: entity.name,
       text: entity.text,
+      items: (entity.items ?? []).map((item) =>
+        NoteItemDto.mapFromEntity(item),
+      ),
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };
