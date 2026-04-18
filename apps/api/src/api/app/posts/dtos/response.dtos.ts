@@ -2,13 +2,43 @@ import {
   PlatformType,
   PostEntity,
   PostStatus,
-  PostVersionAction,
   PostVersionEntity,
+  PostVersionType,
 } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { ProfileDto } from '@/api/app/profiles';
 import { ThemeDto } from '@/api/app/themes';
+
+import { IdeaDto } from '../../ideas/dtos/response.dtos';
+import { NoteDto } from '../../notes/dtos/response.dtos';
+
+export class PostVersionDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  versionNo: number;
+
+  @ApiProperty()
+  type: PostVersionType;
+
+  @ApiProperty()
+  text: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  static mapFromEntity(e: PostVersionEntity): PostVersionDto {
+    return {
+      id: e.id,
+      versionNo: e.versionNo,
+      type: e.type,
+      text: e.text,
+      createdAt: e.createdAt,
+    };
+  }
+}
 
 export class PostDto {
   @ApiProperty({
@@ -43,6 +73,12 @@ export class PostDto {
   })
   platform: PlatformType;
 
+  @ApiProperty({ type: PostVersionDto })
+  currentVersion: PostVersionDto;
+
+  @ApiProperty({ type: IdeaDto })
+  idea: IdeaDto | null;
+
   @ApiProperty({
     description: 'Post creation date',
     example: '2023-01-01T00:00:00.000Z',
@@ -53,8 +89,10 @@ export class PostDto {
     return {
       id: e.id,
       title: e.title,
+      idea: e.idea ? IdeaDto.mapFromEntity(e.idea) : null,
       theme: e.theme ? ThemeDto.mapFromEntity(e.theme) : null,
       profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
+      currentVersion: PostVersionDto.mapFromEntity(e.currentVersion),
       platform: e.platform,
       status: e.status,
       createdAt: e.createdAt,
@@ -62,154 +100,14 @@ export class PostDto {
   }
 }
 
-export class PostVersionDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  versionNo: number;
-
-  @ApiProperty()
-  action: PostVersionAction;
-
-  @ApiProperty()
-  text: string;
-
-  @ApiProperty()
-  createdAt: Date;
-
-  static mapFromEntity(e: PostVersionEntity): PostVersionDto {
-    return {
-      id: e.id,
-      versionNo: e.versionNo,
-      action: e.action,
-      text: e.text,
-      createdAt: e.createdAt,
-    };
-  }
-}
-
-export class PostVersionDetailsDto extends PostVersionDto {
-  @ApiProperty({ required: false })
-  intent: string | null;
-
-  static mapFromEntity(e: PostVersionEntity): PostVersionDetailsDto {
-    return {
-      ...PostVersionDto.mapFromEntity(e),
-      intent: e.intent ?? null,
-    };
-  }
-}
-
 export class PostDetailsDto extends PostDto {
-  @ApiProperty({ enum: PlatformType })
-  platform: PlatformType;
+  @ApiProperty({ type: [NoteDto] })
+  notes: NoteDto[];
 
-  @ApiProperty()
-  themeId: string;
-
-  @ApiProperty({ required: false })
-  finalVersionId: string | null;
-
-  @ApiProperty({ type: PostVersionDto })
-  currentVersion: PostVersionDto;
-
-  static mapFromEntity(
-    e: PostEntity,
-    version: PostVersionEntity,
-  ): PostDetailsDto {
+  static mapFromEntity(e: PostEntity): PostDetailsDto {
     return {
       ...super.mapFromEntity(e),
-      platform: e.platform,
-      themeId: e.themeId,
-      finalVersionId: e.finalVersionId ?? null,
-      currentVersion: PostVersionDto.mapFromEntity(version),
+      notes: e.notes.map((note) => NoteDto.mapFromEntity(note.note)),
     };
   }
-}
-
-export class PostGeneratingDto extends PostDto {
-  @ApiProperty({ enum: PlatformType })
-  platform: PlatformType;
-
-  @ApiProperty()
-  themeId: string;
-
-  @ApiProperty({ required: false })
-  finalVersionId: string | null;
-
-  static mapFromEntity(e: PostEntity): PostGeneratingDto {
-    return {
-      ...super.mapFromEntity(e),
-      platform: e.platform,
-      themeId: e.themeId,
-      finalVersionId: e.finalVersionId ?? null,
-    };
-  }
-}
-
-export class PostContextChunkDto {
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
-  idx: number;
-
-  @ApiProperty()
-  text: string;
-
-  @ApiProperty({ required: false })
-  headingPath: string | null;
-
-  @ApiProperty()
-  documentId: string;
-
-  @ApiProperty({ required: false })
-  documentTitle: string | null;
-}
-
-export class PostContextSnippetDto {
-  @ApiProperty({ enum: ['bullets', 'excerpt'] })
-  mode: 'bullets' | 'excerpt';
-
-  @ApiProperty({ required: false, nullable: true })
-  excerpt?: string | null;
-
-  @ApiProperty({ type: [String] })
-  bullets: string[];
-
-  @ApiProperty({ required: false, nullable: true })
-  quote: string | null;
-}
-
-export class PostContextDto {
-  @ApiProperty()
-  chunks: { id: string; text: string }[];
-
-  @ApiProperty()
-  spanId: string;
-
-  @ApiProperty({ required: false, nullable: true })
-  snippet?: PostContextSnippetDto | null;
-}
-
-export class PostContextResponseDto {
-  @ApiProperty({ type: PostDetailsDto })
-  post: PostDetailsDto;
-
-  @ApiProperty({ type: [PostContextDto] })
-  contexts: PostContextDto[];
-}
-
-export class GeneratePostResponseDto {
-  @ApiProperty({ type: PostDetailsDto })
-  post: PostDetailsDto;
-}
-
-export class GeneratePostStartResponseDto {
-  @ApiProperty()
-  generationId: string;
-
-  @ApiProperty()
-  postId: string;
 }

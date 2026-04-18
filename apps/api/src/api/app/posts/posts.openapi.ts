@@ -1,14 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
-import {
-  GeneratePostStartResponseDto,
-  PostContextResponseDto,
-  PostDetailsDto,
-  PostDto,
-  PostVersionDetailsDto,
-  PostVersionDto,
-} from '@/api/app/posts/dtos';
+import { PostDetailsDto, PostDto, PostVersionDto } from '@/api/app/posts/dtos';
 import { ApiPaginatedResponse } from '@/common/utils';
 
 export const GetPostsOpenApi = () =>
@@ -52,39 +45,7 @@ export const GetPostVersionOpenApi = () =>
     }),
     ApiOkResponse({
       description: 'Post version retrieved successfully',
-      type: PostVersionDetailsDto,
-    }),
-  );
-
-export const GetPostContextOpenApi = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: 'Get post context',
-      description: 'Retrieve context chunks used to generate the post',
-    }),
-    ApiOkResponse({
-      description: 'Post context retrieved successfully',
-      type: PostContextResponseDto,
-    }),
-  );
-
-export const GeneratePostOpenApi = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: 'Generate post',
-      description: 'Start post generation and return a generation id',
-    }),
-    ApiOkResponse({
-      description: 'Post generation started',
-      type: GeneratePostStartResponseDto,
-    }),
-  );
-
-export const GeneratePostStreamOpenApi = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: 'Stream post generation',
-      description: 'Server-sent events stream for post generation',
+      type: PostVersionDto,
     }),
   );
 

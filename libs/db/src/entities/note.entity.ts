@@ -11,6 +11,7 @@ import { AbstractEntity } from '../common/base.entity';
 import { NoteIdeaEntity } from './note-idea.entity';
 import { NoteItemEntity } from './note-item.entity';
 import { NoteThemeEntity } from './note-theme.entity';
+import { PostNoteEntity } from './post-note.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('note')
@@ -59,4 +60,7 @@ export class NoteEntity extends AbstractEntity {
 
   @OneToMany(() => NoteIdeaEntity, (noteIdea) => noteIdea.note)
   ideas: NoteIdeaEntity[];
+
+  @OneToMany(() => PostNoteEntity, (postNote) => postNote.note)
+  posts: PostNoteEntity[];
 }

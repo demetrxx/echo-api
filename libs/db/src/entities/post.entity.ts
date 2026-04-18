@@ -10,6 +10,7 @@ import {
 
 import { AbstractEntity } from '../common/base.entity';
 import { IdeaEntity } from './idea.entity';
+import { PostNoteEntity } from './post-note.entity';
 import { PostVersionEntity } from './post-version.entity';
 import { ProfileEntity } from './profile.entity';
 import { ThemeEntity } from './theme.entity';
@@ -34,8 +35,6 @@ export enum PlatformType {
 }
 
 export enum PostStatus {
-  Generating = 'generating',
-  Failed = 'failed',
   Draft = 'draft',
   Final = 'final',
   Archived = 'archived',
@@ -162,4 +161,7 @@ export class PostEntity extends AbstractEntity {
     nullable: true,
   })
   finalVersionId: string | null;
+
+  @OneToMany(() => PostNoteEntity, (postNote) => postNote.post)
+  notes: PostNoteEntity[];
 }

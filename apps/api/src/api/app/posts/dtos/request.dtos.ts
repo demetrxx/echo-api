@@ -34,37 +34,23 @@ export class GetPostsQueryParams extends PaginationSortingQuery {
 export class CreatePostRequestDto {
   @ApiPropertyOptional()
   @IsUUID()
-  themeId: string;
-
-  @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
-  profileId?: string;
+  themeId?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
   ideaId?: string;
-}
 
-export class GeneratePostRequestDto {
-  @ApiProperty()
-  @IsUUID()
-  themeId: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsUUID()
-  profileId?: string;
-
-  @ApiProperty({ enum: PlatformType })
-  @IsEnum(PlatformType)
-  platform: PlatformType;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiPropertyOptional()
   @IsString()
-  intent?: string;
+  @IsOptional()
+  text?: string;
+
+  @ApiPropertyOptional()
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  noteIds?: string[];
 }
 
 export class UpdatePostRequestDto {
@@ -75,20 +61,34 @@ export class UpdatePostRequestDto {
 
   @ApiProperty({ required: false, enum: PostStatus })
   @IsOptional()
-  @IsEnum([PostStatus.Draft, PostStatus.Final, PostStatus.Archived])
+  @IsEnum(PostStatus)
   status?: PostStatus;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUUID()
   currentVersionId?: string;
-}
 
-export class GetPostContextQueryParams {
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
-  versionId?: string;
+  themeId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  profileId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(PlatformType)
+  platform?: PlatformType;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  noteIds?: string[];
 }
 
 export class EditPostTextRequestDto {

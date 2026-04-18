@@ -6,6 +6,7 @@ export * from './note-idea.entity';
 export * from './note-item.entity';
 export * from './note-theme.entity';
 export * from './post.entity';
+export * from './post-note.entity';
 export * from './post-version.entity';
 export * from './profile.entity';
 export * from './refresh-session.entity';

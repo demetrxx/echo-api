@@ -3,11 +3,9 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../common/base.entity';
 import { PostEntity } from './post.entity';
 
-export enum PostVersionAction {
-  Generate = 'generate',
-  Regenerate = 'regenerate',
-  Refine = 'refine',
-  Edit = 'edit',
+export enum PostVersionType {
+  Manual = 'manual',
+  AI = 'ai',
 }
 
 @Entity('post_version')
@@ -41,21 +39,13 @@ export class PostVersionEntity extends AbstractEntity {
 
   @Column({
     type: 'enum',
-    enum: PostVersionAction,
-    name: 'action',
+    enum: PostVersionType,
+    name: 'type',
   })
-  action: PostVersionAction;
+  type: PostVersionType;
 
   @Column({
     type: 'text',
   })
   text: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'intent',
-    nullable: true,
-  })
-  intent: string | null;
 }

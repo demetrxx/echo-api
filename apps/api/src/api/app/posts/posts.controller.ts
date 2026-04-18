@@ -20,7 +20,6 @@ import {
   GetPostsQueryParams,
   PostDetailsDto,
   PostDto,
-  PostVersionDetailsDto,
   PostVersionDto,
   UpdatePostRequestDto,
 } from './dtos';
@@ -44,8 +43,8 @@ export class PostsAppController {
   @CreatePostOpenApi()
   @Post()
   async create(@Body() body: CreatePostRequestDto, @User() user: User) {
-    await this.postService.create(user.id, body);
-    return { success: true };
+    const post = await this.postService.create(user.id, body);
+    return PostDetailsDto.mapFromEntity(post);
   }
 
   @GetPostsOpenApi()
@@ -70,8 +69,8 @@ export class PostsAppController {
   @GetPostOpenApi()
   @Get(':id')
   async getOne(@Param('id') id: string, @User() user: User) {
-    const { post, version } = await this.postService.getOne(id, user.id);
-    return PostDetailsDto.mapFromEntity(post, version);
+    const post = await this.postService.getOne(id, user.id);
+    return PostDetailsDto.mapFromEntity(post);
   }
 
   @GetPostVersionsOpenApi()
@@ -89,7 +88,7 @@ export class PostsAppController {
     @User() user: User,
   ) {
     const version = await this.postService.getVersion(id, versionId, user.id);
-    return PostVersionDetailsDto.mapFromEntity(version);
+    return PostVersionDto.mapFromEntity(version);
   }
 
   @UpdatePostOpenApi()
