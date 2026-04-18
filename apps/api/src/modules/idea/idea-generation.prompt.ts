@@ -150,11 +150,9 @@ ${injectTheme(i.theme)}
 
 <response_format>
 {
-  ideas: {
-    name: string;
-    angle: string;${i.notes.length ? '\n  noteIds: string[];' : ''}
-  }[]
-}
+  name: string;
+  angle: string;${i.notes.length ? '\n  noteIds: string[];' : ''}
+}[]
 </response_format>
 
 Ideas JSON array:

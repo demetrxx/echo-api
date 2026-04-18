@@ -8,7 +8,7 @@ import {
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
@@ -77,11 +77,11 @@ export class IdeaService {
       themeId?: string;
       profileId?: string;
       notesBased?: boolean;
-      forNoteId?: string;
+      forNoteIds?: string[];
     },
     count: number,
-  ) {
-    const { themeId, notesBased, profileId, forNoteId } = dto;
+  ): Promise<IdeaEntity[]> {
+    const { themeId, notesBased, profileId, forNoteIds } = dto;
 
     let notes: NoteEntity[] = [];
     let theme: ThemeEntity | undefined;
@@ -109,18 +109,14 @@ export class IdeaService {
       });
     }
 
-    if (notesBased) {
+    if (notesBased && !forNoteIds?.length) {
       // todo: get candidate notes
     }
 
-    if (forNoteId) {
-      const note = await this.dataSource.getRepository(NoteEntity).findOne({
-        where: { id: forNoteId, userId },
+    if (forNoteIds?.length) {
+      notes = await this.dataSource.getRepository(NoteEntity).find({
+        where: { id: In(forNoteIds), userId },
       });
-
-      if (note) {
-        notes = [note];
-      }
     }
 
     if (!notes.length && !theme && !profile && !strategy) {

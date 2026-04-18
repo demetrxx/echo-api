@@ -41,10 +41,4 @@ export class NoteIdeaEntity extends AbstractEntity {
     name: 'idea_id',
   })
   ideaId: string;
-
-  @Column({
-    type: 'boolean',
-    name: 'is_manual',
-  })
-  isManual: boolean;
 }

@@ -31,8 +31,8 @@ export class SuggestIdeasRequestDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsUUID()
-  forNoteId?: string;
+  @IsUUID('4', { each: true })
+  forNoteIds?: string[];
 
   @ApiProperty({ required: false, default: 5 })
   @IsOptional()
