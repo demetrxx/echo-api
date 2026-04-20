@@ -1,4 +1,5 @@
 import {
+  IdeaEntity,
   PlatformType,
   PostEntity,
   PostNoteEntity,
@@ -179,12 +180,32 @@ export class PostService {
   async create(userId: string, dto: PostCreateDto) {
     const lastPost = await this.getLastPost(userId);
 
+    let themeId = dto.themeId;
+    let title: string;
+
+    if (dto.ideaId) {
+      const idea = await this.dataSource.getRepository(IdeaEntity).findOne({
+        where: { id: dto.ideaId, userId },
+      });
+
+      if (!idea) {
+        throw Err.notFound('Idea not found');
+      }
+
+      if (!themeId && idea.themeId) {
+        themeId = idea.themeId;
+      }
+
+      title = idea.name;
+    }
+
     const postId = await this.dataSource.transaction(async (ds) => {
       const postRepository = ds.getRepository(PostEntity);
 
       const post = await postRepository.save({
         userId,
-        themeId: dto.themeId,
+        themeId,
+        title,
         profileId: lastPost?.profileId,
         ideaId: dto.ideaId,
         status: PostStatus.Draft,

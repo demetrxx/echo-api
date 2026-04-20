@@ -38,7 +38,7 @@ export class ThemeDto {
     return {
       id: e.id,
       name: e.name,
-      strategies: e.strategies.map((i) => ({
+      strategies: e.strategies?.map((i) => ({
         id: i.strategy.id,
         name: i.strategy.name,
       })),
