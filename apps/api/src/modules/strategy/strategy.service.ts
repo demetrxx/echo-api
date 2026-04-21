@@ -1,10 +1,10 @@
 import {
-  ProfileEntity,
   StrategyConversationEntity,
   StrategyEntity,
   StrategySnapshot,
   StrategyThemeEntity,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -41,8 +41,8 @@ export class StrategyService {
         'strategy.status',
         'strategy.snapshot',
       ])
-      .leftJoinAndSelect('strategy.profile', 'profile')
-      .addSelect(['profile.id', 'profile.name'])
+      .leftJoinAndSelect('strategy.voice', 'voice')
+      .addSelect(['voice.id', 'voice.name'])
       .leftJoinAndSelect('strategy.themes', 'strategy_theme')
       .leftJoinAndSelect('strategy_theme.theme', 'theme')
       .addSelect(['theme.id', 'theme.name'])
@@ -68,7 +68,7 @@ export class StrategyService {
       .getRepository(StrategyEntity)
       .findOne({
         where: { id, userId },
-        relations: ['conversation', 'themes', 'themes.theme', 'profile'],
+        relations: ['conversation', 'themes', 'themes.theme', 'voice'],
       });
 
     if (!strategy) {
@@ -129,7 +129,7 @@ export class StrategyService {
       userMessage: dto.content,
       stage: strategy.stage,
       themes: strategy.themes.map((st) => st.theme),
-      profile: strategy.profile,
+      voice: strategy.voice,
       userId,
       updates: {
         themesToLink: [],
@@ -137,9 +137,9 @@ export class StrategyService {
         themesToUpdate: [],
         themesToRemove: [],
 
-        profileToSet: undefined,
-        profileToCreate: null,
-        profileToUpdate: null,
+        voiceToSet: undefined,
+        voiceToCreate: null,
+        voiceToUpdate: null,
       },
     };
 
@@ -163,13 +163,13 @@ export class StrategyService {
       await this.createThemes(manager, id, state.updates.themesToCreate);
       await this.updateThemes(manager, state.updates.themesToUpdate);
 
-      // handle profile update
-      await this.setProfile(manager, state.updates.profileToSet, id);
-      await this.createProfile(manager, id, state.updates.profileToCreate);
-      await this.updateProfile(
+      // handle voice update
+      await this.setVoice(manager, state.updates.voiceToSet, id);
+      await this.createVoice(manager, id, state.updates.voiceToCreate);
+      await this.updateVoice(
         manager,
-        state.profile?.id,
-        state.updates.profileToUpdate,
+        state.voice?.id,
+        state.updates.voiceToUpdate,
       );
     });
 
@@ -253,39 +253,39 @@ export class StrategyService {
     await ds.getRepository(StrategyThemeEntity).insert(strategyThemes);
   }
 
-  private async setProfile(
+  private async setVoice(
     ds: EntityManager,
-    profileId: string | null | undefined,
+    voiceId: string | null | undefined,
     strategyId: string,
   ) {
-    if (profileId === undefined) return;
+    if (voiceId === undefined) return;
 
-    await ds.getRepository(StrategyEntity).update(strategyId, { profileId });
+    await ds.getRepository(StrategyEntity).update(strategyId, { voiceId });
   }
 
-  private async createProfile(
+  private async createVoice(
     ds: EntityManager,
     strategyId: string,
-    profileData: StrategyAgentState['updates']['profileToCreate'],
+    voiceData: StrategyAgentState['updates']['voiceToCreate'],
   ) {
-    if (!profileData) return;
+    if (!voiceData) return;
 
-    const profile = await ds.getRepository(ProfileEntity).insert({
-      ...profileData,
+    const voice = await ds.getRepository(VoiceEntity).insert({
+      ...voiceData,
     });
 
     await ds
       .getRepository(StrategyEntity)
-      .update(strategyId, { profileId: profile.raw.id });
+      .update(strategyId, { voiceId: voice.raw.id });
   }
 
-  private async updateProfile(
+  private async updateVoice(
     ds: EntityManager,
-    profileId: string,
-    profileData: StrategyAgentState['updates']['profileToUpdate'],
+    voiceId: string,
+    voiceData: StrategyAgentState['updates']['voiceToUpdate'],
   ) {
-    if (!profileData) return;
+    if (!voiceData) return;
 
-    await ds.getRepository(ProfileEntity).update(profileId, profileData);
+    await ds.getRepository(VoiceEntity).update(voiceId, voiceData);
   }
 }

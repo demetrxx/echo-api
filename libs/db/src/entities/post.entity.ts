@@ -12,9 +12,10 @@ import { AbstractEntity } from '../common/base.entity';
 import { IdeaEntity } from './idea.entity';
 import { PostNoteEntity } from './post-note.entity';
 import { PostVersionEntity } from './post-version.entity';
-import { ProfileEntity } from './profile.entity';
+import { StrategyEntity } from './strategy.entity';
 import { ThemeEntity } from './theme.entity';
 import { UserEntity } from './user.entity';
+import { VoiceEntity } from './voice.entity';
 
 export enum PlatformType {
   Telegram = 'telegram',
@@ -88,22 +89,22 @@ export class PostEntity extends AbstractEntity {
   })
   themeId?: string;
 
-  @ManyToOne(() => ProfileEntity, (profile) => profile.posts, {
+  @ManyToOne(() => VoiceEntity, (voice) => voice.posts, {
     nullable: true,
   })
   @JoinColumn({
-    name: 'profile_id',
+    name: 'voice_id',
     referencedColumnName: 'id',
   })
-  profile: ProfileEntity;
+  voice: VoiceEntity;
 
-  @Index('idx_post_profile')
+  @Index('idx_post_voice')
   @Column({
     type: 'uuid',
-    name: 'profile_id',
+    name: 'voice_id',
     nullable: true,
   })
-  profileId: string | null;
+  voiceId: string | null;
 
   @Index('idx_post_status')
   @Column({
@@ -124,6 +125,7 @@ export class PostEntity extends AbstractEntity {
   @Column({
     type: 'enum',
     enum: PlatformType,
+    enumName: 'platform_type_enum',
   })
   platform: PlatformType;
 
@@ -164,4 +166,21 @@ export class PostEntity extends AbstractEntity {
 
   @OneToMany(() => PostNoteEntity, (postNote) => postNote.post)
   notes: PostNoteEntity[];
+
+  @ManyToOne(() => StrategyEntity, (strategy) => strategy.posts, {
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'strategy_id',
+    referencedColumnName: 'id',
+  })
+  strategy?: StrategyEntity;
+
+  @Index('idx_post_strategy')
+  @Column({
+    type: 'uuid',
+    name: 'strategy_id',
+    nullable: true,
+  })
+  strategyId?: string;
 }

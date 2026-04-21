@@ -11,10 +11,11 @@ import {
 import { AbstractEntity } from '../common/base.entity';
 import { StrategySnapshot } from '../common/strategy';
 import { IdeaEntity } from './idea.entity';
-import { ProfileEntity } from './profile.entity';
+import { PostEntity } from './post.entity';
 import { StrategyConversationEntity } from './strategy-conversation.entity';
 import { StrategyThemeEntity } from './strategy-theme.entity';
 import { UserEntity } from './user.entity';
+import { VoiceEntity } from './voice.entity';
 
 export enum StrategyStatus {
   Draft = 'draft',
@@ -76,22 +77,22 @@ export class StrategyEntity extends AbstractEntity {
   })
   userId: string;
 
-  @ManyToOne(() => ProfileEntity, (profile) => profile.strategies, {
+  @ManyToOne(() => VoiceEntity, (voice) => voice.strategies, {
     nullable: true,
   })
   @JoinColumn({
-    name: 'profile_id',
+    name: 'voice_id',
     referencedColumnName: 'id',
   })
-  profile?: ProfileEntity;
+  voice?: VoiceEntity;
 
-  @Index('idx_strategy_profile')
+  @Index('idx_strategy_voice')
   @Column({
     type: 'uuid',
-    name: 'profile_id',
+    name: 'voice_id',
     nullable: true,
   })
-  profileId?: string;
+  voiceId?: string;
 
   @OneToMany(
     () => StrategyThemeEntity,
@@ -101,6 +102,9 @@ export class StrategyEntity extends AbstractEntity {
 
   @OneToMany(() => IdeaEntity, (idea) => idea.strategy)
   ideas: IdeaEntity[];
+
+  @OneToMany(() => PostEntity, (post) => post.strategy)
+  posts: PostEntity[];
 
   @OneToOne(
     () => StrategyConversationEntity,

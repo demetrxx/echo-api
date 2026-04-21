@@ -34,7 +34,7 @@ Goal: Create, refine, or link a small set of active themes that express the user
 
 
 5. voice
-Description: Define how this strategy should sound. This stage selects, creates, or refines a usable voice profile and captures the strategy-specific expression adjustments needed for downstream writing.
+Description: Define how this strategy should sound. This stage selects, creates, or refines a usable voice and captures the strategy-specific expression adjustments needed for downstream writing.
 Goal: Establish a usable voice foundation for the strategy by linking an existing voice or creating/refining one, then capture the key adjustments that will make future writing sound natural and aligned.
 
 

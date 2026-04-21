@@ -4,9 +4,9 @@ import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationSortingQuery } from '@/common/utils';
 
-export class GetProfilesQueryParams extends PaginationSortingQuery {}
+export class GetVoicesQueryParams extends PaginationSortingQuery {}
 
-export class CreateProfileRequestDto {
+export class CreateVoiceRequestDto {
   @ApiProperty()
   @IsString()
   name: string;
@@ -35,7 +35,7 @@ export class CreateProfileRequestDto {
   isDefaultFor?: PlatformType[];
 }
 
-export class UpdateProfileRequestDto {
+export class UpdateVoiceRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()

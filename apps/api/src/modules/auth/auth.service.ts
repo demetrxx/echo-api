@@ -322,7 +322,10 @@ export class AuthService {
       throw Err.badRequest('Password is not set');
     }
 
-    const isValid = await bcrypt.compare(payload.oldPassword, user.passwordHash);
+    const isValid = await bcrypt.compare(
+      payload.oldPassword,
+      user.passwordHash,
+    );
     if (!isValid) {
       throw Err.unauthorized();
     }
@@ -344,20 +347,20 @@ export class AuthService {
     }
 
     const tokenResponse = await this.exchangeGoogleToken(payload);
-    const profile = await this.fetchGoogleProfile(tokenResponse.id_token);
+    const voice = await this.fetchGoogleVoice(tokenResponse.id_token);
 
-    if (profile.aud !== authConfig.googleClientId) {
+    if (voice.aud !== authConfig.googleClientId) {
       throw Err.unauthorized('Invalid Google token audience');
     }
 
     const emailVerified =
-      profile.email_verified === 'true' || profile.email_verified === true;
+      voice.email_verified === 'true' || voice.email_verified === true;
 
     if (!emailVerified) {
       throw Err.unauthorized('Google email is not verified');
     }
 
-    const email = this.normalizeEmail(profile.email);
+    const email = this.normalizeEmail(voice.email);
     const userRepository = this.dataSource.getRepository(UserEntity);
     let user = await userRepository.findOne({
       where: { email },
@@ -368,7 +371,7 @@ export class AuthService {
     }
 
     if (!user) {
-      const { firstName, lastName } = this.splitFullName(profile.name);
+      const { firstName, lastName } = this.splitFullName(voice.name);
       user = userRepository.create({
         email,
         firstName,
@@ -809,7 +812,7 @@ export class AuthService {
     return payloadJson;
   }
 
-  private async fetchGoogleProfile(idToken: string) {
+  private async fetchGoogleVoice(idToken: string) {
     const response = await fetch(
       `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(
         idToken,

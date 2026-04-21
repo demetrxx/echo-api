@@ -28,7 +28,7 @@ export class GetPostsQueryParams extends PaginationSortingQuery {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUUID()
-  profileId?: string;
+  voiceId?: string;
 }
 
 export class CreatePostRequestDto {
@@ -77,7 +77,7 @@ export class UpdatePostRequestDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
-  profileId?: string;
+  voiceId?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -95,4 +95,10 @@ export class EditPostTextRequestDto {
   @ApiProperty()
   @IsString()
   text: string;
+}
+
+export class RefinePostRequestDto {
+  @ApiProperty()
+  @IsString()
+  request: string;
 }

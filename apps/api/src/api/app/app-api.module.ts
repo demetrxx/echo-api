@@ -4,10 +4,10 @@ import { FilesApiModule } from './files';
 import { IdeasApiModule } from './ideas';
 import { NotesApiModule } from './notes';
 import { PostsApiModule } from './posts';
-import { ProfilesApiModule } from './profiles';
 import { StrategiesApiModule } from './strategies';
 import { ThemesApiModule } from './themes';
 import { UserApiModule } from './user';
+import { VoicesApiModule } from './voices';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { UserApiModule } from './user';
     NotesApiModule,
     UserApiModule,
     PostsApiModule,
-    ProfilesApiModule,
+    VoicesApiModule,
     ThemesApiModule,
     StrategiesApiModule,
   ],

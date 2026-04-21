@@ -10,10 +10,10 @@ import {
 import { AbstractEntity } from '../common/base.entity';
 import { NoteIdeaEntity } from './note-idea.entity';
 import { PostEntity } from './post.entity';
-import { ProfileEntity } from './profile.entity';
 import { StrategyEntity } from './strategy.entity';
 import { ThemeEntity } from './theme.entity';
 import { UserEntity } from './user.entity';
+import { VoiceEntity } from './voice.entity';
 
 export enum IdeaStatus {
   Pending = 'pending',
@@ -73,23 +73,23 @@ export class IdeaEntity extends AbstractEntity {
   })
   themeId: string;
 
-  @ManyToOne(() => ProfileEntity, (profile) => profile.ideas, {
+  @ManyToOne(() => VoiceEntity, (voice) => voice.ideas, {
     onDelete: 'SET NULL',
     nullable: true,
   })
   @JoinColumn({
-    name: 'profile_id',
+    name: 'voice_id',
     referencedColumnName: 'id',
   })
-  profile?: ProfileEntity;
+  voice?: VoiceEntity;
 
-  @Index('idx_idea_profile')
+  @Index('idx_idea_voice')
   @Column({
     type: 'uuid',
-    name: 'profile_id',
+    name: 'voice_id',
     nullable: true,
   })
-  profileId?: string;
+  voiceId?: string;
 
   @ManyToOne(() => UserEntity, (user) => user.ideas, {
     onDelete: 'CASCADE',

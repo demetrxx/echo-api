@@ -4,17 +4,17 @@ import { FilesApiModule } from './files';
 import { IdeasApiModule } from './ideas';
 import { NotesApiModule } from './notes';
 import { PostsApiModule } from './posts';
-import { ProfilesApiModule } from './profiles';
 import { StrategiesApiModule } from './strategies';
 import { ThemesApiModule } from './themes';
 import { UserApiModule } from './user';
+import { VoicesApiModule } from './voices';
 
 const routes: [string, any][] = [
   ['files', FilesApiModule],
   ['ideas', IdeasApiModule],
   ['notes', NotesApiModule],
   ['posts', PostsApiModule],
-  ['profiles', ProfilesApiModule],
+  ['voices', VoicesApiModule],
   ['user', UserApiModule],
   ['themes', ThemesApiModule],
   ['strategies', StrategiesApiModule],

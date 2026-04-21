@@ -1,10 +1,10 @@
 import {
   IdeaEntity,
   NoteEntity,
-  ProfileEntity,
   StrategyEntity,
   StrategyStatus,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -41,8 +41,8 @@ export class IdeaService {
       .addSelect(['note.id', 'note.name'])
       .leftJoin('idea.theme', 'theme')
       .addSelect(['theme.id', 'theme.name'])
-      .leftJoin('idea.profile', 'profile')
-      .addSelect(['profile.id', 'profile.name'])
+      .leftJoin('idea.voice', 'voice')
+      .addSelect(['voice.id', 'voice.name'])
       .orderBy(`idea.${query.orderBy}`, query.order)
       .skip(query.skip)
       .take(query.take);
@@ -65,7 +65,7 @@ export class IdeaService {
    * @param count - The number of ideas to suggest
    * @returns The suggested ideas
    *
-   * Profile and strategy are there always there if exist
+   * Voice and strategy are there always there if exist
    * Strategy is default active or none
    * Voice is provided, default, or none
    * Theme is either selected or none
@@ -75,17 +75,17 @@ export class IdeaService {
     userId: string,
     dto: {
       themeId?: string;
-      profileId?: string;
+      voiceId?: string;
       notesBased?: boolean;
       forNoteIds?: string[];
     },
     count: number,
   ): Promise<IdeaEntity[]> {
-    const { themeId, notesBased, profileId, forNoteIds } = dto;
+    const { themeId, notesBased, voiceId, forNoteIds } = dto;
 
     let notes: NoteEntity[] = [];
     let theme: ThemeEntity | undefined;
-    let profile: ProfileEntity | undefined;
+    let voice: VoiceEntity | undefined;
 
     if (themeId) {
       theme = await this.dataSource.getRepository(ThemeEntity).findOne({
@@ -99,12 +99,12 @@ export class IdeaService {
         where: { status: StrategyStatus.Active, userId },
       });
 
-    if (profileId) {
-      profile = await this.dataSource.getRepository(ProfileEntity).findOne({
-        where: { id: profileId, userId },
+    if (voiceId) {
+      voice = await this.dataSource.getRepository(VoiceEntity).findOne({
+        where: { id: voiceId, userId },
       });
     } else {
-      profile = await this.dataSource.getRepository(ProfileEntity).findOne({
+      voice = await this.dataSource.getRepository(VoiceEntity).findOne({
         where: { userId },
       });
     }
@@ -119,14 +119,14 @@ export class IdeaService {
       });
     }
 
-    if (!notes.length && !theme && !profile && !strategy) {
+    if (!notes.length && !theme && !voice && !strategy) {
       throw Err.badRequest('No context provided');
     }
 
     const ideas = await this.ideaGeneratorService.suggest(
       userId,
       {
-        profile,
+        voice,
         notes,
         strategy,
         theme,

@@ -40,9 +40,17 @@ export class ThemeService {
     const recentPosts = await this.dataSource
       .getRepository(PostEntity)
       .createQueryBuilder('post')
-      .select(['post.id', 'post.title', 'post.status'])
+      .select([
+        'post.id',
+        'post.title',
+        'post.status',
+        'post.createdAt',
+        'post.updatedAt',
+      ])
       .where('post.themeId = :themeId', { themeId: id })
       .andWhere('post.userId = :userId', { userId })
+      .leftJoinAndSelect('post.idea', 'idea')
+      .leftJoinAndSelect('post.currentVersion', 'currentVersion')
       .orderBy('post.createdAt', 'DESC')
       .take(3)
       .getMany();

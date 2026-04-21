@@ -1,7 +1,9 @@
 # 05_DECISIONS_AND_OPEN_QUESTIONS.md
 
 ## Purpose
+
 This document separates:
+
 - what is currently locked
 - what is still a working hypothesis
 - what is still open
@@ -21,10 +23,13 @@ These decisions are considered locked unless explicitly reopened.
 ## 1.1 Product Direction
 
 ### Locked
+
 Echo is **not** being built as a generic AI content factory.
 
 ### Meaning
+
 The product should not center itself around:
+
 - “30 days of content in one click”
 - pure automation
 - bulk social content generation as the core truth
@@ -32,7 +37,9 @@ The product should not center itself around:
 - heavy SMM dashboard behavior
 
 ### Why this is locked
+
 The current strongest direction is:
+
 - strategy as clarity/context
 - notes as grounding
 - refine-loop writing as the core execution advantage
@@ -42,10 +49,13 @@ The current strongest direction is:
 ## 1.2 Refine-Loop Writing Is Core
 
 ### Locked
+
 The product’s main writing value is **refinement**, not one-shot generation.
 
 ### Meaning
+
 The product should help users:
+
 - sharpen
 - structure
 - ground
@@ -60,11 +70,14 @@ It should not primarily try to “write for them from nothing”.
 ## 1.3 Strategy Is a Core Module
 
 ### Locked
+
 Strategy is not optional garnish.
 It is a core layer of the product.
 
 ### Meaning
+
 Strategy exists to create:
+
 - clarity for the user
 - context for the system
 - better inputs for angles, ideas, and posts
@@ -76,11 +89,14 @@ It is not a calendar or posting plan.
 ## 1.4 Strategy Is Conversation + Snapshot
 
 ### Locked
+
 The Strategy module is built around:
+
 - a persistent strategy conversation
 - a live structured strategy snapshot
 
 ### Meaning
+
 The conversation is the process.
 The snapshot is the source of truth.
 
@@ -89,10 +105,13 @@ The snapshot is the source of truth.
 ## 1.5 Refinement Is Not a Separate Strategy Mode
 
 ### Locked
+
 There is no separate “refine strategy” mode.
 
 ### Meaning
+
 If the user later says:
+
 - “I understand the audience better now”
 - “let’s rethink the goals”
 - “this is too broad”
@@ -104,9 +123,11 @@ the same strategy conversation continues, and the snapshot is updated.
 ## 1.6 Snapshot Is the Source of Truth
 
 ### Locked
+
 The strategy snapshot, not the chat history, is the canonical strategy artifact.
 
 ### Meaning
+
 The agent must update the snapshot through tools.
 The system should not treat the chat as the final state.
 
@@ -115,13 +136,17 @@ The system should not treat the chat as the final state.
 ## 1.7 Notes Have Compiled Text + Items
 
 ### Locked
+
 A note has:
+
 - one coherent compiled text body
 - underlying note items
 
 ### Meaning
+
 The user mostly experiences notes as readable whole objects.
 But the system still preserves:
+
 - text items
 - voice items
 - links
@@ -135,10 +160,13 @@ This is a core architectural decision.
 ## 1.8 Theme Linkage Is Soft and Stateful
 
 ### Locked
+
 Theme linkage for notes is not a hard binary truth.
 
 ### Meaning
+
 A note can have:
+
 - suggested theme link
 - confirmed theme link
 - rejected / cleared link
@@ -150,12 +178,15 @@ Suggested and confirmed are not the same.
 ## 1.9 Voice Is a Separate Entity
 
 ### Locked
+
 Voice remains a separate stable entity.
 
 ### Meaning
+
 Voice is not merged into Strategy.
 
-Voice holds the stable author profile:
+Voice holds the stable author voice:
+
 - style rules
 - tone summary
 - avoid rules
@@ -168,9 +199,11 @@ Strategy can reference and refine how voice is used in a given context.
 ## 1.10 Voice Creation / Refinement Happens Inside Strategy Flow
 
 ### Locked
+
 Voice may be created or refined during the Strategy flow, before angles / ideas.
 
 ### Meaning
+
 The Strategy process can include a Voice stage.
 This is not a contradiction with Voice being a separate entity.
 
@@ -179,10 +212,12 @@ This is not a contradiction with Voice being a separate entity.
 ## 1.11 Strategy and Voice Are Not the Same
 
 ### Locked
+
 Voice = stable author profile  
 Strategy = current content direction context
 
 ### Meaning
+
 Voice should stay small and stable.
 Most contextual writing preferences belong in Strategy.
 
@@ -191,9 +226,11 @@ Most contextual writing preferences belong in Strategy.
 ## 1.12 Angles and Ideas Are Not the Same
 
 ### Locked
+
 Angle and Idea are distinct layers.
 
 ### Meaning
+
 - Angle = framing / take / lens
 - Idea = executable content unit closer to a post
 
@@ -204,11 +241,14 @@ This distinction is intentional.
 ## 1.13 Post Is Separate from Idea
 
 ### Locked
+
 A post is a concrete writing object.
 It is not the same as a theme, angle, or idea.
 
 ### Meaning
+
 Post belongs to the write-post layer and uses:
+
 - notes
 - strategy context
 - voice
@@ -220,9 +260,11 @@ Post belongs to the write-post layer and uses:
 ## 1.14 Strategy and Ideation Are Separate
 
 ### Locked
+
 Strategy ends before full ideation / writing.
 
 ### Meaning
+
 The default downstream flow is:
 
 **strategy → angles / ideas → writing**
@@ -234,12 +276,15 @@ Strategy should not immediately collapse into final post generation by default.
 ## 1.15 Diagnose Must Come First
 
 ### Locked
+
 The first step of strategy building is not a mode selector or a rigid multiselect.
 
 ### Meaning
+
 The first step is a chat-based diagnosis phase.
 
 Diagnose determines:
+
 - goals
 - branch hints
 - relevant snapshot blocks
@@ -250,13 +295,16 @@ Diagnose determines:
 ## 1.16 Dynamic Strategy Shape
 
 ### Locked
+
 The Strategy snapshot is not one fixed schema for everyone.
 
 ### Meaning
+
 Some blocks are always present.
 Some are conditional and appear depending on the user’s goals and context.
 
 Examples:
+
 - product context for sales-like goals
 - clarity context for thinking/exploration goals
 - expertise context for trust/authority goals
@@ -266,7 +314,9 @@ Examples:
 ## 1.17 Strategy Stages Were Simplified
 
 ### Locked
+
 The stage model moved away from:
+
 - Rapport
 - Inventory
 - Distillation
@@ -277,6 +327,7 @@ The stage model moved away from:
 - FreeRefine
 
 Toward a cleaner version centered around:
+
 - Diagnose
 - Direction
 - Themes
@@ -285,6 +336,7 @@ Toward a cleaner version centered around:
 - FreeRefine
 
 ### Note
+
 “Ideation-ready” is better treated as a state than as a full stage.
 
 ---
@@ -292,10 +344,13 @@ Toward a cleaner version centered around:
 ## 1.18 Channels Matter
 
 ### Locked
+
 Channels are part of strategy.
 
 ### Meaning
+
 The strategy must know where the user actually writes:
+
 - X
 - Threads
 - LinkedIn
@@ -311,10 +366,13 @@ They should not be ignored or deferred out of strategy.
 ## 1.19 Evidence Preferences Matter
 
 ### Locked
+
 How the user prefers to support claims is a meaningful strategic input.
 
 ### Meaning
+
 The strategy should eventually capture things like:
+
 - personal observations
 - examples
 - case studies
@@ -333,7 +391,9 @@ These are strong current hypotheses, but not yet fully locked.
 ---
 
 ## 2.1 First Paying User Likely Cares More About
+
 Current hypothesis:
+
 - clarity
 - trust
 - identity
@@ -347,8 +407,10 @@ This is not fully locked yet.
 ---
 
 ## 2.2 Strategy Should Probably Stay Lightweight
+
 Current hypothesis:
 The strategy layer should stay:
+
 - live
 - conversational
 - structured
@@ -359,6 +421,7 @@ This is a strong design direction, but exact threshold is still open.
 ---
 
 ## 2.3 Growth / Sales Branches May Exist Without Becoming Core
+
 Current hypothesis:
 The product can support growth or sales-oriented users,
 but should not become a heavy marketing machine by default.
@@ -368,8 +431,10 @@ Still open how far this should go in v1.
 ---
 
 ## 2.4 Platform-Specific Execution Should Likely Stay Downstream
+
 Current hypothesis:
 Deep platform adaptation should happen later in:
+
 - angle generation
 - idea generation
 - writing layer
@@ -381,8 +446,10 @@ Still open how much platform-specific logic needs to be elevated.
 ---
 
 ## 2.5 Preferred Formats Probably Belong in Strategy
+
 Current hypothesis:
 Preferences like:
+
 - short dense posts
 - practical breakdowns
 - story-led content
@@ -395,8 +462,10 @@ Still open how structured this field should be.
 ---
 
 ## 2.6 Expression Block Is the Right Home for Contextual Writing Preferences
+
 Current hypothesis:
 A strategy-level `expression` block is likely the cleanest place for:
+
 - linked voice
 - voice adjustments
 - preferred formats
@@ -415,10 +484,12 @@ These should be the focus of future product/system design conversations.
 ---
 
 ## 3.1 Final Strategy Snapshot Shape
+
 Open:
 What is the final best structure of the strategy snapshot?
 
 Still unresolved:
+
 - exact field names
 - exact nested structure
 - what belongs in core vs conditional blocks
@@ -427,10 +498,12 @@ Still unresolved:
 ---
 
 ## 3.2 Goal-to-Block Mapping
+
 Open:
 Exactly which goals should activate which conditional blocks?
 
 Examples still being refined:
+
 - sales / leads → productContext?
 - trust → expertiseContext?
 - clarity → clarityContext?
@@ -439,6 +512,7 @@ Examples still being refined:
 ---
 
 ## 3.3 Core Blocks vs Conditional Blocks
+
 Open:
 What should always exist in every strategy snapshot,
 and what should only appear when Diagnose decides it is relevant?
@@ -446,12 +520,15 @@ and what should only appear when Diagnose decides it is relevant?
 ---
 
 ## 3.4 Voice vs Strategy Boundaries
+
 Open:
 Where exactly is the cleanest split between:
+
 - stable voice profile
 - contextual expression preferences
 
 Still unresolved:
+
 - what belongs in Voice only
 - what belongs in Strategy only
 - what is derived or shared
@@ -459,8 +536,10 @@ Still unresolved:
 ---
 
 ## 3.5 Final Shape of the Expression Block
+
 Open:
 Should `expression` contain:
+
 - preferredFormats
 - evidencePreferences
 - avoidPatterns
@@ -468,6 +547,7 @@ Should `expression` contain:
 - anything else?
 
 And in what structure:
+
 - arrays
 - freeform text
 - richer objects
@@ -475,10 +555,12 @@ And in what structure:
 ---
 
 ## 3.6 What Makes a Strategy “Ideation Ready”
+
 Open:
 What is the exact readiness threshold?
 
 Not yet fully decided:
+
 - minimum required fields
 - how strict readiness should be
 - whether readiness is binary or tiered
@@ -486,10 +568,12 @@ Not yet fully decided:
 ---
 
 ## 3.7 Angle / Idea Generation UX
+
 Open:
 How should angle generation and idea generation actually feel?
 
 Questions include:
+
 - do we generate angles first and then ideas?
 - when do users choose one vs the other?
 - how much is auto-generated vs explicitly requested?
@@ -498,8 +582,10 @@ Questions include:
 ---
 
 ## 3.8 How Much Bulk / Branching Generation to Support
+
 Open:
 Should the product support:
+
 - one angle → one idea → one post
   or also
 - one direction → many angles → many ideas
@@ -509,10 +595,12 @@ Not decided how far to go here in v1.
 ---
 
 ## 3.9 Which Goal Branches Matter Most in V1
+
 Open:
 Which goal branches deserve first-class support in the first version?
 
 Likely candidates:
+
 - clarity
 - trust
 - identity
@@ -523,10 +611,12 @@ Still not fully locked.
 ---
 
 ## 3.10 What Inputs Strategy Should Accept
+
 Open:
 Beyond starting from chat, what inputs should Strategy support well?
 
 Examples:
+
 - existing notes
 - past posts
 - writing samples
@@ -567,6 +657,7 @@ Current recommended order of work:
 ---
 
 # 6. HOW TO USE THIS DOCUMENT IN A NEW CHAT
+
 When continuing in a new chat:
 
 - treat everything under “Locked Decisions” as settled unless explicitly reopened

@@ -556,7 +556,7 @@ Do not use this stage to solve voice or expression questions.
     expectedSnapshotEffects: [
       'a usable voice is linked to the strategy, or the lack of a strong voice is consciously acknowledged',
       'voice adjustments reflect this strategy’s context rather than replacing the base voice',
-      'stable voice traits are kept in the voice profile, not scattered across the strategy',
+      'stable voice traits are kept in the voice, not scattered across the strategy',
       'generic, weak, or contradictory expression instructions are avoided',
       'the strategy is ready to move into sharpening with a clear enough expression foundation',
     ],
@@ -567,7 +567,7 @@ Voice-stage priorities:
 - Prefer linking an existing voice when it already matches the strategy well enough.
 - Create a new voice only when the difference is real and meaningful.
 - If the user provides writing examples, extract stable style signals from them.
-- Put stable voice identity into the voice profile.
+- Put stable voice identity into the voice.
 - Put only contextual expression shifts into strategy voice adjustments.
 - If voice is still unclear but not blocking progress, keep it minimal rather than over-designing it.
 - If voice is unclear, first ask for examples, old posts, references, or rough style signals

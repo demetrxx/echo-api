@@ -1,12 +1,12 @@
 import {
   ChatMessage,
-  ProfileEntity,
   StrategySnapshot,
   StrategyStage,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 
-interface CreateStrategyProfileDto {
+interface CreateStrategyVoiceDto {
   name: string;
   description: string;
   rules: string[];
@@ -16,7 +16,7 @@ interface CreateStrategyProfileDto {
   anglePreferences: string;
 }
 
-type UpdateStrategyProfileDto = Partial<CreateStrategyProfileDto>;
+type UpdateStrategyVoiceDto = Partial<CreateStrategyVoiceDto>;
 
 export interface StrategyAgentState {
   name: string;
@@ -26,7 +26,7 @@ export interface StrategyAgentState {
   userMessage: string;
 
   themes: ThemeEntity[];
-  profile: ProfileEntity | null;
+  voice: VoiceEntity | null;
 
   userId: string;
 
@@ -36,8 +36,8 @@ export interface StrategyAgentState {
     themesToUpdate: { id: string; name?: string; description?: string }[];
     themesToRemove: string[];
 
-    profileToSet: string | null | undefined;
-    profileToCreate: CreateStrategyProfileDto | null;
-    profileToUpdate: UpdateStrategyProfileDto | null;
+    voiceToSet: string | null | undefined;
+    voiceToCreate: CreateStrategyVoiceDto | null;
+    voiceToUpdate: UpdateStrategyVoiceDto | null;
   };
 }

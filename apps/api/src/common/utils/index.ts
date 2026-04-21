@@ -1,6 +1,7 @@
 export * from './pagination';
 export * from './percentile';
 export * from './person';
+export * from './prompt';
 export * from './safe-num';
 export * from './sha256Async';
 export * from './sleep';

@@ -1,41 +1,30 @@
-import {
-  NoteEntity,
-  ProfileEntity,
-  StrategyEntity,
-  ThemeEntity,
-} from '@app/db';
+import { NoteEntity, StrategyEntity, ThemeEntity, VoiceEntity } from '@app/db';
+
+import { inTag } from '@/common/utils';
 
 export interface IdeaGenerationPromptInput {
   notes: NoteEntity[];
   theme?: ThemeEntity;
-  profile?: ProfileEntity;
+  voice?: VoiceEntity;
   strategy?: StrategyEntity;
   count: number;
 }
 
-// utils
-function inTag(tag: string, content: string) {
-  return `<${tag}>
-${content}
-</${tag}`;
-}
+function injectVoice(voice?: VoiceEntity) {
+  if (!voice) return ``;
 
-function injectProfile(profile?: ProfileEntity) {
-  if (!profile) return ``;
-
-  const profileData = {
-    name: profile.name,
-    tov: profile.tov,
-    rules: profile.rules,
-    avoidRules: profile.avoidRules,
-    examplesSummary: profile.examplesSummary,
+  const voiceData = {
+    name: voice.name,
+    tov: voice.tov,
+    rules: voice.rules,
+    avoidRules: voice.avoidRules,
   };
 
   return inTag(
-    'profile',
+    'voice',
     `Use this as voice/framing context. It should shape phrasing and emphasis, but it must not override the actual subject matter:
 
-${JSON.stringify(profileData, null, 2)}`,
+${JSON.stringify(voiceData, null, 2)}`,
   );
 }
 
@@ -110,7 +99,7 @@ Core rules:
 - If notes are provided, use them as the primary source material.
 - If a theme is provided, every idea must clearly fit that theme.
 - If a strategy is provided, align the ideas with the audience, problems, goals, and strategic context.
-- If a voice profile is provided, use it only to shape phrasing and framing, not to override the subject matter.
+- If a voice voice is provided, use it only to shape phrasing and framing, not to override the subject matter.
 - Generate ideas, not posts.
 - Do not generate hooks, outlines, CTAs, or platform-specific execution.
 - Each idea must be meaningfully different from the others.
@@ -135,7 +124,7 @@ Angle rules:
 
 ${injectStrategy(i.strategy)}
 
-${injectProfile(i.profile)}
+${injectVoice(i.voice)}
 
 ${injectNotes(i.notes)}
 

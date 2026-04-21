@@ -1,17 +1,20 @@
 # 01_PRODUCT_THESIS.md
 
 ## Working Name
+
 **Echo**
 
 ---
 
 ## Product Thesis
+
 Echo helps creators turn raw thoughts into strong posts without losing their voice.
 
 Most tools start too late.  
 They assume the user is already ready to “create content”.
 
 But the real bottlenecks usually happen earlier:
+
 - thoughts appear in the wrong moment
 - capture is fragmented
 - material gets lost across apps
@@ -25,15 +28,18 @@ Echo exists to make that path feel natural:
 ---
 
 ## Core Problem
+
 Creators often do not lack ideas.
 
 They lack:
+
 - a reliable way to capture thoughts
 - a calm place where those thoughts stay usable
 - a system that gives direction without becoming oppressive
 - a writing flow that helps them refine instead of replacing them
 
 This creates several common problems:
+
 - thoughts are lost
 - good notes never turn into posts
 - content feels inconsistent
@@ -44,13 +50,16 @@ This creates several common problems:
 ---
 
 ## Product Promise
+
 Echo gives users:
+
 - one place to collect their raw material
 - a structured but non-heavy strategy layer
 - a way to extract stronger angles and ideas from that context
 - a refine-loop writing flow that preserves authorship
 
 The product should make users feel:
+
 - clearer
 - lighter
 - less fragmented
@@ -59,36 +68,46 @@ The product should make users feel:
 ---
 
 ## Core User Jobs
+
 Echo is designed to help users do the following jobs:
 
 ### 1. Capture thoughts when they happen
+
 Text, voice, links, screenshots, files, whatever is available in the moment.
 
 ### 2. Keep those thoughts alive
+
 Notes should not become dead storage.
 
 ### 3. Understand what they are actually trying to say
+
 Not just on a post-by-post level, but on a strategy level:
+
 - who am I writing for?
 - what am I trying to be known for?
 - what tensions / problems am I circling?
 - why am I writing at all?
 
 ### 4. Generate better directions from real context
+
 Not abstract “10 content ideas”, but grounded:
+
 - angles
 - ideas
 - post directions
 
 ### 5. Write faster without losing self-authorship
+
 The product should reduce cognitive load, not replace the user’s mind.
 
 ---
 
 ## What Makes This Product Different
+
 Echo is not trying to win by writing the most content automatically.
 
 It is trying to win by being better at:
+
 - context retention
 - direction clarity
 - idea grounding
@@ -96,6 +115,7 @@ It is trying to win by being better at:
 - refinement over replacement
 
 In practice, that means:
+
 - notes matter
 - strategy matters
 - voice matters
@@ -105,21 +125,27 @@ In practice, that means:
 ---
 
 ## Strategic Product Position
+
 Echo should sit between several categories without collapsing into any of them.
 
 ### Not just a note app
+
 Because notes are only the beginning.
 
 ### Not just an AI writer
+
 Because writing quality depends on context and direction.
 
 ### Not just a strategy tool
+
 Because strategy must feed execution.
 
 ### Not just a scheduling / publishing tool
+
 Because the real value happens before posting.
 
 ### Not just a social media dashboard
+
 Because the product is not built around operations or analytics first.
 
 Echo is best thought of as:
@@ -130,7 +156,9 @@ Echo is best thought of as:
 ## Product Pillars
 
 ### 1. Capture
+
 The product must make it easy to save raw material:
+
 - text
 - voice
 - links
@@ -140,7 +168,9 @@ The product must make it easy to save raw material:
 This must feel fast and low-friction.
 
 ### 2. Strategy
+
 The product must help the user build clarity:
+
 - who they are writing for
 - why they are writing
 - what tensions / themes matter
@@ -149,22 +179,27 @@ The product must help the user build clarity:
 This should happen through a live strategy process, not through a rigid form.
 
 ### 3. Voice
+
 The product must preserve how the user naturally sounds and help refine, not flatten, that voice.
 
 ### 4. Ideation
+
 The product must generate better angles and ideas because it has better context.
 
 ### 5. Writing
+
 The product must help the user go from raw thought / angle / idea to a better post through refinement.
 
 ---
 
 ## The Refine-Loop Thesis
+
 One of the strongest current product beliefs is this:
 
 **Refinement is more valuable than one-shot generation.**
 
 Why:
+
 - most AI writing fails because it jumps too fast to final output
 - users often have something worth saying already
 - the real value is often in sharpening, structuring, grounding, and expressing that thought better
@@ -175,21 +210,25 @@ This is why refine-loop writing is a core part of the product.
 ---
 
 ## Why Strategy Matters
+
 Strategy is not an add-on.
 
 It matters because it creates:
+
 - clarity for the user
 - usable context for the system
 - better inputs for angles, ideas, and posts
 - continuity across time
 
 Without strategy:
+
 - the product becomes just another note-to-post tool
 - ideas become generic
 - posts become disconnected
 - voice and themes float without enough anchor
 
 Strategy in Echo should not mean:
+
 - calendar
 - cadence
 - rigid content planning
@@ -201,9 +240,11 @@ It should mean:
 ---
 
 ## Why Voice Matters
+
 Voice is not just tone.
 
 Voice includes:
+
 - rhythm
 - level of sharpness
 - density of language
@@ -212,12 +253,14 @@ Voice includes:
 - what kinds of phrasing feel false or embarrassing
 
 Voice matters because otherwise:
+
 - generated output becomes generic
 - strategy feels detached from real authorship
 - the user stops trusting the system
 
 Echo should treat voice as:
-- a stable profile
+
+- a stable voice
 - refined through examples
 - reusable across strategies
 - adjustable in context through strategy
@@ -225,9 +268,11 @@ Echo should treat voice as:
 ---
 
 ## Why Notes Still Matter
+
 Even with strategy and ideation, notes remain fundamental.
 
 Notes are:
+
 - raw observations
 - half-formed ideas
 - voice transcripts
@@ -235,6 +280,7 @@ Notes are:
 - things the user noticed and does not want to lose
 
 Notes matter because they provide:
+
 - grounding
 - memory
 - continuity
@@ -245,7 +291,9 @@ Without them, the system becomes too abstract.
 ---
 
 ## What the Product Is Not Optimizing For
+
 Echo is not trying to optimize primarily for:
+
 - content volume at all costs
 - social-media automation
 - prompt hacking
@@ -259,7 +307,9 @@ Those can be adjacent, but they are not the product’s truth.
 ---
 
 ## Current Product Bias
+
 The current strongest direction is toward users who care about:
+
 - clarity
 - trust
 - identity
@@ -267,6 +317,7 @@ The current strongest direction is toward users who care about:
 - stronger writing
 
 This does not exclude growth or sales use cases, but it means the product’s center of gravity should remain:
+
 - human
 - thoughtful
 - strategy-aware
@@ -275,7 +326,9 @@ This does not exclude growth or sales use cases, but it means the product’s ce
 ---
 
 ## Likely User Segments
+
 Still not fully locked, but the product likely fits:
+
 - founders writing in public
 - solo creators
 - expert operators
@@ -289,7 +342,9 @@ Each segment may have different goals, but the system should feel coherent acros
 ---
 
 ## Product Non-Goals
+
 At least for now, Echo should avoid turning into:
+
 - a full publishing suite
 - a content calendar product
 - a social scheduling tool
@@ -302,6 +357,7 @@ At least for now, Echo should avoid turning into:
 ---
 
 ## Current High-Level Flow
+
 The current canonical flow is:
 
 1. Capture notes / source material
@@ -315,7 +371,9 @@ This is the product spine.
 ---
 
 ## Product Design Principles
+
 Echo should feel:
+
 - calm
 - precise
 - lightweight
@@ -324,6 +382,7 @@ Echo should feel:
 - useful without being loud
 
 The UI should avoid:
+
 - dashboard energy
 - AI theater
 - too many simultaneous decisions
@@ -333,11 +392,13 @@ The UI should avoid:
 ---
 
 ## Truth vs Hype
+
 Many public threads and creator posts sell a fantasy of “content factories”, prompt rituals, and bulk content output.
 
 Echo should learn from that market language, but should not become that product unless validated by real usage.
 
 Current direction:
+
 - strategy for context
 - notes for grounding
 - voice for authorship
@@ -345,9 +406,11 @@ Current direction:
 - writing for refinement
 
 Not:
+
 - AI content spam machine
 
 ---
 
 ## One-Sentence Product Thesis
+
 Echo helps creators turn raw thoughts into clearer strategy, grounded ideas, and stronger posts through calm capture, live strategy building, and refine-loop writing.

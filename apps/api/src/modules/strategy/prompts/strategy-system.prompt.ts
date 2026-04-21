@@ -1,8 +1,8 @@
 import {
-  ProfileEntity,
   StrategySnapshot,
   StrategyStage,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 
 import { STAGE_TOOLS, STRATEGY_STAGES } from '../consts';
@@ -11,7 +11,7 @@ export interface StrategySystemPromptInput {
   currentStage: StrategyStage;
   snapshot: StrategySnapshot;
   themes: ThemeEntity[];
-  voice: ProfileEntity;
+  voice: VoiceEntity;
 }
 
 export const STAGES_IN_ORDER = [
@@ -50,7 +50,7 @@ ${JSON.stringify(
 </themes>`;
 }
 
-function injectVoiceBlock(voice?: ProfileEntity) {
+function injectVoiceBlock(voice?: VoiceEntity) {
   if (!voice) {
     return 'Voice has not been defined yet.';
   }
@@ -59,11 +59,9 @@ function injectVoiceBlock(voice?: ProfileEntity) {
 <voice>
 ${JSON.stringify({
   name: voice.name,
-  summary: voice.examplesSummary,
   rules: voice.rules,
   avoidRules: voice.avoidRules,
   tov: voice.tov,
-  anglePreferences: voice.anglePreferences,
   evidencePreferences: voice.evidencePreferences,
 })}
 </voice>`;
@@ -238,7 +236,7 @@ Global snapshot field guidance:
 
 - voiceAdjustments
   Use these only for strategy-specific expression shifts.
-  Do not use them to recreate the entire voice profile inside the strategy.
+  Do not use them to recreate the entire voice voice inside the strategy.
 </global_snapshot_guidance>
 
 Available tools for the current stage:

@@ -7,8 +7,8 @@ import {
 } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ProfileDto } from '@/api/app/profiles';
 import { ThemeDto } from '@/api/app/themes';
+import { VoiceDto } from '@/api/app/voices';
 
 import { IdeaDto } from '../../ideas/dtos/response.dtos';
 import { NoteDto } from '../../notes/dtos/response.dtos';
@@ -63,8 +63,8 @@ export class PostDto {
   @ApiProperty({ type: ThemeDto })
   theme: ThemeDto;
 
-  @ApiProperty({ type: ProfileDto })
-  profile: ProfileDto;
+  @ApiProperty({ type: VoiceDto })
+  voice: VoiceDto;
 
   @ApiProperty({
     description: 'Post platform',
@@ -91,7 +91,7 @@ export class PostDto {
       title: e.title,
       idea: e.idea ? IdeaDto.mapFromEntity(e.idea) : null,
       theme: e.theme ? ThemeDto.mapFromEntity(e.theme) : null,
-      profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
+      voice: e.voice ? VoiceDto.mapFromEntity(e.voice) : null,
       currentVersion: PostVersionDto.mapFromEntity(e.currentVersion),
       platform: e.platform,
       status: e.status,

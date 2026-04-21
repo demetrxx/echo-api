@@ -21,6 +21,7 @@ import {
   PostDetailsDto,
   PostDto,
   PostVersionDto,
+  RefinePostRequestDto,
   UpdatePostRequestDto,
 } from './dtos';
 import {
@@ -30,6 +31,7 @@ import {
   GetPostsOpenApi,
   GetPostVersionOpenApi,
   GetPostVersionsOpenApi,
+  RefinePostOpenApi,
   UpdatePostOpenApi,
 } from './posts.openapi';
 
@@ -39,6 +41,17 @@ import {
 @Protected()
 export class PostsAppController {
   constructor(private readonly postService: PostService) {}
+
+  @RefinePostOpenApi()
+  @Post(':id/refine')
+  async refine(
+    @Param('id') id: string,
+    @Body() body: RefinePostRequestDto,
+    @User() user: User,
+  ) {
+    const post = await this.postService.refine(id, user.id, body);
+    return PostDetailsDto.mapFromEntity(post);
+  }
 
   @CreatePostOpenApi()
   @Post()

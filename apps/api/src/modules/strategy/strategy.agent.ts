@@ -1,8 +1,8 @@
 import {
-  ProfileEntity,
   StrategyContextBlockType,
   StrategyStage,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -34,7 +34,7 @@ export class StrategyAgent {
       snapshot: state.snapshot,
       currentStage: state.stage,
       themes: state.themes,
-      voice: state.profile,
+      voice: state.voice,
     });
 
     this.logger.log(systemPrompt);
@@ -146,7 +146,7 @@ export class StrategyAgent {
   }
 
   private async action_queryVoices(state: StrategyAgentState) {
-    const themes = await this.dataSource.getRepository(ProfileEntity).find({
+    const themes = await this.dataSource.getRepository(VoiceEntity).find({
       where: { userId: state.userId },
     });
 
@@ -155,8 +155,6 @@ export class StrategyAgent {
         id: i.id,
         name: i.name,
         tov: i.tov,
-        examplesSummary: i.examplesSummary,
-        anglePreferences: i.anglePreferences,
         rules: i.rules,
         avoidRules: i.avoidRules,
         evidencePreferences: i.evidencePreferences,
@@ -216,7 +214,7 @@ export class StrategyAgent {
   }
 
   private action_linkVoice(state: StrategyAgentState, i: { id: string }) {
-    state.updates.profileToSet = i.id;
+    state.updates.voiceToSet = i.id;
   }
 
   private action_createVoice(
@@ -231,7 +229,7 @@ export class StrategyAgent {
       anglePreferences: string;
     },
   ) {
-    state.updates.profileToCreate = {
+    state.updates.voiceToCreate = {
       name: i.name,
       description: i.description,
       rules: i.rules,
@@ -254,12 +252,12 @@ export class StrategyAgent {
       anglePreferences?: string;
     },
   ) {
-    if (!state.profile) {
-      this.logger.error(`No profile linked to strategy, cannot update voice`);
+    if (!state.voice) {
+      this.logger.error(`No voice linked to strategy, cannot update voice`);
       return;
     }
 
-    state.updates.profileToUpdate = i;
+    state.updates.voiceToUpdate = i;
   }
 
   action_updateContext(

@@ -9,8 +9,8 @@ import {
 } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ProfileDto } from '@/api/app/profiles';
 import { ThemeDto } from '@/api/app/themes';
+import { VoiceDto } from '@/api/app/voices';
 
 export class StrategyDto {
   @ApiProperty({
@@ -33,9 +33,9 @@ export class StrategyDto {
   status: StrategyStatus;
 
   @ApiProperty({
-    description: 'Strategy profile',
+    description: 'Strategy voice',
   })
-  profile: ProfileDto;
+  voice: VoiceDto;
 
   @ApiProperty({
     description: 'Strategy themes',
@@ -92,7 +92,7 @@ export class StrategyDto {
       problems: e.snapshot.problems,
       audience: e.snapshot.audience,
       themes: e.themes.map((theme) => ThemeDto.mapFromEntity(theme.theme)),
-      profile: e.profile ? ProfileDto.mapFromEntity(e.profile) : null,
+      voice: e.voice ? VoiceDto.mapFromEntity(e.voice) : null,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
     };

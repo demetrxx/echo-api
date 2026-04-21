@@ -22,7 +22,7 @@ export class SuggestIdeasRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUUID()
-  profileId?: string;
+  voiceId?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()

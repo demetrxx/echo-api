@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 
-import { ProfileModule } from '../profile';
+import { LlmModule } from '@/modules/llm';
+
+import { VoiceModule } from '../voice';
 import { PostService } from './post.service';
+import { PostRefineService } from './post-refine.service';
 
 @Module({
-  imports: [ProfileModule],
-  providers: [PostService],
+  imports: [VoiceModule, LlmModule],
+  providers: [PostService, PostRefineService],
   exports: [PostService],
 })
 export class PostModule {}

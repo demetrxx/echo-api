@@ -6,6 +6,8 @@ import {
   PostStatus,
   PostVersionEntity,
   PostVersionType,
+  StrategyEntity,
+  StrategyStatus,
 } from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -14,6 +16,8 @@ import { DataSource, In } from 'typeorm';
 import { Err } from '@/common/errors/app-error';
 import { DS } from '@/common/types';
 import { PaginationSortingQuery } from '@/common/utils';
+
+import { PostRefineService } from './post-refine.service';
 
 export interface PostCreateDto {
   themeId?: string;
@@ -27,7 +31,7 @@ const DEFAULT_PLATFORM = PlatformType.LinkedIn;
 export interface PostUpdateDto {
   title?: string;
   themeId?: string;
-  profileId?: string;
+  voiceId?: string;
   noteIds?: string[];
   platform?: PlatformType | null;
   status?: PostStatus;
@@ -39,7 +43,42 @@ export class PostService {
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
+    private readonly postRefineService: PostRefineService,
   ) {}
+
+  async refine(postId: string, userId: string, dto: { request: string }) {
+    const post = await this.getOne(postId, userId);
+
+    const strategy = await this.dataSource
+      .getRepository(StrategyEntity)
+      .findOne({
+        where: { id: post.strategyId, userId },
+      });
+
+    const refinedPostText = await this.postRefineService.refine({
+      post,
+      notes: post.notes.map((note) => note.note),
+      theme: post.theme,
+      idea: post.idea,
+      strategy,
+      request: dto.request,
+    });
+
+    // create new version
+    await this.dataSource.transaction(async (ds) => {
+      await this.createPostVersion(
+        {
+          postId: post.id,
+          text: refinedPostText,
+          type: PostVersionType.AI,
+          parentVersionNo: post.currentVersion.versionNo,
+        },
+        ds,
+      );
+    });
+
+    return this.getOne(postId, userId);
+  }
 
   async getMany(
     userId: string,
@@ -48,7 +87,7 @@ export class PostService {
       status?: PostStatus;
       platform?: PlatformType;
       search?: string;
-      profileId?: string;
+      voiceId?: string;
     },
   ) {
     const {
@@ -59,7 +98,7 @@ export class PostService {
       themeId,
       status,
       platform,
-      profileId,
+      voiceId,
       search,
     } = query;
 
@@ -68,7 +107,7 @@ export class PostService {
       .createQueryBuilder('post')
       .where('post.userId = :userId', { userId })
       .leftJoinAndSelect('post.theme', 'theme')
-      .leftJoinAndSelect('post.profile', 'profile')
+      .leftJoinAndSelect('post.voice', 'voice')
       .leftJoinAndSelect('post.idea', 'idea')
       .leftJoinAndSelect('post.currentVersion', 'currentVersion')
       .orderBy(`post.${orderBy}`, order)
@@ -95,8 +134,8 @@ export class PostService {
       qb.andWhere('post.platform = :platform', { platform });
     }
 
-    if (profileId) {
-      qb.andWhere('post.profileId = :profileId', { profileId });
+    if (voiceId) {
+      qb.andWhere('post.voiceId = :voiceId', { voiceId });
     }
 
     const data = await qb.getMany();
@@ -115,7 +154,7 @@ export class PostService {
       where: { id, userId },
       relations: [
         'theme',
-        'profile',
+        'voice',
         'idea',
         'currentVersion',
         'notes',
@@ -139,7 +178,7 @@ export class PostService {
     await postRepository.update(id, {
       title: dto.title,
       themeId: dto.themeId,
-      profileId: dto.profileId,
+      voiceId: dto.voiceId,
       platform: dto.platform,
       status: dto.status,
       currentVersionId: dto.currentVersionId,
@@ -162,11 +201,6 @@ export class PostService {
         text: dto.text,
         type: PostVersionType.Manual,
         parentVersionNo: version.versionNo,
-        versionNo: version.versionNo + 1,
-      });
-
-      await this.updateOne(post.id, userId, {
-        currentVersionId: version.id,
       });
     } else {
       await this.updatePostVersion(version.id, {
@@ -199,6 +233,15 @@ export class PostService {
       title = idea.name;
     }
 
+    const activeStrategy = await this.dataSource
+      .getRepository(StrategyEntity)
+      .findOne({
+        where: {
+          userId,
+          status: StrategyStatus.Active,
+        },
+      });
+
     const postId = await this.dataSource.transaction(async (ds) => {
       const postRepository = ds.getRepository(PostEntity);
 
@@ -206,10 +249,11 @@ export class PostService {
         userId,
         themeId,
         title,
-        profileId: lastPost?.profileId,
+        voiceId: lastPost?.voiceId,
         ideaId: dto.ideaId,
         status: PostStatus.Draft,
         platform: lastPost?.platform ?? DEFAULT_PLATFORM,
+        strategyId: activeStrategy?.id,
       });
 
       const version = await this.createPostVersion(
@@ -217,7 +261,6 @@ export class PostService {
           postId: post.id,
           text: dto.text,
           type: PostVersionType.Manual,
-          versionNo: 1,
           parentVersionNo: null,
         },
         ds,
@@ -281,11 +324,23 @@ export class PostService {
       text: string;
       type: PostVersionType;
       parentVersionNo: number | null;
-      versionNo: number;
     },
     ds: DS = this.dataSource,
   ) {
-    return ds.getRepository(PostVersionEntity).save(dto);
+    const postVersionRepository = ds.getRepository(PostVersionEntity);
+    const latestVersion = await this.getLatestVersion(dto.postId);
+    const postRepository = ds.getRepository(PostEntity);
+
+    const version = await postVersionRepository.save({
+      ...dto,
+      versionNo: (latestVersion?.versionNo || 0) + 1,
+    });
+
+    await postRepository.update(dto.postId, {
+      currentVersionId: version.id,
+    });
+
+    return version;
   }
 
   async updatePostVersion(

@@ -4,11 +4,11 @@ import { AbstractEntity } from '../common/base.entity';
 import { IdeaEntity } from './idea.entity';
 import { NoteEntity } from './note.entity';
 import { PostEntity } from './post.entity';
-import { ProfileEntity } from './profile.entity';
 import { RefreshSessionEntity } from './refresh-session.entity';
 import { StrategyEntity } from './strategy.entity';
 import { TgUserEntity } from './tg-user.entity';
 import { ThemeEntity } from './theme.entity';
+import { VoiceEntity } from './voice.entity';
 
 export enum UserStatus {
   Active = 'active',
@@ -93,8 +93,8 @@ export class UserEntity extends AbstractEntity {
   @OneToMany(() => PostEntity, (post) => post.user)
   posts: PostEntity[];
 
-  @OneToMany(() => ProfileEntity, (profile) => profile.user)
-  profiles: ProfileEntity[];
+  @OneToMany(() => VoiceEntity, (voice) => voice.user)
+  voices: VoiceEntity[];
 
   @OneToMany(() => RefreshSessionEntity, (session) => session.user)
   refreshSessions: RefreshSessionEntity[];

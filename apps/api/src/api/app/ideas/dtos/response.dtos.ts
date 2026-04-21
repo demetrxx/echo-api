@@ -24,7 +24,7 @@ export class IdeaThemeDto {
   name: string;
 }
 
-export class IdeaProfileDto {
+export class IdeaVoiceDto {
   @ApiProperty()
   id: string;
 
@@ -49,13 +49,13 @@ export class IdeaDto {
   themeId: string | null;
 
   @ApiProperty({ required: false, nullable: true })
-  profileId: string | null;
+  voiceId: string | null;
 
   @ApiProperty({ type: IdeaThemeDto, required: false, nullable: true })
   theme: IdeaThemeDto | null;
 
-  @ApiProperty({ type: IdeaProfileDto, required: false, nullable: true })
-  profile: IdeaProfileDto | null;
+  @ApiProperty({ type: IdeaVoiceDto, required: false, nullable: true })
+  voice: IdeaVoiceDto | null;
 
   @ApiProperty({ type: [IdeaNoteDto] })
   notes: IdeaNoteDto[];
@@ -73,17 +73,17 @@ export class IdeaDto {
       angle: entity.angle ?? null,
       strategyId: entity.strategyId ?? entity.strategy?.id ?? null,
       themeId: entity.themeId ?? entity.theme?.id ?? null,
-      profileId: entity.profileId ?? entity.profile?.id ?? null,
+      voiceId: entity.voiceId ?? entity.voice?.id ?? null,
       theme: entity.theme
         ? {
             id: entity.theme.id,
             name: entity.theme.name,
           }
         : null,
-      profile: entity.profile
+      voice: entity.voice
         ? {
-            id: entity.profile.id,
-            name: entity.profile.name,
+            id: entity.voice.id,
+            name: entity.voice.name,
           }
         : null,
       notes: (entity.notes ?? []).map((note) =>

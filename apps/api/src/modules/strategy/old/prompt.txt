@@ -1,6 +1,6 @@
 import {
   PlatformType,
-  ProfileEntity,
+  VoiceEntity,
   StrategySnapshot,
   StrategyStage,
   ThemeEntity,
@@ -12,7 +12,7 @@ export interface StrategySystemPromptInput {
   currentStage: StrategyStage;
   snapshot: StrategySnapshot;
   themes: ThemeEntity[];
-  voice: ProfileEntity;
+  voice: VoiceEntity;
 }
 
 export const STAGES_IN_ORDER = [
@@ -55,7 +55,7 @@ ${JSON.stringify(
 </themes>`;
 }
 
-function injectVoiceBlock(voice?: ProfileEntity) {
+function injectVoiceBlock(voice?: VoiceEntity) {
   if (!voice) {
     return 'Voice has not been defined yet.';
   }

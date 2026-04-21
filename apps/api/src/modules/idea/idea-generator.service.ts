@@ -2,9 +2,9 @@ import {
   IdeaEntity,
   NoteEntity,
   NoteIdeaEntity,
-  ProfileEntity,
   StrategyEntity,
   ThemeEntity,
+  VoiceEntity,
 } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -50,19 +50,19 @@ export class IdeaGeneratorService {
   async suggest(
     userId: string,
     dto: {
-      profile?: ProfileEntity;
+      voice?: VoiceEntity;
       notes?: NoteEntity[];
       strategy?: StrategyEntity;
       theme?: ThemeEntity;
     },
     count: number,
   ) {
-    const { profile, notes, strategy, theme } = dto;
+    const { voice, notes, strategy, theme } = dto;
 
     const systemPrompt = IDEA_GENERATION_PROMPT({
       notes,
       theme,
-      profile,
+      voice,
       strategy,
       count,
     });

@@ -92,3 +92,14 @@ export const CreatePostOpenApi = () =>
       description: 'Post created successfully',
     }),
   );
+
+export const RefinePostOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Refine post',
+      description: 'Refine a post',
+    }),
+    ApiOkResponse({
+      description: 'Post refined successfully',
+    }),
+  );
