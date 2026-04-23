@@ -59,10 +59,10 @@ function injectVoiceBlock(voice?: VoiceEntity) {
 <voice>
 ${JSON.stringify({
   name: voice.name,
-  rules: voice.rules,
-  avoidRules: voice.avoidRules,
-  tov: voice.tov,
-  evidencePreferences: voice.evidencePreferences,
+  rules: voice.data.rules,
+  avoidRules: voice.data.avoidRules,
+  tov: voice.data.tov,
+  evidencePreferences: voice.data.evidencePreferences,
 })}
 </voice>`;
 }

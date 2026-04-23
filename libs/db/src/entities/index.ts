@@ -17,4 +17,5 @@ export * from './tg-user.entity';
 export * from './theme.entity';
 export * from './user.entity';
 export * from './voice.entity';
+export * from './voice-calibration.entity';
 export * from './voice-example.entity';

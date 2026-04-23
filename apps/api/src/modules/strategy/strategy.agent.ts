@@ -12,7 +12,7 @@ import { DataSource } from 'typeorm';
 import { LlmService } from '@/modules/llm';
 
 import { STAGE_TOOLS, StrategyAgentTool } from './consts';
-import { buildTool, cleanMessages, getContextBlockDefault } from './lib';
+import { buildTool, cleanMessages } from './lib';
 import { STRATEGY_SYSTEM_PROMPT } from './prompts';
 import { STRATEGY_NAME_PROMPT } from './prompts';
 import { StrategyAgentState } from './types';
@@ -154,10 +154,10 @@ export class StrategyAgent {
       themes.map((i) => ({
         id: i.id,
         name: i.name,
-        tov: i.tov,
-        rules: i.rules,
-        avoidRules: i.avoidRules,
-        evidencePreferences: i.evidencePreferences,
+        tov: i.data.tov,
+        rules: i.data.rules,
+        avoidRules: i.data.avoidRules,
+        evidencePreferences: i.data.evidencePreferences,
       })),
     );
   }

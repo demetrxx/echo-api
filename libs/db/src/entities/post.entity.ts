@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { PlatformType } from '../common/platform';
 import { IdeaEntity } from './idea.entity';
 import { PostNoteEntity } from './post-note.entity';
 import { PostVersionEntity } from './post-version.entity';
@@ -16,24 +17,6 @@ import { StrategyEntity } from './strategy.entity';
 import { ThemeEntity } from './theme.entity';
 import { UserEntity } from './user.entity';
 import { VoiceEntity } from './voice.entity';
-
-export enum PlatformType {
-  Telegram = 'telegram',
-  X = 'x',
-  Threads = 'threads',
-  LinkedIn = 'linkedin',
-  Instagram = 'instagram',
-  TikTok = 'tiktok',
-  YouTube = 'youtube',
-  Facebook = 'facebook',
-  Newsletter = 'newsletter',
-  Blog = 'blog',
-  Substack = 'substack',
-  Medium = 'medium',
-  Reddit = 'reddit',
-  Discord = 'discord',
-  Custom = 'custom',
-}
 
 export enum PostStatus {
   Draft = 'draft',

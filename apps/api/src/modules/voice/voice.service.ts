@@ -1,36 +1,24 @@
-import { PlatformType, VoiceEntity, VoiceExampleEntity } from '@app/db';
+import {
+  PlatformType,
+  VoiceCalibrationEntity,
+  VoiceCalibrationType,
+  VoiceEntity,
+  VoiceExampleEntity,
+  VoiceStatus,
+} from '@app/db';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { toSql } from 'pgvector/utils';
 import { DataSource } from 'typeorm';
-import { z } from 'zod';
 
 import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
 import { LlmService } from '@/modules/llm';
 
 import { ADAPT_TEXT_PROMPT } from './prompts/adapt-text.prompt';
-import { VOICE_PROCESS_PROMPT } from './prompts/voice-process.prompt';
+import { VoiceCalibrationService } from './voice-calibration.service';
 
 const SIMILARITY_THRESHOLD = 0.5;
-
-const schema = z.object({
-  tov: z.string().describe('Tone of voice'),
-  rules: z.array(z.string()).describe('Rules'),
-  avoidRules: z.array(z.string()).describe('Avoid rules'),
-  evidencePreferences: z.string().describe('Evidence preferences'),
-  platformOverrides: z
-    .record(
-      z.enum(PlatformType),
-      z.object({
-        tov: z.array(z.string()).describe('Tone of voice'),
-        rules: z.array(z.string()).describe('Rules'),
-        avoidRules: z.array(z.string()).describe('Avoid rules'),
-        evidencePreferences: z.string().describe('Evidence preferences'),
-      }),
-    )
-    .describe('Platform overrides'),
-});
 
 @Injectable()
 export class VoiceService {
@@ -38,38 +26,32 @@ export class VoiceService {
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly llmService: LlmService,
+    private readonly voiceCalibrationService: VoiceCalibrationService,
   ) {}
 
   // voice processing
+  async calibrate(voiceId: string, userId: string, type: VoiceCalibrationType) {
+    const voice = await this.getOne(voiceId, userId);
 
-  async process(id: string, userId: string) {
-    const voice = await this.getOne(id, userId);
+    const examples = await this.getExamples(voiceId, userId);
 
-    const examples = await this.getExamples(id, userId);
-
-    const prompt = VOICE_PROCESS_PROMPT({
+    await this.voiceCalibrationService.calibrate(
       voice,
-      examples,
-    });
+      examples.map((e) => e.text),
+      type,
+    );
 
-    const response = await this.llmService.client.invoke([
-      { role: 'user', content: prompt },
-    ]);
-
-    const result = schema.parse(response);
-
-    await this.updateOne(id, userId, result);
+    // add step
   }
 
   async getRelevantExamples(
     voiceId: string,
     i: {
-      platform: PlatformType;
       text: string;
       count: number;
     },
   ) {
-    const { platform, text, count } = i;
+    const { text, count } = i;
 
     const repo = this.dataSource.getRepository(VoiceExampleEntity);
 
@@ -78,7 +60,6 @@ export class VoiceService {
     const examples = await repo
       .createQueryBuilder('example')
       .where('example.voiceId = :voiceId', { voiceId })
-      .andWhere('example.platform = :platform', { platform })
       .andWhere(
         'example.textEmbeddings <-> (:embeddings)::vector < :threshold',
         {
@@ -97,8 +78,8 @@ export class VoiceService {
     voiceId: string,
     userId: string,
     i: {
-      platform: PlatformType;
       text: string;
+      platform: PlatformType;
     },
   ) {
     const { platform, text } = i;
@@ -106,7 +87,6 @@ export class VoiceService {
     const voice = await this.getOne(voiceId, userId);
 
     const examples = await this.getRelevantExamples(voiceId, {
-      platform,
       text,
       count: 10,
     });
@@ -130,17 +110,35 @@ export class VoiceService {
   async create(
     userId: string,
     dto: {
-      name: string;
+      platforms: PlatformType[];
     },
   ) {
-    const repo = this.dataSource.getRepository(VoiceEntity);
+    this.dataSource.transaction(async (ds) => {
+      const repo = ds.getRepository(VoiceEntity);
 
-    const voice = await repo.save({
-      userId,
-      name: dto.name,
+      const voice = await repo.save({
+        userId,
+        name: `New Voice for ${dto.platforms.join(', ')}`,
+        platforms: dto.platforms,
+        data: {
+          tov: [],
+          rules: [],
+          avoidRules: [],
+          evidencePreferences: '',
+          extra: {},
+        },
+        status: VoiceStatus.Calibrating,
+      });
+
+      await ds.getRepository(VoiceCalibrationEntity).save({
+        voiceId: voice.id,
+        data: {
+          steps: [],
+        },
+      });
+
+      return voice;
     });
-
-    return voice;
   }
 
   async getOne(id: string, userId: string) {
@@ -212,20 +210,22 @@ export class VoiceService {
   // examples
   async addExamples(
     voiceId: string,
-    examples: { platform: PlatformType; example: string }[],
+    userId: string,
+    dto: { examples: string[] },
   ) {
+    await this.checkExists(voiceId, userId);
+
+    const { examples } = dto;
+
     const repo = this.dataSource.getRepository(VoiceExampleEntity);
 
     const embeddings = await Promise.all(
-      examples.map(async (e) => {
-        return this.llmService.getEmbeddings(e.example);
-      }),
+      examples.map((e) => this.llmService.getEmbeddings(e)),
     );
 
     await repo.save(
       examples.map((e, idx) => ({
-        platform: e.platform,
-        example: e.example,
+        example: e,
         textEmbeddings: embeddings[idx],
         voiceId,
       })),

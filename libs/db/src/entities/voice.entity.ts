@@ -5,23 +5,30 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { PlatformType } from '../common/platform';
 import { IdeaEntity } from './idea.entity';
-import { PlatformType, PostEntity } from './post.entity';
+import { PostEntity } from './post.entity';
 import { StrategyEntity } from './strategy.entity';
 import { UserEntity } from './user.entity';
+import { VoiceCalibrationEntity } from './voice-calibration.entity';
 import { VoiceExampleEntity } from './voice-example.entity';
 
-interface PlatformOverride {
-  tov?: string[];
-  rules?: string[];
-  avoidRules?: string[];
-  evidencePreferences?: string[];
+export enum VoiceStatus {
+  Calibrating = 'calibrating',
+  Active = 'active',
 }
 
-type PlatformOverrides = Partial<Record<PlatformType, PlatformOverride>>;
+export interface VoiceData {
+  tov: string[];
+  rules: string[];
+  avoidRules: string[];
+  evidencePreferences: string;
+  extra: Record<string, string>;
+}
 
 @Entity('voice')
 export class VoiceEntity extends AbstractEntity {
@@ -32,27 +39,16 @@ export class VoiceEntity extends AbstractEntity {
   name: string;
 
   @Column({
-    type: 'jsonb',
+    type: 'enum',
+    enum: VoiceStatus,
+    default: VoiceStatus.Calibrating,
   })
-  rules: string[];
+  status: VoiceStatus;
 
   @Column({
     type: 'jsonb',
-    nullable: true,
   })
-  avoidRules: string[];
-
-  @Column({
-    type: 'jsonb',
-    nullable: true,
-  })
-  tov: string;
-
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
-  evidencePreferences: string;
+  data: VoiceData;
 
   @Column({
     type: 'enum',
@@ -63,13 +59,10 @@ export class VoiceEntity extends AbstractEntity {
   })
   platforms: PlatformType[];
 
-  @Column({
-    type: 'jsonb',
-    nullable: true,
-  })
-  platformOverrides: PlatformOverrides;
-
   // relations
+
+  @OneToOne(() => VoiceCalibrationEntity, (calibration) => calibration.voice)
+  calibration: VoiceCalibrationEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.voices, {
     onDelete: 'CASCADE',

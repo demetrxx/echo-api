@@ -1,9 +1,10 @@
-import { Column, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
-import { PlatformType } from './post.entity';
+import { PlatformType } from '../common/platform';
 import { VoiceEntity } from './voice.entity';
 
+@Entity('voice_example')
 export class VoiceExampleEntity extends AbstractEntity {
   // embedding of the text
   @Column({

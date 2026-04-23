@@ -1,32 +1,20 @@
-import { VoiceEntity, VoiceExampleEntity } from '@app/db';
+import { VoiceEntity } from '@app/db';
 
 import { inTag } from '@/common/utils';
 
 interface VoiceProcessPromptInput {
   voice: VoiceEntity;
-  examples: VoiceExampleEntity[];
+  examples: string[];
 }
 
-function injectExamples(examples: VoiceExampleEntity[]) {
+function injectExamples(examples: string[]) {
   return (
     'Examples:\n' +
-    inTag(
-      'examples',
-      `
-  ${JSON.stringify(
-    examples.map((e) => ({
-      platform: e.platform,
-      example: e.text,
-    })),
-    null,
-    2,
-  )}
-  `,
-    )
+    inTag('examples', `${examples.map((e) => inTag('example', e)).join('\n')}`)
   );
 }
 
-export const VOICE_PROCESS_PROMPT = (i: VoiceProcessPromptInput) => `
+export const VOICE_CALIBRATE_PROMPT = (i: VoiceProcessPromptInput) => `
 You are a voice processing agent.
 
 You are given a voice and a list of examples.

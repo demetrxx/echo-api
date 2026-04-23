@@ -15,9 +15,9 @@ function injectVoice(voice?: VoiceEntity) {
 
   const voiceData = {
     name: voice.name,
-    tov: voice.tov,
-    rules: voice.rules,
-    avoidRules: voice.avoidRules,
+    tov: voice.data.tov,
+    rules: voice.data.rules,
+    avoidRules: voice.data.avoidRules,
   };
 
   return inTag(
