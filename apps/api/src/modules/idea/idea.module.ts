@@ -8,6 +8,6 @@ import { IdeaGeneratorService } from './idea-generator.service';
 @Module({
   imports: [LlmModule],
   providers: [IdeaService, IdeaGeneratorService],
-  exports: [IdeaService],
+  exports: [IdeaService, IdeaGeneratorService],
 })
 export class IdeaModule {}

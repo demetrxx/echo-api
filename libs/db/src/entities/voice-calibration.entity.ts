@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
+import { NoteEntity } from './note.entity';
 import { VoiceData, VoiceEntity } from './voice.entity';
 
 export enum VoiceCalibrationType {
@@ -9,17 +10,23 @@ export enum VoiceCalibrationType {
   UpdateExamples = 'updateExamples',
 }
 
+export interface VoiceCalibrationSample {
+  theme: { name: string; description?: string };
+  idea: { name: string; angle?: string };
+  note?: string;
+  text: string;
+}
+
 export interface VoiceCalibrationStep {
   type: VoiceCalibrationType;
   data: VoiceData;
-  samples: { theme: string; idea: string; note?: string; text: string }[];
+  samples: VoiceCalibrationSample[];
   feedback: string;
 }
 
 export interface VoiceCalibrationData {
   steps: VoiceCalibrationStep[];
-  themes: string[];
-  ideas: string[];
+  themes: { name: string; description?: string }[];
   note: string | null;
 }
 
@@ -42,4 +49,18 @@ export class VoiceCalibrationEntity extends AbstractEntity {
     type: 'jsonb',
   })
   data: VoiceCalibrationData;
+
+  @OneToOne(() => NoteEntity, { nullable: true })
+  @JoinColumn({
+    name: 'note_id',
+    referencedColumnName: 'id',
+  })
+  note?: NoteEntity;
+
+  @Column({
+    type: 'uuid',
+    name: 'note_id',
+    nullable: true,
+  })
+  noteId?: string;
 }

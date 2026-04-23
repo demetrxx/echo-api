@@ -4,6 +4,7 @@ import {
   NoteIdeaEntity,
   StrategyEntity,
   ThemeEntity,
+  VoiceData,
   VoiceEntity,
 } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
@@ -50,14 +51,14 @@ export class IdeaGeneratorService {
   async suggest(
     userId: string,
     dto: {
-      voice?: VoiceEntity;
+      voiceData?: VoiceData;
       notes?: NoteEntity[];
       strategy?: StrategyEntity;
       theme?: ThemeEntity;
     },
     count: number,
   ) {
-    const { voice, notes, strategy, theme } = dto;
+    const { voiceData, notes, strategy, theme } = dto;
 
     const systemPrompt = IDEA_GENERATION_PROMPT({
       notes,

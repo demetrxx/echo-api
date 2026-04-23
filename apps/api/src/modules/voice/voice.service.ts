@@ -113,7 +113,7 @@ export class VoiceService {
       platforms: PlatformType[];
     },
   ) {
-    this.dataSource.transaction(async (ds) => {
+    return this.dataSource.transaction(async (ds) => {
       const repo = ds.getRepository(VoiceEntity);
 
       const voice = await repo.save({
