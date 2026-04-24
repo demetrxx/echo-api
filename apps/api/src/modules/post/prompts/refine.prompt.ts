@@ -7,19 +7,15 @@ import {
 } from '@app/db';
 
 import { inTag } from '@/common/utils';
+import { injectVoice, VoiceInfoDto } from '@/modules/voice';
 export interface RefinePromptInput {
   post: string;
   request: string;
-  voice?: VoiceEntity;
+  voice?: VoiceInfoDto;
   notes?: NoteEntity[];
   theme?: ThemeEntity;
   idea?: IdeaEntity;
   strategy?: StrategyEntity;
-}
-
-function injectVoice(voice?: VoiceEntity) {
-  if (!voice) return ``;
-  return inTag('voice', ``);
 }
 
 function injectNotes(notes?: NoteEntity[]) {

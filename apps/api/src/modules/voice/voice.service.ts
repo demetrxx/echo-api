@@ -26,23 +26,7 @@ export class VoiceService {
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly llmService: LlmService,
-    private readonly voiceCalibrationService: VoiceCalibrationService,
   ) {}
-
-  // voice processing
-  async calibrate(voiceId: string, userId: string, type: VoiceCalibrationType) {
-    const voice = await this.getOne(voiceId, userId);
-
-    const examples = await this.getExamples(voiceId, userId);
-
-    await this.voiceCalibrationService.calibrate(
-      voice,
-      examples.map((e) => e.text),
-      type,
-    );
-
-    // add step
-  }
 
   async getRelevantExamples(
     voiceId: string,

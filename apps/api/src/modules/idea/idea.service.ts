@@ -126,7 +126,7 @@ export class IdeaService {
     const ideas = await this.ideaGeneratorService.suggest(
       userId,
       {
-        voice,
+        voice: voice ? { data: voice.data } : undefined,
         notes,
         strategy,
         theme,

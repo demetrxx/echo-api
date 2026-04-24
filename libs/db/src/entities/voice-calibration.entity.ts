@@ -26,8 +26,6 @@ export interface VoiceCalibrationStep {
 
 export interface VoiceCalibrationData {
   steps: VoiceCalibrationStep[];
-  themes: { name: string; description?: string }[];
-  note: string | null;
 }
 
 @Entity('voice_calibration')

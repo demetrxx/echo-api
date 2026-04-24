@@ -1,4 +1,9 @@
-import { PlatformType, VoiceEntity, VoiceExampleEntity } from '@app/db';
+import {
+  PlatformType,
+  VoiceData,
+  VoiceEntity,
+  VoiceExampleEntity,
+} from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class VoiceDto {
@@ -16,8 +21,8 @@ export class VoiceDto {
   })
   platforms: PlatformType[];
 
-  @ApiProperty({ description: 'Tone of voice', type: [String] })
-  tov: string;
+  @ApiProperty({ description: 'Tone of voice' })
+  data: VoiceData;
 
   @ApiProperty({ description: 'Examples count', example: 10 })
   examplesCount: number;
@@ -31,7 +36,7 @@ export class VoiceDto {
       name: e.name,
       platforms: e.platforms,
       examplesCount: e.examplesCount,
-      tov: e.tov ?? '',
+      data: e.data,
       createdAt: e.createdAt,
     };
   }
@@ -61,15 +66,6 @@ export class VoiceExampleDto {
 }
 
 export class VoiceDetailsDto extends VoiceDto {
-  @ApiProperty({ description: 'Rules', type: [String] })
-  rules: string[];
-
-  @ApiProperty({ description: 'Avoid rules', type: [String] })
-  avoidRules: string[];
-
-  @ApiProperty({ description: 'Evidence preferences', type: String })
-  evidencePreferences: string;
-
   @ApiProperty({ description: 'Examples', type: [VoiceExampleDto] })
   examples: VoiceExampleDto[];
 
@@ -79,9 +75,6 @@ export class VoiceDetailsDto extends VoiceDto {
       examples: e.examples.map((example) =>
         VoiceExampleDto.mapFromEntity(example),
       ),
-      rules: e.rules ?? [],
-      avoidRules: e.avoidRules ?? [],
-      evidencePreferences: e.evidencePreferences ?? '',
     };
   }
 }

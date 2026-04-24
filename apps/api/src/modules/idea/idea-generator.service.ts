@@ -14,6 +14,7 @@ import { z } from 'zod';
 
 import { LlmService } from '@/modules/llm';
 
+import { VoiceInfoDto } from '../voice';
 import { IDEA_GENERATION_PROMPT } from './idea-generation.prompt';
 
 const shemaNoNotes = z.array(
@@ -51,14 +52,14 @@ export class IdeaGeneratorService {
   async suggest(
     userId: string,
     dto: {
-      voiceData?: VoiceData;
+      voice?: VoiceInfoDto;
       notes?: NoteEntity[];
       strategy?: StrategyEntity;
       theme?: ThemeEntity;
     },
     count: number,
   ) {
-    const { voiceData, notes, strategy, theme } = dto;
+    const { voice, notes, strategy, theme } = dto;
 
     const systemPrompt = IDEA_GENERATION_PROMPT({
       notes,
@@ -114,10 +115,10 @@ export class IdeaGeneratorService {
 
   async suggestForStrategy() {}
 
-  async getNoteCandidates(
-    userId: string,
-    themeId: string,
-  ): Promise<NoteEntity[]> {
-    return [];
-  }
+  // async getNoteCandidates(
+  //   userId: string,
+  //   themeId: string,
+  // ): Promise<NoteEntity[]> {
+  //   return [];
+  // }
 }

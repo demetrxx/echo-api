@@ -18,7 +18,10 @@ import { LlmService } from '@/modules/llm';
 import { PostRefineService } from '@/modules/post';
 
 import { IdeaGeneratorService } from '../idea/idea-generator.service';
+import { NoteService } from '../note/note.service';
 import { VOICE_CALIBRATE_PROMPT } from './prompts/voice-calibrate.prompt';
+import { VoiceInfoDto } from './types/voice-info.dto';
+import { VoiceService } from './voice.service';
 
 const MAX_SAMPLES = 3;
 
@@ -38,14 +41,14 @@ export class VoiceCalibrationService {
     private readonly dataSource: DataSource,
     private readonly postRefineService: PostRefineService,
     private readonly ideaGeneratorService: IdeaGeneratorService,
+    private readonly voiceService: VoiceService,
+    private readonly noteService: NoteService,
   ) {}
 
-  async calibrate(
-    voice: VoiceEntity,
-    examples: string[],
-    type: VoiceCalibrationType,
-    feedback?: string,
-  ) {
+  // actions
+  async calibrate(voiceId: string, userId: string, type: VoiceCalibrationType) {
+    const voice = await this.voiceService.getOne(voiceId, userId);
+
     const calibration = await this.dataSource
       .getRepository(VoiceCalibrationEntity)
       .findOne({
@@ -54,10 +57,7 @@ export class VoiceCalibrationService {
         },
       });
 
-    if (feedback) {
-      calibration.data.steps[calibration.data.steps.length - 1].feedback =
-        feedback;
-    }
+    const examples = await this.getExamples(voiceId, userId);
 
     const prompt = VOICE_CALIBRATE_PROMPT({
       voice,
@@ -70,25 +70,12 @@ export class VoiceCalibrationService {
 
     const voiceData = voiceDataSchema.parse(response);
 
-    const themes = await this.getUserThemes(voice.userId);
-
-    const ideas = await this.generateIdeas(voice.userId, {
-      themes,
-      note: calibration.note,
+    const samples = await this.generateSamples({
+      voice,
+      calibration,
       voiceData,
+      examples,
     });
-
-    const samples = await Promise.all(
-      ideas.map((idea) =>
-        this.generateSample({
-          data: voiceData,
-          examples,
-          idea,
-          note: calibration.data.note,
-          platforms: voice.platforms,
-        }),
-      ),
-    );
 
     calibration.data.steps.push({
       type,
@@ -103,56 +90,119 @@ export class VoiceCalibrationService {
     });
   }
 
-  async getUserThemes(userId: string): Promise<ThemeEntity[]> {
-    return this.dataSource.getRepository(ThemeEntity).find({
-      where: {
-        userId,
-      },
-      take: 3,
+  async addFeedback(voiceId: string, userId: string, feedback: string) {
+    await this.voiceService.checkExists(voiceId, userId);
+
+    const calibration = await this.dataSource
+      .getRepository(VoiceCalibrationEntity)
+      .findOne({
+        where: {
+          voiceId,
+        },
+      });
+
+    calibration.data.steps[calibration.data.steps.length - 1].feedback =
+      feedback;
+
+    await this.dataSource.getRepository(VoiceCalibrationEntity).save({
+      id: calibration.id,
+      data: calibration.data,
+    });
+
+    await this.calibrate(voiceId, userId, VoiceCalibrationType.Feedback);
+  }
+
+  async updateExamples(voiceId: string, userId: string, examples: string[]) {
+    await this.voiceService.checkExists(voiceId, userId);
+
+    await this.voiceService.addExamples(voiceId, userId, { examples });
+
+    await this.calibrate(voiceId, userId, VoiceCalibrationType.UpdateExamples);
+  }
+
+  async updateNote(voiceId: string, userId: string, note: string) {
+    const voice = await this.voiceService.getOne(voiceId, userId);
+
+    const calibration = await this.getOne(voiceId, userId);
+
+    const examples = await this.getExamples(voiceId, userId);
+
+    if (!calibration.note) {
+      const noteEntity = await this.noteService.create(userId, {
+        name: 'Voice calibration',
+        text: note,
+      });
+
+      await this.dataSource
+        .getRepository(VoiceCalibrationEntity)
+        .update(calibration.id, {
+          noteId: noteEntity.id,
+        });
+    } else {
+      await this.noteService.updateOne(calibration.note.id, userId, {
+        text: note,
+      });
+    }
+
+    const step = calibration.data.steps[calibration.data.steps.length - 1];
+
+    // add samples
+    const samples = await this.generateSamples({
+      voice,
+      calibration,
+      voiceData: step.data,
+      examples,
+    });
+
+    step.samples = [...step.samples, ...samples];
+
+    await this.dataSource.getRepository(VoiceCalibrationEntity).save({
+      id: calibration.id,
+      data: calibration.data,
     });
   }
 
-  async generateIdeas(
-    userId: string,
-    i: {
-      themes: ThemeEntity[];
-      note: NoteEntity;
-      voiceData: VoiceData;
-    },
-  ): Promise<IdeaEntity[]> {
-    const ideasAmountToGenerate: Record<string, number> = i.themes.reduce(
-      (acc, theme) => {
-        // 1 idea for each theme
-        acc[theme.id] = 1;
-
-        // if we have less than 3 themes, repeat the last theme
-        if (i.themes.length < MAX_SAMPLES) {
-          acc[theme.id] = MAX_SAMPLES - i.themes.length;
-        }
-
-        return acc;
+  async getOne(voiceId: string, userId: string) {
+    await this.voiceService.checkExists(voiceId, userId);
+    return this.dataSource.getRepository(VoiceCalibrationEntity).findOne({
+      where: {
+        voiceId,
       },
-      {},
-    );
-
-    const ideas = await Promise.all(
-      i.themes.map((theme) =>
-        this.ideaGeneratorService.suggest(
-          userId,
-          {
-            notes: [i.note],
-            voiceData: i.voiceData,
-            theme,
-          },
-          ideasAmountToGenerate[theme.id],
-        ),
-      ),
-    );
-
-    return ideas.flat();
+      relations: ['note'],
+    });
   }
 
-  async generateSample(i: {
+  // samples
+  private async generateSamples(i: {
+    voice: VoiceEntity;
+    calibration: VoiceCalibrationEntity;
+    voiceData: VoiceData;
+    examples: string[];
+  }) {
+    const { voice, calibration, voiceData, examples } = i;
+
+    const themes = await this.getUserThemes(voice.userId);
+
+    const ideas = await this.generateIdeas(voice.userId, {
+      themes,
+      note: calibration.note,
+      voice: { data: voice.data },
+    });
+
+    return Promise.all(
+      ideas.map((idea) =>
+        this.generateSample({
+          data: voiceData,
+          examples,
+          idea,
+          note: calibration.data.note,
+          platforms: voice.platforms,
+        }),
+      ),
+    );
+  }
+
+  private async generateSample(i: {
     platforms: PlatformType[];
     data: VoiceData;
     examples: string[];
@@ -184,5 +234,65 @@ export class VoiceCalibrationService {
       text: sample,
       note: i.note,
     };
+  }
+
+  // ideas
+  private async generateIdeas(
+    userId: string,
+    i: {
+      themes: ThemeEntity[];
+      note: NoteEntity;
+      voice: VoiceInfoDto;
+    },
+  ): Promise<IdeaEntity[]> {
+    const ideasAmountToGenerate: Record<string, number> = i.themes.reduce(
+      (acc, theme) => {
+        // 1 idea for each theme
+        acc[theme.id] = 1;
+
+        // if we have less than 3 themes, repeat the last theme
+        if (i.themes.length < MAX_SAMPLES) {
+          acc[theme.id] = MAX_SAMPLES - i.themes.length;
+        }
+
+        return acc;
+      },
+      {},
+    );
+
+    const ideas = await Promise.all(
+      i.themes.map((theme) =>
+        this.ideaGeneratorService.suggest(
+          userId,
+          {
+            notes: [i.note],
+            voice: i.voice,
+            theme,
+          },
+          ideasAmountToGenerate[theme.id],
+        ),
+      ),
+    );
+
+    return ideas.flat();
+  }
+
+  // themes
+  private async getUserThemes(userId: string): Promise<ThemeEntity[]> {
+    return this.dataSource.getRepository(ThemeEntity).find({
+      where: {
+        userId,
+      },
+      take: 3,
+    });
+  }
+
+  // examples
+  private async getExamples(voiceId: string, userId: string) {
+    const exampleEntities = await this.voiceService.getExamples(
+      voiceId,
+      userId,
+    );
+    return exampleEntities.map((e) => e.text);
   }
 }

@@ -1,20 +1,21 @@
-import { NoteEntity, StrategyEntity, ThemeEntity, VoiceEntity } from '@app/db';
+import { NoteEntity, StrategyEntity, ThemeEntity } from '@app/db';
 
 import { inTag } from '@/common/utils';
+
+import { VoiceInfoDto } from '../voice';
 
 export interface IdeaGenerationPromptInput {
   notes: NoteEntity[];
   theme?: ThemeEntity;
-  voice?: VoiceEntity;
+  voice?: VoiceInfoDto;
   strategy?: StrategyEntity;
   count: number;
 }
 
-function injectVoice(voice?: VoiceEntity) {
+function injectVoice(voice?: VoiceInfoDto) {
   if (!voice) return ``;
 
   const voiceData = {
-    name: voice.name,
     tov: voice.data.tov,
     rules: voice.data.rules,
     avoidRules: voice.data.avoidRules,

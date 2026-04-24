@@ -1,23 +1,22 @@
 import {
   IdeaEntity,
   NoteEntity,
-  PlatformType,
   PostEntity,
   StrategyEntity,
   ThemeEntity,
-  VoiceData,
 } from '@app/db';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 
 import { LlmService } from '@/modules/llm';
 
+import { VoiceInfoDto } from '../voice';
 import { REFINE_PROMPT } from './prompts/refine.prompt';
 
 interface RefineInput {
   post: PostEntity;
   request: string;
-  voice?: { data: VoiceData; platforms: PlatformType[]; examples: string[] };
+  voice?: VoiceInfoDto;
   notes?: NoteEntity[];
   theme?: ThemeEntity;
   idea?: IdeaEntity;
