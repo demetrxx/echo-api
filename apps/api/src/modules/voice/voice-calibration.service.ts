@@ -60,8 +60,13 @@ export class VoiceCalibrationService {
     const examples = await this.getExamples(voiceId, userId);
 
     const prompt = VOICE_CALIBRATE_PROMPT({
-      voice,
-      examples,
+      calibrationType: type,
+      steps: calibration.data.steps,
+      voiceInfo: {
+        data: voice.data,
+        examples,
+        platforms: voice.platforms,
+      },
     });
 
     const response = await this.llmService.client.invoke([
@@ -195,7 +200,7 @@ export class VoiceCalibrationService {
           data: voiceData,
           examples,
           idea,
-          note: calibration.data.note,
+          note: calibration.note?.text,
           platforms: voice.platforms,
         }),
       ),

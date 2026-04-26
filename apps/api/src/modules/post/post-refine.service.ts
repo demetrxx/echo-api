@@ -41,6 +41,8 @@ export class PostRefineService {
       theme: i.theme,
       idea: i.idea,
       strategy: i.strategy,
+      platform: i.post.platform,
+      versions: i.post.versions,
     });
 
     const response = await this.llmService.client.invoke([
