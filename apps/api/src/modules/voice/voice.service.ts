@@ -1,7 +1,5 @@
 import {
   PlatformType,
-  VoiceCalibrationEntity,
-  VoiceCalibrationType,
   VoiceEntity,
   VoiceExampleEntity,
   VoiceStatus,
@@ -16,7 +14,6 @@ import { PaginationSortingQuery } from '@/common/utils';
 import { LlmService } from '@/modules/llm';
 
 import { ADAPT_TEXT_PROMPT } from './prompts/adapt-text.prompt';
-import { VoiceCalibrationService } from './voice-calibration.service';
 
 const SIMILARITY_THRESHOLD = 0.5;
 
@@ -97,37 +94,29 @@ export class VoiceService {
       platforms: PlatformType[];
     },
   ) {
-    return this.dataSource.transaction(async (ds) => {
-      const repo = ds.getRepository(VoiceEntity);
+    const repo = this.dataSource.getRepository(VoiceEntity);
 
-      const voice = await repo.save({
-        userId,
-        name: `New Voice for ${dto.platforms.join(', ')}`,
-        platforms: dto.platforms,
-        data: {
-          tov: [],
-          rules: [],
-          avoidRules: [],
-          evidencePreferences: '',
-          extra: {},
-        },
-        status: VoiceStatus.Calibrating,
-      });
-
-      await ds.getRepository(VoiceCalibrationEntity).save({
-        voiceId: voice.id,
-        data: {
-          steps: [],
-        },
-      });
-
-      return voice;
+    const voice = await repo.save({
+      userId,
+      name: `New Voice`,
+      platforms: dto.platforms,
+      data: {
+        tov: [],
+        rules: [],
+        avoidRules: [],
+        evidencePreferences: '',
+        extra: {},
+      },
+      status: VoiceStatus.Created,
     });
+
+    return this.getOne(voice.id, userId);
   }
 
   async getOne(id: string, userId: string) {
     const voice = await this.dataSource.getRepository(VoiceEntity).findOne({
       where: { id, userId },
+      relations: ['examples'],
     });
 
     if (!voice) {
@@ -209,7 +198,7 @@ export class VoiceService {
 
     await repo.save(
       examples.map((e, idx) => ({
-        example: e,
+        text: e,
         textEmbeddings: embeddings[idx],
         voiceId,
       })),

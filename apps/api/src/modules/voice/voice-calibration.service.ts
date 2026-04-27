@@ -8,8 +8,9 @@ import {
   VoiceCalibrationType,
   VoiceData,
   VoiceEntity,
+  VoiceStatus,
 } from '@app/db';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { z } from 'zod';
@@ -35,6 +36,8 @@ const voiceDataSchema = z.object({
 
 @Injectable()
 export class VoiceCalibrationService {
+  private readonly logger = new Logger(VoiceCalibrationService.name);
+
   constructor(
     private readonly llmService: LlmService,
     @InjectDataSource()
@@ -47,17 +50,11 @@ export class VoiceCalibrationService {
 
   // actions
   async calibrate(voiceId: string, userId: string, type: VoiceCalibrationType) {
-    const voice = await this.voiceService.getOne(voiceId, userId);
+    const calibration = await this.getOne(voiceId, userId);
 
-    const calibration = await this.dataSource
-      .getRepository(VoiceCalibrationEntity)
-      .findOne({
-        where: {
-          voiceId: voice.id,
-        },
-      });
+    const { voice } = calibration;
 
-    const examples = await this.getExamples(voiceId, userId);
+    const examples = voice.examples.map((e) => e.text);
 
     const prompt = VOICE_CALIBRATE_PROMPT({
       calibrationType: type,
@@ -73,7 +70,9 @@ export class VoiceCalibrationService {
       { role: 'user', content: prompt },
     ]);
 
-    const voiceData = voiceDataSchema.parse(response);
+    const voiceData = voiceDataSchema.parse(
+      JSON.parse(response.content as string),
+    );
 
     const samples = await this.generateSamples({
       voice,
@@ -93,6 +92,27 @@ export class VoiceCalibrationService {
       id: calibration.id,
       data: calibration.data,
     });
+  }
+
+  async start(voiceId: string, userId: string) {
+    await this.voiceService.checkExists(voiceId, userId);
+
+    await this.dataSource.transaction(async (ds) => {
+      await ds.getRepository(VoiceCalibrationEntity).save({
+        voiceId: voiceId,
+        data: {
+          steps: [],
+        },
+      });
+
+      await ds.getRepository(VoiceEntity).update(voiceId, {
+        status: VoiceStatus.Calibrating,
+      });
+    });
+
+    await this.calibrate(voiceId, userId, VoiceCalibrationType.Initial);
+
+    return this.getOne(voiceId, userId);
   }
 
   async addFeedback(voiceId: string, userId: string, feedback: string) {
@@ -115,6 +135,8 @@ export class VoiceCalibrationService {
     });
 
     await this.calibrate(voiceId, userId, VoiceCalibrationType.Feedback);
+
+    return this.getOne(voiceId, userId);
   }
 
   async updateExamples(voiceId: string, userId: string, examples: string[]) {
@@ -123,14 +145,14 @@ export class VoiceCalibrationService {
     await this.voiceService.addExamples(voiceId, userId, { examples });
 
     await this.calibrate(voiceId, userId, VoiceCalibrationType.UpdateExamples);
+
+    return this.getOne(voiceId, userId);
   }
 
   async updateNote(voiceId: string, userId: string, note: string) {
-    const voice = await this.voiceService.getOne(voiceId, userId);
-
     const calibration = await this.getOne(voiceId, userId);
 
-    const examples = await this.getExamples(voiceId, userId);
+    const examples = calibration.voice.examples.map((e) => e.text);
 
     if (!calibration.note) {
       const noteEntity = await this.noteService.create(userId, {
@@ -153,7 +175,7 @@ export class VoiceCalibrationService {
 
     // add samples
     const samples = await this.generateSamples({
-      voice,
+      voice: calibration.voice,
       calibration,
       voiceData: step.data,
       examples,
@@ -169,12 +191,18 @@ export class VoiceCalibrationService {
 
   async getOne(voiceId: string, userId: string) {
     await this.voiceService.checkExists(voiceId, userId);
-    return this.dataSource.getRepository(VoiceCalibrationEntity).findOne({
-      where: {
-        voiceId,
-      },
-      relations: ['note'],
-    });
+    const calibration = await this.dataSource
+      .getRepository(VoiceCalibrationEntity)
+      .findOne({
+        where: {
+          voiceId,
+        },
+        relations: ['note', 'voice', 'voice.examples'],
+      });
+
+    this.logger.debug(calibration.data.steps.length);
+
+    return calibration;
   }
 
   // samples
@@ -215,7 +243,8 @@ export class VoiceCalibrationService {
     note: string | null;
   }): Promise<VoiceCalibrationSample> {
     const sample = await this.postRefineService.refine({
-      post: null,
+      platform: i.platforms[0],
+      versions: [],
       idea: i.idea,
       theme: i.idea.theme,
       request: 'Write the post',
@@ -270,7 +299,7 @@ export class VoiceCalibrationService {
         this.ideaGeneratorService.suggest(
           userId,
           {
-            notes: [i.note],
+            notes: i.note ? [i.note] : [],
             voice: i.voice,
             theme,
           },
@@ -293,11 +322,11 @@ export class VoiceCalibrationService {
   }
 
   // examples
-  private async getExamples(voiceId: string, userId: string) {
-    const exampleEntities = await this.voiceService.getExamples(
-      voiceId,
-      userId,
-    );
-    return exampleEntities.map((e) => e.text);
-  }
+  // private async getExamples(voiceId: string, userId: string) {
+  //   const exampleEntities = await this.voiceService.getExamples(
+  //     voiceId,
+  //     userId,
+  //   );
+  //   return exampleEntities.map((e) => e.text);
+  // }
 }

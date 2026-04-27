@@ -42,3 +42,28 @@ export class UpdateVoiceRequestDto {
   @IsEnum(PlatformType, { each: true })
   isDefaultFor?: PlatformType[];
 }
+
+export class AddExamplesRequestDto {
+  @ApiProperty({ required: true, type: [String] })
+  @IsString({ each: true })
+  examples: string[];
+}
+
+export class DeleteExamplesRequestDto {
+  @ApiProperty({ required: true, type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  exampleIds: string[];
+}
+
+export class AddFeedbackRequestDto {
+  @ApiProperty({ required: true })
+  @IsString()
+  value: string;
+}
+
+export class UpdateNoteRequestDto {
+  @ApiProperty({ required: true })
+  @IsString()
+  note: string;
+}

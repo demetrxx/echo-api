@@ -1,7 +1,8 @@
 import {
   IdeaEntity,
   NoteEntity,
-  PostEntity,
+  PlatformType,
+  PostVersionEntity,
   StrategyEntity,
   ThemeEntity,
 } from '@app/db';
@@ -14,7 +15,8 @@ import { VoiceInfoDto } from '../voice';
 import { REFINE_PROMPT } from './prompts/refine.prompt';
 
 interface RefineInput {
-  post: PostEntity;
+  versions: PostVersionEntity[];
+  platform: PlatformType;
   request: string;
   voice?: VoiceInfoDto;
   notes?: NoteEntity[];
@@ -27,22 +29,18 @@ interface RefineInput {
 export class PostRefineService {
   private readonly logger = new Logger(PostRefineService.name);
 
-  constructor(
-    @InjectDataSource()
-    private readonly llmService: LlmService,
-  ) {}
+  constructor(private readonly llmService: LlmService) {}
 
   async refine(i: RefineInput): Promise<string> {
     const prompt = REFINE_PROMPT({
-      post: i.post.currentVersion.text,
       request: i.request,
       voice: i.voice,
       notes: i.notes,
       theme: i.theme,
       idea: i.idea,
       strategy: i.strategy,
-      platform: i.post.platform,
-      versions: i.post.versions,
+      platform: i.platform,
+      versions: i.versions,
     });
 
     const response = await this.llmService.client.invoke([

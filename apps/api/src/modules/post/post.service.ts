@@ -56,7 +56,8 @@ export class PostService {
       });
 
     const refinedPostText = await this.postRefineService.refine({
-      post,
+      versions: post.versions,
+      platform: post.platform,
       notes: post.notes.map((note) => note.note),
       theme: post.theme,
       idea: post.idea,

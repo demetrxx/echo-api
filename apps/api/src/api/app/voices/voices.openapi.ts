@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 import { ApiPaginatedResponse } from '@/common/utils';
 
-import { VoiceDetailsDto, VoiceDto } from './dtos';
+import { VoiceCalibrationDto, VoiceDetailsDto, VoiceDto } from './dtos';
 
 export const GetVoicesOpenApi = () =>
   applyDecorators(
@@ -58,5 +58,87 @@ export const DeleteVoiceOpenApi = () =>
     }),
     ApiOkResponse({
       description: 'Voice deleted successfully',
+    }),
+  );
+
+export const AddExamplesOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Add examples to voice',
+      description: 'Add examples to an existing voice',
+    }),
+    ApiOkResponse({
+      description: 'Examples added successfully',
+    }),
+  );
+
+export const DeleteExamplesOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Delete examples from voice',
+      description: 'Delete examples from an existing voice',
+    }),
+    ApiOkResponse({
+      description: 'Examples deleted successfully',
+    }),
+  );
+
+export const GetCalibrationOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Get voice calibration',
+      description: 'Get the calibration for a specific voice',
+    }),
+    ApiOkResponse({
+      description: 'Voice calibration retrieved successfully',
+      type: VoiceCalibrationDto,
+    }),
+  );
+
+export const CalibrateVoiceOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Calibrate voice',
+      description: 'Calibrate an existing voice',
+    }),
+    ApiOkResponse({
+      description: 'Voice calibrated successfully',
+      type: VoiceDetailsDto,
+    }),
+  );
+
+export const AddFeedbackOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Add feedback to voice calibration',
+      description: 'Add feedback to the voice calibration',
+    }),
+    ApiOkResponse({
+      description: 'Feedback added successfully',
+      type: VoiceCalibrationDto,
+    }),
+  );
+
+export const RegenerateCalibrationOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Regenerate voice calibration',
+      description: 'Regenerate the voice calibration',
+    }),
+    ApiOkResponse({
+      description: 'Voice calibration regenerated successfully',
+      type: VoiceCalibrationDto,
+    }),
+  );
+
+export const UpdateNoteOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Update voice calibration note',
+      description: 'Update the voice calibration note',
+    }),
+    ApiOkResponse({
+      description: 'Voice calibration note updated successfully',
+      type: VoiceCalibrationDto,
     }),
   );

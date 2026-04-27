@@ -1,12 +1,10 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import { AbstractEntity } from '../common/base.entity';
-import { PlatformType } from '../common/platform';
 import { VoiceEntity } from './voice.entity';
 
 @Entity('voice_example')
 export class VoiceExampleEntity extends AbstractEntity {
-  // embedding of the text
   @Column({
     type: 'vector',
     length: 1536,
@@ -17,13 +15,6 @@ export class VoiceExampleEntity extends AbstractEntity {
     type: 'text',
   })
   text: string;
-
-  @Column({
-    type: 'enum',
-    enum: PlatformType,
-    enumName: 'platform_type_enum',
-  })
-  platform: PlatformType;
 
   @ManyToOne(() => VoiceEntity, (voice) => voice.examples)
   @JoinColumn({

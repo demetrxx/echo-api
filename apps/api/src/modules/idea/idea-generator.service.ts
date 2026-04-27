@@ -107,6 +107,10 @@ export class IdeaGeneratorService {
         await noteIdeaRepository.save(noteIdeas);
       }
 
+      ideasEntities.forEach((idea) => {
+        idea.theme = theme;
+      });
+
       return ideasEntities;
     });
   }

@@ -18,6 +18,7 @@ import { VoiceCalibrationEntity } from './voice-calibration.entity';
 import { VoiceExampleEntity } from './voice-example.entity';
 
 export enum VoiceStatus {
+  Created = 'created',
   Calibrating = 'calibrating',
   Active = 'active',
 }

@@ -16,7 +16,6 @@ import { injectTheme } from '@/modules/theme';
 import { injectVoice, VoiceInfoDto } from '@/modules/voice';
 
 export interface RefinePromptInput {
-  post: string;
   platform: PlatformType;
   request: string;
   voice?: VoiceInfoDto;
