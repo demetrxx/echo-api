@@ -155,6 +155,7 @@ export class VoiceService {
       rules?: string[];
       avoidRules?: string[];
       evidencePreferences?: string;
+      status?: VoiceStatus;
     },
   ) {
     await this.checkExists(id, userId);

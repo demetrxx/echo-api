@@ -10,7 +10,7 @@ import {
   VoiceEntity,
   VoiceStatus,
 } from '@app/db';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { z } from 'zod';
@@ -113,6 +113,23 @@ export class VoiceCalibrationService {
     await this.calibrate(voiceId, userId, VoiceCalibrationType.Initial);
 
     return this.getOne(voiceId, userId);
+  }
+
+  async save(voiceId: string, userId: string) {
+    await this.voiceService.checkExists(voiceId, userId);
+
+    const calibration = await this.getOne(voiceId, userId);
+
+    if (calibration.voice.status !== VoiceStatus.Calibrating) {
+      throw new BadRequestException('Voice is not calibrating');
+    }
+
+    const lastStep = calibration.data.steps[calibration.data.steps.length - 1];
+
+    await this.dataSource.getRepository(VoiceEntity).update(voiceId, {
+      data: lastStep.data,
+      status: VoiceStatus.Active,
+    });
   }
 
   async addFeedback(voiceId: string, userId: string, feedback: string) {

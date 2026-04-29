@@ -4,6 +4,7 @@ import { FilesApiModule } from './files';
 import { IdeasApiModule } from './ideas';
 import { NotesApiModule } from './notes';
 import { PostsApiModule } from './posts';
+import { ServicesApiModule } from './services';
 import { StrategiesApiModule } from './strategies';
 import { ThemesApiModule } from './themes';
 import { UserApiModule } from './user';
@@ -19,6 +20,7 @@ import { VoicesApiModule } from './voices';
     VoicesApiModule,
     ThemesApiModule,
     StrategiesApiModule,
+    ServicesApiModule,
   ],
   providers: [],
   controllers: [],

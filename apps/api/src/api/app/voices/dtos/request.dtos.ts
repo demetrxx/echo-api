@@ -1,4 +1,4 @@
-import { PlatformType } from '@app/db';
+import { PlatformType, VoiceStatus } from '@app/db';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
@@ -36,11 +36,10 @@ export class UpdateVoiceRequestDto {
   @IsString({ each: true })
   examples?: string[];
 
-  @ApiProperty({ required: false, enum: PlatformType, isArray: true })
+  @ApiProperty({ required: false, enum: VoiceStatus })
   @IsOptional()
-  @IsArray()
-  @IsEnum(PlatformType, { each: true })
-  isDefaultFor?: PlatformType[];
+  @IsEnum(VoiceStatus)
+  status?: VoiceStatus;
 }
 
 export class AddExamplesRequestDto {

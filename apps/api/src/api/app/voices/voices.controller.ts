@@ -171,6 +171,13 @@ export class VoicesAppController {
     return VoiceCalibrationDto.mapFromEntity(calibration);
   }
 
+  @Post(':id/calibration/save')
+  async saveCalibration(@Param('id') id: string, @User() user: User) {
+    await this.voiceCalibrationService.save(id, user.id);
+    const calibration = await this.voiceCalibrationService.getOne(id, user.id);
+    return VoiceCalibrationDto.mapFromEntity(calibration);
+  }
+
   @UpdateNoteOpenApi()
   @Post(':id/calibration/note')
   async updateNote(
