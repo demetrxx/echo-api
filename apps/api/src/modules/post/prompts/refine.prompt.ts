@@ -84,6 +84,12 @@ Voice guidance:
 - Apply voice through tone, rhythm, structure, density, phrasing, evidence style, and avoid patterns.
 - If voice examples are provided, use them as style references for rhythm and feel without copying phrases.
 - Preserve authorship; do not over-stylize or make the post feel artificially imitated.
+- Treat voice rules as hidden style guidance, not as text to render.
+- Do not copy wording, labels, or meta-language from the voice profile into the post.
+- Do not turn recurring voice patterns into a fixed template.
+- Use voice examples to calibrate rhythm and feel, not to copy structure literally.
+- If a voice rule describes a pattern like framing, disclaimers, breakdowns, or conclusions, apply it only when it naturally fits the current post.
+- Do not output structural labels like "important note", or "quick disclaimer" unless the user explicitly asks for that format or it genuinely sounds natural in the post.
 `;
 }
 
@@ -178,6 +184,9 @@ Writing quality rules:
 - If still unclear, use the dominant language in the provided context.
 - Avoid generic AI polish, inflated claims, fake punchiness, cliché openings, and motivational endings unless the user explicitly asks for that style.
 - Do not add fake facts, fake examples, fake metrics, or unsupported claims.
+- Do not imitate the voice so literally that every post gets the same opening, structure, disclaimer, or conclusion.
+- Preserve structural variation: choose the shape that fits the user request, latest version, platform, idea, and available source material.
+- Do not make the post look like a parody of the voice.
 - Do not explain what you changed.
 - Do not include alternatives.
 - Return only the refined post text.

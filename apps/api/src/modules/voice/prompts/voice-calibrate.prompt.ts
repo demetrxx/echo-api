@@ -86,6 +86,9 @@ Your job is to produce the best current voice profile from:
 
 The goal is not to guess some perfect hidden identity.
 The goal is to improve stylistic fit so future writing feels more like the user and less generic.
+The output is not a description of the writer.
+The output is a compact control profile for future writing.
+Every field should help another model write closer to the user's style without copying examples or forcing a template.
 
 Latest-step priority:
 - Treat the latest calibration step as the primary source of truth.
@@ -111,6 +114,9 @@ How to read calibration steps:
 - Use that relationship to infer what in the voice profile helped, what hurt, and what should now change.
 - Do not blindly preserve earlier voice fields if the later samples and feedback show they are wrong.
 - Do not overreact to one weak signal; update the profile only as much as needed to improve fit.
+- Platforms are context for calibration, not something to infer freely.
+- Do not recommend where this voice "fits best" unless the provided examples or platforms clearly support it.
+- If platforms are provided, calibrate the voice for those platforms.
 
 ${injectPlatforms(i.voiceInfo.platforms)}
 
@@ -123,6 +129,12 @@ General guidance:
 - Do not overfit to one sample.
 - If evidence is thin, keep the profile minimal rather than forcing confidence.
 - If feedback is vague, make the smallest reasonable improvement instead of rewriting everything.
+- Write rules, avoidRules, and extra fields as reusable writing instructions, not third-person analysis of the author.
+- Avoid phrasing like "likes to", "prefers to", "often does", "tends to", "may do", or similar observer-language.
+- Phrase rules as guidance for future writing behavior.
+- Treat repeated patterns as conditional tendencies, not mandatory templates.
+- Do not create rules that force every future post into the same structure.
+- If a structure appears often, describe when it should be used and when it should not be forced.
 
 What belongs in the result:
 - tov: how the writing tends to feel
@@ -130,6 +142,9 @@ What belongs in the result:
 - avoidRules: things the writing should avoid
 - evidencePreferences: what kind of support or proof the writing tends to rely on
 - extra: any additional stable signals that materially help, when they do not fit well into the main fields
+- Do not include literal meta-phrases that a writing model might copy into future posts.
+- Avoid stock phrases like "first, a frame", "quick disclaimer", "important note", unless they are genuinely part of the user's own repeated phrasing.
+- Voice rules should guide generation silently; they should not become visible phrases in the final post.
 
 Field guidance:
 
@@ -138,19 +153,26 @@ tov:
 - Keep them reusable and grounded in the evidence.
 
 rules:
-- Capture concrete habits that can guide future writing.
-- Focus on rhythm, structure, phrasing, argument movement, or recurring stylistic behavior.
+- Capture concrete, reusable writing instructions.
+- Write each rule as something that can directly guide future drafting.
+- Prefer conditional rules over absolute rules when the pattern depends on context.
+- Focus on rhythm, structure, phrasing, argument movement, evidence use, and recurring stylistic behavior.
+- Do not write rules as literary analysis of the author.
 
 avoidRules:
 - Capture concrete anti-patterns that would make future writing feel wrong.
+- Write avoidRules as direct constraints for future writing.
+- Include anti-patterns caused by over-literal imitation, such as forcing the same opening, structure, disclaimer, or conclusion into every post.
 
 evidencePreferences:
 - Describe, in one concise string, what kind of support the writing tends to rely on.
 
 extra:
-- Use only for stable, helpful signals that do not fit the main fields well.
+- Use only for stable, helpful, generation-relevant signals that do not fit the main fields well.
 - Keep it compact.
 - Do not use it as a dump of observations.
+- Write extra values as practical guidance, not third-person commentary.
+- Do not use extra for platform recommendations unless platforms were explicitly provided or the signal is about format constraints.
 
 How to use samples and feedback:
 - Samples are a mix of idea, note, and voice.

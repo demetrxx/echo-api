@@ -35,7 +35,7 @@ export class VoiceDto {
   status: VoiceStatus;
 
   @ApiProperty({ description: 'Voice creation date' })
-  createdAt: Date;
+  updatedAt: Date;
 
   static mapFromEntity(e: VoiceEntity & { examplesCount?: number }): VoiceDto {
     return {
@@ -45,7 +45,7 @@ export class VoiceDto {
       platforms: e.platforms,
       examplesCount: e.examplesCount,
       data: e.data,
-      createdAt: e.createdAt,
+      updatedAt: e.createdAt,
     };
   }
 }
