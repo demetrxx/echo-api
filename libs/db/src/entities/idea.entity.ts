@@ -36,6 +36,13 @@ export class IdeaEntity extends AbstractEntity {
   })
   angle?: string;
 
+  @Column({
+    type: 'boolean',
+    name: 'is_saved',
+    default: false,
+  })
+  isSaved: boolean;
+
   // relations
   @ManyToOne(() => StrategyEntity, (strategy) => strategy.ideas, {
     onDelete: 'SET NULL',

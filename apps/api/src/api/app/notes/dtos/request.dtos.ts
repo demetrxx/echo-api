@@ -27,6 +27,12 @@ export class CreateNoteRequestDto {
   @ApiProperty()
   @IsString()
   text: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreateNoteItemRequestDto)
+  items?: CreateNoteItemRequestDto[];
 }
 
 export class UpdateNoteRequestDto {

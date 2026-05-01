@@ -260,7 +260,7 @@ export class PostService {
       const version = await this.createPostVersion(
         {
           postId: post.id,
-          text: dto.text,
+          text: dto.text || '',
           type: PostVersionType.Manual,
           parentVersionNo: null,
         },

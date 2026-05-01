@@ -55,6 +55,13 @@ export class NoteEntity extends AbstractEntity {
   })
   shouldSuggestThemes: boolean;
 
+  @Column({
+    type: 'boolean',
+    name: 'generating_title',
+    default: false,
+  })
+  generatingTitle: boolean;
+
   @OneToMany(() => NoteThemeEntity, (noteTheme) => noteTheme.note)
   themes: NoteThemeEntity[];
 

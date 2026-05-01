@@ -24,3 +24,15 @@ export const SuggestIdeasOpenApi = () =>
       type: [IdeaDto],
     }),
   );
+
+export const UpdateIdeaOpenApi = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Update idea',
+      description: 'Update an idea',
+    }),
+    ApiOkResponse({
+      description: 'Idea updated successfully',
+      type: IdeaDto,
+    }),
+  );

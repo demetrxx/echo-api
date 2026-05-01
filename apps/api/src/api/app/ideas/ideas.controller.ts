@@ -1,12 +1,29 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
 import { PaginatedResponse } from '@/common/utils';
 import { Protected, User } from '@/modules/auth';
 import { IdeaService } from '@/modules/idea';
 
-import { GetIdeasQueryParams, IdeaDto, SuggestIdeasRequestDto } from './dtos';
-import { GetIdeasOpenApi, SuggestIdeasOpenApi } from './ideas.openapi';
+import {
+  GetIdeasQueryParams,
+  IdeaDto,
+  SuggestIdeasRequestDto,
+  UpdateIdeaRequestDto,
+} from './dtos';
+import {
+  GetIdeasOpenApi,
+  SuggestIdeasOpenApi,
+  UpdateIdeaOpenApi,
+} from './ideas.openapi';
 
 @ApiTags('App / Ideas')
 @ApiExtraModels(PaginatedResponse)
@@ -41,5 +58,16 @@ export class IdeasAppController {
     const ideas = await this.ideaService.suggest(user.id, dto, count);
 
     return ideas.map(IdeaDto.mapFromEntity);
+  }
+
+  @UpdateIdeaOpenApi()
+  @Patch(':id')
+  async updateOne(
+    @Param('id') id: string,
+    @Body() body: UpdateIdeaRequestDto,
+    @User() user: User,
+  ) {
+    const idea = await this.ideaService.updateOne(id, user.id, body);
+    return IdeaDto.mapFromEntity(idea);
   }
 }

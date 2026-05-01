@@ -13,6 +13,17 @@ import { PaginationSortingQuery, trimNL } from '@/common/utils';
 import { FileService } from '@/modules/file';
 import { LlmService } from '@/modules/llm';
 
+interface NoteItemDto {
+  type: NoteItemType;
+  value?: string;
+  fileId?: string;
+  meta?: {
+    duration?: number;
+  };
+}
+
+const MIN_TEXT_LENGTH_FOR_TITLE = 50;
+
 @Injectable()
 export class NoteService {
   private readonly logger = new Logger(NoteService.name);
@@ -64,18 +75,25 @@ export class NoteService {
     };
   }
 
-  async create(userId: string, dto?: { name?: string; text?: string }) {
+  async create(
+    userId: string,
+    dto?: { name?: string; text?: string; items?: NoteItemDto[] },
+  ) {
     const note = await this.dataSource.getRepository(NoteEntity).save({
       userId,
       name: dto?.name,
       text: dto?.text,
     });
 
-    if (dto?.text.trim()) {
-      this.generateTitle(note.id, userId, dto.text);
+    this.generateTitle(note.id, userId, note);
+
+    if (dto?.items) {
+      for (const item of dto.items) {
+        await this.addNoteItem(note.id, userId, item);
+      }
     }
 
-    return note;
+    return this.getOne(note.id, userId);
   }
 
   async getOne(id: string, userId: string) {
@@ -98,14 +116,22 @@ export class NoteService {
   ) {
     const note = await this.getOne(id, userId);
 
-    if (!note.text && dto.text) {
-      this.generateTitle(note.id, userId, dto.text);
-    }
-
     await this.dataSource.getRepository(NoteEntity).update(id, {
       name: dto.name,
       text: dto.text,
     });
+
+    if (dto.text) {
+      note.text = dto.text;
+    }
+
+    if (dto.name) {
+      note.name = dto.name;
+    }
+
+    this.generateTitle(note.id, userId, note);
+
+    return note;
   }
 
   async deleteOne(id: string, userId: string) {
@@ -126,7 +152,23 @@ export class NoteService {
     await this.dataSource.getRepository(NoteEntity).softDelete(ids);
   }
 
-  async generateTitle(id, userId: string, text: string) {
+  async generateTitle(id: string, userId: string, note: NoteEntity) {
+    if (note.text?.length < MIN_TEXT_LENGTH_FOR_TITLE) {
+      return;
+    }
+
+    if (note.generatingTitle) {
+      return;
+    }
+
+    if (note.name) {
+      return;
+    }
+
+    await this.dataSource.getRepository(NoteEntity).update(id, {
+      generatingTitle: true,
+    });
+
     const response = await this.llmService.fastClient.invoke(
       [
         {
@@ -142,18 +184,7 @@ export class NoteService {
     this.updateOne(id, userId, { name: title });
   }
 
-  async addNoteItem(
-    id: string,
-    userId: string,
-    dto: {
-      type: NoteItemType;
-      value?: string;
-      fileId?: string;
-      meta?: {
-        duration?: number;
-      };
-    },
-  ) {
+  async addNoteItem(id: string, userId: string, dto: NoteItemDto) {
     const note = await this.getOne(id, userId);
 
     if (dto.type === NoteItemType.Voice && dto.fileId) {

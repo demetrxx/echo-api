@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
-import { PaginatedResponse, sleep } from '@/common/utils';
+import { PaginatedResponse } from '@/common/utils';
 import { Protected, User } from '@/modules/auth';
 import { NoteService } from '@/modules/note';
 

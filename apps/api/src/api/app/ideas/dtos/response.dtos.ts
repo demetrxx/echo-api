@@ -40,6 +40,9 @@ export class IdeaDto {
   name: string;
 
   @ApiProperty({ required: false, nullable: true })
+  isSaved: boolean | null;
+
+  @ApiProperty({ required: false, nullable: true })
   angle: string | null;
 
   @ApiProperty({ required: false, nullable: true })
@@ -71,6 +74,7 @@ export class IdeaDto {
       id: entity.id,
       name: entity.name,
       angle: entity.angle ?? null,
+      isSaved: entity.isSaved,
       strategyId: entity.strategyId ?? entity.strategy?.id ?? null,
       themeId: entity.themeId ?? entity.theme?.id ?? null,
       voiceId: entity.voiceId ?? entity.voice?.id ?? null,

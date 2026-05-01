@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsNumber,
   IsOptional,
+  IsString,
   IsUUID,
   Max,
   Min,
@@ -41,4 +42,21 @@ export class SuggestIdeasRequestDto {
   @Max(20)
   @Type(() => Number)
   count: number = 5;
+}
+
+export class UpdateIdeaRequestDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  angle?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBoolean()
+  isSaved?: boolean;
 }

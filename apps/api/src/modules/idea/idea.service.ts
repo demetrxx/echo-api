@@ -1,6 +1,7 @@
 import {
   IdeaEntity,
   NoteEntity,
+  NoteIdeaEntity,
   StrategyEntity,
   StrategyStatus,
   ThemeEntity,
@@ -14,6 +15,12 @@ import { Err } from '@/common/errors/app-error';
 import { PaginationSortingQuery } from '@/common/utils';
 
 import { IdeaGeneratorService } from './idea-generator.service';
+
+interface UpdateIdeaDto {
+  name?: string;
+  angle?: string;
+  isSaved?: boolean;
+}
 
 @Injectable()
 export class IdeaService {
@@ -55,6 +62,21 @@ export class IdeaService {
       skip: query.skip,
       take: query.take,
     };
+  }
+
+  async updateOne(id: string, userId: string, dto: UpdateIdeaDto) {
+    const idea = await this.dataSource.getRepository(IdeaEntity).findOne({
+      where: { id, userId },
+    });
+
+    if (!idea) {
+      throw Err.notFound('Idea not found');
+    }
+
+    return this.dataSource.getRepository(IdeaEntity).save({
+      id,
+      ...dto,
+    });
   }
 
   /**
