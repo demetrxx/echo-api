@@ -269,98 +269,118 @@ Voice keeps the shape, rhythm, and language close to how you actually write.
 File: `10_writing.md`
 
 Purpose:
-- make the refine-loop thesis concrete
+- show that Echo helps turn raw material into a ready post
+- explain that the user can add whatever is missing
 - position writing as collaboration, not replacement
 
 Core idea:
 
-**Refine the thought until it finally says what you meant.**
+**Make it ready.**
 
 Writing in Echo should feel like:
-- sharpening
-- structuring
-- grounding
-- articulating
-- making the thought publishable without handing over authorship
-
-Supported platforms should be mentioned here as a small supporting point, not as a separate platform-grid section.
-
-Core framing:
-
-**Write for the places where your thinking already lives.**
-
-Possible platforms:
-- LinkedIn
-- X
-- newsletters
-- long-form drafts
-
-This should not make Echo feel like a publishing suite. The emphasis is that Echo helps shape the thought before it goes anywhere.
+- starting from anywhere
+- saying what is missing
+- turning raw material into a draft
+- adding the hook, structure, CTA, platform fit, or polish
+- making the post ready without handing over authorship
 
 Example:
 
 ```txt
 Before Echo:
-You know what you mean, but the post still does not say it.
+You have something to say, but something is still missing.
 
 With Echo:
-Refine the thought until it becomes clear enough to publish.
+Start from anywhere, say what the post needs, and make it ready.
 ```
 
-### 11. Product Proof
+### 11. Supported Platforms
 
-File: `11_product_proof.md`
+File: `11_supported_platforms.md`
 
 Purpose:
-- prove the product through transformation instead of fake social proof
-- make the user see the before/after clearly
-- show that Echo improves real material, not empty prompts
+- show quiet breadth after the writing section
+- mention supported output platforms without turning Echo into a publishing suite
 
 Core idea:
 
-**From messy thought to sharper post.**
+**Whatever you write for.**
 
-This section should show 2-3 concrete transformations:
-- raw note -> grounded angle -> refined post
-- voice note -> clear thesis -> draft
-- saved link + user's comment -> post direction -> publishable version
+Platforms:
+- Telegram
+- X
+- Threads
+- LinkedIn
+- Instagram
+- TikTok
+- YouTube
+- Facebook
+- Newsletter
+- Blog
+- Substack
+- Medium
+- Reddit
+- Discord
+- Custom
 
-The point is not to show "AI magic".
-The point is to show that Echo preserves the user's original meaning and makes it stronger.
+This should be a narrow strip, not a full feature section.
 
-If real user quotes exist later, they can appear here. Until then, product proof is stronger than fake social proof.
+### 12. It Finally Feels Obvious
 
-### 12. Not A Content Factory
+File: `12_it_finally_feels_obvious.md`
 
-File: `12_not_a_content_factory.md`
+Purpose:
+- give the user a light, obvious-feeling summary after the product layers
+- make Echo feel natural instead of heavy
+- sell the whole system without examples or extra proof blocks
+
+Core idea:
+
+**It finally feels obvious.**
+
+Locked copy:
+
+```txt
+Thoughts should be easy to save.
+Notes should be easy to use.
+Ideas should come from your own context.
+Posts should be easy to finish.
+
+Echo just puts those pieces together.
+```
+
+### 13. Not Another AI Content Machine
+
+File: `13_not_a_content_machine.md`
 
 Purpose:
 - draw a strong product boundary
 - make Echo's values explicit
-- reject the market fantasy without sounding defensive
+- reject generic AI content without sounding defensive
+- make clear that Echo cannot replace the user and should not try
 
 Core idea:
 
-**Echo is not here to turn you into a content machine.**
+**Not another AI content machine.**
 
-Not optimizing for:
-- bulk content
-- prompt hacking
-- 30 posts in one click
-- vanity growth
-- generic AI output
+Working copy:
 
-Optimizing for:
-- clarity
-- context
-- trust
-- identity
-- stronger writing
-- preserved authorship
+```txt
+Echo cannot be you.
+Nothing can.
 
-### 13. Final CTA
+It removes the busywork,
+lowers the weight of writing,
+and keeps your best thoughts from disappearing.
 
-File: `13_final_cta.md`
+For people who care about what they say,
+how it sounds,
+and whether it was worth saying at all.
+```
+
+### 14. Final CTA
+
+File: `14_final_cta.md`
 
 Purpose:
 - bring the page back to the emotional promise
@@ -382,8 +402,9 @@ CTA should point toward starting with capture or joining early access, depending
 6. `6_notes.md`
 7. `9_voice.md`
 8. `10_writing.md`
-9. `11_product_proof.md`
-10. `12_not_a_content_factory.md`
-11. remaining feature sections
+9. `11_supported_platforms.md`
+10. `12_it_finally_feels_obvious.md`
+11. `13_not_a_content_machine.md`
+12. remaining feature sections
 
 This order lets us lock the emotional and strategic spine before polishing secondary product explanations.

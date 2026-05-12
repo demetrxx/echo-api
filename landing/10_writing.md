@@ -4,60 +4,57 @@
 
 ### Heading
 
-**Refine until it says what you meant**
+**Make it ready**
 
 ### Subheading
 
-Write from a thought, a note, an idea, or a blank page - then shape it until it is clear enough to publish.
+Turn raw material into a ready post - and add whatever is missing.
 
 ### Before Echo
 
-You know there is something there.
+You have something to say.
 
-But the post still does not say it.
+But something is still missing.
 
-It is too loose.  
-Too flat.  
-Too long.  
-Too generic.  
-Or just not quite the thing you meant.
+No hook.  
+No structure.  
+No clear CTA.  
+No time to polish.  
+No words for the first draft.  
+No version that fits the platform.
 
 ### With Echo
 
-Echo helps you refine the post without handing over authorship.
+Start from anywhere.
 
-It can help you:
-- sharpen the point
-- find the structure
-- make the argument clearer
-- cut what does not belong
-- rewrite without losing the thought
-- move from idea to draft when you already know what you want
+Tell Echo what the post needs.
 
-### Supported Platforms
+Then add the missing part:
+- turn a raw thought into a draft
+- develop the idea
+- sharpen the hook
+- make the structure clearer
+- write a stronger CTA
+- adapt it for the platform
+- polish the grammar
 
-Write for the places where your thinking already lives:
-- LinkedIn
-- X
-- newsletters
-- long-form drafts
-
-This should stay small. Echo is not a publishing suite. The value is shaping the thought before it goes anywhere.
+Keep going until the material becomes a meaningful result.
 
 ### Short UI Version
 
 ```txt
-Not one-shot generation.
-Refinement until the post finally says what you meant.
+Start anywhere.
+Say what's missing.
+Make the post ready.
 ```
 
 ### Notes
 
-This section should make the refine-loop thesis concrete.
+This section should shift the focus from "refine-loop" to "add the missing part".
 
 The user should feel:
 
 ```txt
 I am still the author.
-This just makes the hard part lighter.
+Echo helps me get from what I have to a post that is ready.
 ```
