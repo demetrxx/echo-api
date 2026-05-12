@@ -349,9 +349,29 @@ Posts should be easy to finish.
 Echo just puts those pieces together.
 ```
 
-### 13. Not Another AI Content Machine
+### 13. Plans
 
-File: `13_not_a_content_machine.md`
+File: `13_plans.md`
+
+Purpose:
+- show that users can choose how much help they want
+- keep pricing/plans calm and simple
+- avoid a heavy SaaS pricing-table feeling
+
+Core idea:
+
+**Choose how much help you want.**
+
+Three plans:
+- a light plan for capturing and shaping occasional thoughts
+- a main plan for people who write regularly and want the full system
+- a higher plan for people who want more volume, context, and support
+
+The plans should feel like levels of support, not a bundle of random features.
+
+### 14. Not Another AI Content Machine
+
+File: `14_not_a_content_machine.md`
 
 Purpose:
 - draw a strong product boundary
@@ -378,9 +398,9 @@ how it sounds,
 and whether it was worth saying at all.
 ```
 
-### 14. Final CTA
+### 15. Final CTA
 
-File: `14_final_cta.md`
+File: `15_final_cta.md`
 
 Purpose:
 - bring the page back to the emotional promise
@@ -404,7 +424,8 @@ CTA should point toward starting with capture or joining early access, depending
 8. `10_writing.md`
 9. `11_supported_platforms.md`
 10. `12_it_finally_feels_obvious.md`
-11. `13_not_a_content_machine.md`
-12. remaining feature sections
+11. `13_plans.md`
+12. `14_not_a_content_machine.md`
+13. remaining feature sections
 
 This order lets us lock the emotional and strategic spine before polishing secondary product explanations.
