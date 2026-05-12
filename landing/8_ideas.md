@@ -20,12 +20,12 @@ But it could belong to anyone.
 
 ### With Echo
 
-Echo finds angles from your actual material:
+Echo finds angles from the context that is already yours:
+
 - notes
+- recurring themes
 - strategy
 - voice
-- saved thoughts
-- things you keep returning to
 
 The idea feels grounded because it did not come from nowhere.
 
