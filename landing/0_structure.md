@@ -383,7 +383,7 @@ CTA should point toward starting with capture or joining early access, depending
 7. `9_voice.md`
 8. `10_writing.md`
 9. `11_product_proof.md`
-9. `12_not_a_content_factory.md`
-10. remaining feature sections
+10. `12_not_a_content_factory.md`
+11. remaining feature sections
 
 This order lets us lock the emotional and strategic spine before polishing secondary product explanations.
