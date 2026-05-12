@@ -8,34 +8,21 @@
 
 ### Subheading
 
-The post should sound like you, not like clean text with your name on it.
+AI can make it better without losing your identity.
 
 ### Before Echo
 
-AI can make writing smoother.
+AI can do the writing for you.
 
-But smoother is not always better.
-
-Sometimes the result loses the rhythm, sharpness, density, and phrasing that made the thought yours in the first place.
+But the style that made it yours - tone, phrasing, density, the way you shape a thought - often gets lost.
 
 ### With Echo
 
-Echo keeps the shape close to how you actually write.
+Echo preserves your voice.
 
-Voice helps the post keep:
-- your rhythm
-- your level of sharpness
-- your density
-- your phrasing
-- what feels natural
-- what would feel false
+Send a couple of your posts - and that's it.
 
-### Short UI Version
-
-```txt
-Cleaner is not enough.
-It still has to sound like you.
-```
+Echo remembers how you write when it helps you next.
 
 ### Notes
 
