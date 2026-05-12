@@ -49,7 +49,7 @@ Pain points:
 
 ### 3. Why Current Tools Fail
 
-File: `3_why_tools_fail.md`
+File: `3_why_current_tools_fail.md`
 
 Purpose:
 - explain why existing tools feel insufficient
@@ -57,55 +57,70 @@ Purpose:
 
 Core idea:
 
-**Most writing tools start too late.**
+**Tools miss the point.**
 
-They enter when the user is already staring at the blank page, after the thought has lost its context.
+They promise help. Then hand the real work back to you.
 
-### 4. The Echo Way
+### 4. Wherever You Need It
 
-File: `4_echo_way.md`
-
-Purpose:
-- introduce the product model in one simple spine
-- make Echo feel like a new path, not a feature bundle
-
-Core flow:
-
-**thought -> context -> clarity -> angle -> post**
-
-Echo helps preserve the path from the first raw thought to publishable writing.
-
-### 5. Moments Where Posts Die
-
-File: `5_moments_where_posts_die.md`
+File: `4_wherever_you_need_it.md`
 
 Purpose:
-- make the product feel rooted in real creator moments
-- show use cases without calling them "use cases"
-- make the user feel that Echo understands where the loss actually happens
+- show that Echo is not a rigid linear workflow
+- explain that the product helps at the exact point where the user needs support
+- make the product feel flexible around the user's real state
 
 Core idea:
 
-**The best posts often die before they look like posts.**
+**Wherever you need it.**
 
-Moments to show:
-- after a call, when there is a sharp point somewhere in what just happened
-- during a walk, when the thought is clear for thirty seconds and then disappears
-- when a saved link had a reason, but the reason is gone a week later
-- when a voice note has energy, but no structure
-- when a screenshot captures the trigger, but not the thought
-- when the user has a strong opinion, but it is still too messy to publish
-- when AI can produce text, but not the thing the user actually meant
+Echo brings in only what you need, when you need it.
 
-This section should feel like recognition, not feature explanation.
+Possible flows:
+- thought -> note
+- thought -> post
+- note -> post later
+- notes -> idea -> post
+- idea -> post
+- draft -> refined post
 
-### 6. Capture
+The user should feel that Echo lets them take exactly what is missing in the moment:
+- memory
+- clarity
+- direction
+- idea
+- shape
+- refinement
 
-File: `6_capture.md`
+## Product Layer Pattern
+
+The "moments where posts die" idea should not be a standalone section here.
+
+Instead, each product layer should show why that layer matters through a simple before/after rhythm:
+
+```txt
+Before Echo:
+[the real moment where the user feels the pain]
+
+With Echo:
+[what this product layer makes possible]
+```
+
+Each product section should answer:
+- what pain this layer removes
+- what Echo adds
+- what feels lighter after
+
+This keeps the page moving forward after `Wherever you need it` instead of returning to a separate pain section.
+
+### 5. Capture
+
+File: `5_capture.md`
 
 Purpose:
 - show that Echo starts where thoughts actually happen
 - make capture feel fast, light, and non-ceremonial
+- show that capture removes the first point of loss
 
 Core idea:
 
@@ -117,6 +132,44 @@ Inputs:
 - links
 - files
 - images
+
+Example:
+
+```txt
+Before Echo:
+The thought shows up on a walk and disappears before you can use it.
+
+With Echo:
+Save it as text, voice, link, image, or file - without turning capture into work.
+```
+
+### 6. Notes
+
+File: `6_notes.md`
+
+Purpose:
+- show that notes are not just storage
+- explain how raw material stays usable after capture
+- make the bridge from saved thought to future post feel concrete
+
+Core idea:
+
+**Notes should not become dead storage.**
+
+Notes in Echo should feel:
+- readable
+- usable
+- connected to what they could become
+
+Example:
+
+```txt
+Before Echo:
+You come back to a note and it is still just raw material.
+
+With Echo:
+The thought stays readable, usable, and ready to become an idea, angle, or post.
+```
 
 ### 7. Strategy
 
@@ -142,6 +195,16 @@ Not:
 - a content-planning dashboard
 - a marketing template
 
+Example:
+
+```txt
+Before Echo:
+You know you need direction, but strategy feels too big or too generic.
+
+With Echo:
+Build clarity through a natural conversation, not a template made for someone else.
+```
+
 ### 8. Ideas
 
 File: `8_ideas.md`
@@ -160,9 +223,50 @@ Echo should generate angles and post directions from:
 - voice
 - accumulated context
 
-### 9. Writing
+Example:
 
-File: `9_writing.md`
+```txt
+Before Echo:
+You ask for ideas and get generic lists.
+
+With Echo:
+Ideas come from your notes, direction, and actual context.
+```
+
+### 9. Voice
+
+File: `9_voice.md`
+
+Purpose:
+- show that voice is a core product layer, not a footnote
+- address the fear that AI will flatten the user's style
+- make authorship feel protected before writing starts
+
+Core idea:
+
+**Voice keeps it yours.**
+
+Voice is not just tone. It includes:
+- rhythm
+- sharpness
+- density
+- phrasing
+- what feels natural
+- what feels false or embarrassing
+
+Example:
+
+```txt
+Before Echo:
+AI can make the post cleaner, but it often makes it sound less like you.
+
+With Echo:
+Voice keeps the shape, rhythm, and language close to how you actually write.
+```
+
+### 10. Writing
+
+File: `10_writing.md`
 
 Purpose:
 - make the refine-loop thesis concrete
@@ -193,9 +297,19 @@ Possible platforms:
 
 This should not make Echo feel like a publishing suite. The emphasis is that Echo helps shape the thought before it goes anywhere.
 
-### 10. Product Proof
+Example:
 
-File: `10_product_proof.md`
+```txt
+Before Echo:
+You know what you mean, but the post still does not say it.
+
+With Echo:
+Refine the thought until it becomes clear enough to publish.
+```
+
+### 11. Product Proof
+
+File: `11_product_proof.md`
 
 Purpose:
 - prove the product through transformation instead of fake social proof
@@ -215,26 +329,6 @@ The point is not to show "AI magic".
 The point is to show that Echo preserves the user's original meaning and makes it stronger.
 
 If real user quotes exist later, they can appear here. Until then, product proof is stronger than fake social proof.
-
-### 11. Voice
-
-File: `11_voice.md`
-
-Purpose:
-- address the fear that AI will flatten the user's style
-- make authorship emotionally important
-
-Core idea:
-
-**Still you. Just clearer.**
-
-Voice is not just tone. It includes:
-- rhythm
-- sharpness
-- density
-- phrasing
-- what feels natural
-- what feels false or embarrassing
 
 ### 12. Not A Content Factory
 
@@ -282,12 +376,14 @@ CTA should point toward starting with capture or joining early access, depending
 
 1. `1_hero.md`
 2. `2_problem.md`
-3. `3_why_tools_fail.md`
-4. `4_echo_way.md`
-5. `5_moments_where_posts_die.md`
-6. `9_writing.md`
-7. `10_product_proof.md`
-8. `12_not_a_content_factory.md`
-9. remaining feature sections
+3. `3_why_current_tools_fail.md`
+4. `4_wherever_you_need_it.md`
+5. `5_capture.md`
+6. `6_notes.md`
+7. `9_voice.md`
+8. `10_writing.md`
+9. `11_product_proof.md`
+9. `12_not_a_content_factory.md`
+10. remaining feature sections
 
 This order lets us lock the emotional and strategic spine before polishing secondary product explanations.
