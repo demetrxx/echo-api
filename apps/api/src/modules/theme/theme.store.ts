@@ -53,6 +53,15 @@ export class ThemeStore {
 
     const themesCount = await themesQb.getCount();
 
+    if (!themes.length) {
+      return {
+        total: 0,
+        data: [],
+        skip,
+        take,
+      };
+    }
+
     const strategies = await this.dataSource
       .getRepository(StrategyThemeEntity)
       .createQueryBuilder('strategyTheme')

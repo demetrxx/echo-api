@@ -25,7 +25,11 @@ Purpose:
 
 Core idea:
 
-**Your best thoughts should not die in notes.**
+**Let the world hear you.**
+
+Subtitle:
+
+**From raw thought to strong post - faster, clearer, easier.**
 
 ### 2. Problem
 
@@ -38,7 +42,11 @@ Purpose:
 
 Core idea:
 
-**You do not lack ideas. You lose the thread.**
+**Creating isn't hard because you have nothing to say.**
+
+Subheading:
+
+**It's hard because your thoughts arrive messy, scattered, and unfinished - long before you sit down to write.**
 
 Pain points:
 - thoughts appear at the wrong time
@@ -124,23 +132,28 @@ Purpose:
 
 Core idea:
 
-**Catch the thought in the form it arrived.**
+**Catch it before it disappears.**
 
 Inputs:
 - text
 - voice
-- links
 - files
-- images
+
+Subtitle:
+
+**Text, voice, files - if it matters, just send it to your favorite messenger.**
 
 Example:
 
 ```txt
 Before Echo:
-The thought shows up on a walk and disappears before you can use it.
+The thought shows up while you are walking, reading, or between tasks.
+Opening another app is already too much.
+So you tell yourself you will remember it.
 
 With Echo:
-Save it as text, voice, link, image, or file - without turning capture into work.
+Send it like a message.
+Text, voice, links, screenshots, files - captured through WhatsApp or Telegram, where your hand already goes.
 ```
 
 ### 6. Notes
@@ -154,12 +167,12 @@ Purpose:
 
 Core idea:
 
-**Notes should not become dead storage.**
+**Keep thoughts usable.**
 
 Notes in Echo should feel:
-- readable
-- usable
-- connected to what they could become
+- easy to read and return to
+- a source for ideas that are actually yours
+- ready to be shaped into a post
 
 Example:
 
@@ -168,7 +181,8 @@ Before Echo:
 You come back to a note and it is still just raw material.
 
 With Echo:
-The thought stays readable, usable, and ready to become an idea, angle, or post.
+Echo keeps the pieces together as one readable note.
+The raw material becomes easy to read and return to, a source for ideas that are actually yours, and ready to be shaped into a post.
 ```
 
 ### 7. Strategy
@@ -181,13 +195,11 @@ Purpose:
 
 Core idea:
 
-**Strategy without the heavy planning ritual.**
+**Direction without the ritual.**
 
-Strategy in Echo is a live structured understanding of:
-- who the user is writing for
-- what they are trying to be known for
-- what tensions and themes they keep circling
-- why they are writing at all
+Subheading:
+
+**Strategy should not feel like a template made for someone else.**
 
 Not:
 - a calendar
@@ -202,7 +214,12 @@ Before Echo:
 You know you need direction, but strategy feels too big or too generic.
 
 With Echo:
-Build clarity through a natural conversation, not a template made for someone else.
+Find your direction through a natural conversation.
+No premature advice. First, we understand what you want, why you write, what you care about, and where you want to grow.
+Then Echo helps you find your own way there.
+
+Result:
+Ideas get sharper, angles get clearer, and your posts start to add up.
 ```
 
 ### 8. Ideas
@@ -215,13 +232,13 @@ Purpose:
 
 Core idea:
 
-**Ideas from your real material, not from nowhere.**
+**Ideas from what you already have.**
 
-Echo should generate angles and post directions from:
+Echo finds angles from the context that is already yours:
 - notes
+- recurring themes
 - strategy
 - voice
-- accumulated context
 
 Example:
 
@@ -230,7 +247,8 @@ Before Echo:
 You ask for ideas and get generic lists.
 
 With Echo:
-Ideas come from your notes, direction, and actual context.
+Echo finds angles from your notes, recurring themes, strategy, and voice.
+The idea feels grounded because it did not come from nowhere.
 ```
 
 ### 9. Voice
@@ -258,10 +276,12 @@ Example:
 
 ```txt
 Before Echo:
-AI can make the post cleaner, but it often makes it sound less like you.
+AI can do the writing for you, but the style that made it yours often gets lost.
 
 With Echo:
-Voice keeps the shape, rhythm, and language close to how you actually write.
+Echo preserves your voice.
+Send a couple of your posts - and that's it.
+Echo remembers how you write when it helps you next.
 ```
 
 ### 10. Writing
@@ -324,6 +344,8 @@ Platforms:
 - Custom
 
 This should be a narrow strip, not a full feature section.
+Visually, this should be a simple row of platform icons in the same quiet style as the page.
+No cards, no explanations, no platform feature claims.
 
 ### 12. It Finally Feels Obvious
 
@@ -369,7 +391,7 @@ Three plans:
 
 The plans should feel like levels of support, not a bundle of random features.
 
-### 14. Not Another AI Content Machine
+### 14. Done-for-you Was The Lie
 
 File: `14_not_a_content_machine.md`
 
@@ -381,21 +403,23 @@ Purpose:
 
 Core idea:
 
-**Not another AI content machine.**
+**Done-for-you was the lie.**
 
 Working copy:
 
 ```txt
-Echo cannot be you.
-Nothing can.
+No AI, tool or machine can be you.
 
-It removes the busywork,
-lowers the weight of writing,
-and keeps your best thoughts from disappearing.
+That's not the problem - that's the point.
 
-For people who care about what they say,
-how it sounds,
-and whether it was worth saying at all.
+The value is in you.
+
+Your thoughts.
+Your taste.
+Your way of seeing things.
+
+Echo only clears the weight around it.
+So the world does not lose what only you could say.
 ```
 
 ### 15. Final CTA
@@ -408,9 +432,18 @@ Purpose:
 
 Core idea:
 
-**Stop losing the thoughts that could become your best posts.**
+**Make the next thought publishable.**
 
-CTA should point toward starting with capture or joining early access, depending on the actual product state.
+Copy:
+
+```txt
+Start with whatever you have.
+Echo helps you shape it into a post.
+```
+
+CTA:
+
+**Get early access**
 
 ## Recommended Build Order
 
@@ -420,12 +453,14 @@ CTA should point toward starting with capture or joining early access, depending
 4. `4_wherever_you_need_it.md`
 5. `5_capture.md`
 6. `6_notes.md`
-7. `9_voice.md`
-8. `10_writing.md`
-9. `11_supported_platforms.md`
-10. `12_it_finally_feels_obvious.md`
-11. `13_plans.md`
-12. `14_not_a_content_machine.md`
-13. remaining feature sections
+7. `7_strategy.md`
+8. `8_ideas.md`
+9. `9_voice.md`
+10. `10_writing.md`
+11. `11_supported_platforms.md`
+12. `12_it_finally_feels_obvious.md`
+13. `13_plans.md`
+14. `14_not_a_content_machine.md`
+15. `15_final_cta.md`
 
 This order lets us lock the emotional and strategic spine before polishing secondary product explanations.

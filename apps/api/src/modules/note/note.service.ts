@@ -173,7 +173,7 @@ export class NoteService {
       [
         {
           role: 'user',
-          content: `Generate a short title (3-5 words) for the following text: """${text}""", \n **return only the title and nothing else**`,
+          content: `Generate a short title (3-5 words) for the following text: """${note.text}""", \n **return only the title and nothing else**`,
         },
       ],
       {},
@@ -253,7 +253,7 @@ export class NoteService {
     });
 
     if (!note.text) {
-      this.generateTitle(id, userId, text);
+      this.generateTitle(id, userId, note);
     }
 
     await this.updateOne(id, userId, {
