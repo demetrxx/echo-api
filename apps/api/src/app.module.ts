@@ -9,12 +9,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from '@/api';
 import { TelegramModule } from '@/modules/telegram';
 
-import { AuthConfig, RedisConfig } from './config';
+import { AuthConfig, QaConfig, RedisConfig } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [AuthConfig, RedisConfig],
+      load: [AuthConfig, RedisConfig, QaConfig],
       isGlobal: true,
     }),
     BullModule.forRootAsync({

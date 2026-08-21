@@ -4,6 +4,8 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  isSubscribed: boolean;
+  credits: number;
   id: string;
 }
 

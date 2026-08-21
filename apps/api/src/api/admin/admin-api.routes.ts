@@ -1,5 +1,6 @@
 import { RouteTree } from '@nestjs/core';
 
+import { QaApiModule } from './qa';
 import { UsersApiModule } from './users';
 
 export const adminApiRoutes: RouteTree = {
@@ -8,6 +9,10 @@ export const adminApiRoutes: RouteTree = {
     {
       path: 'users',
       module: UsersApiModule,
+    },
+    {
+      path: 'qa',
+      module: QaApiModule,
     },
   ],
 };

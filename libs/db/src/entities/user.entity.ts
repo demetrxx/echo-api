@@ -81,6 +81,20 @@ export class UserEntity extends AbstractEntity {
   })
   lastActivityAt: Date | null;
 
+  @Column({
+    type: 'boolean',
+    name: 'is_qa_sandbox',
+    default: false,
+  })
+  isQaSandbox: boolean;
+
+  @Column({
+    type: 'integer',
+    name: 'credits',
+    default: 0,
+  })
+  credits: number;
+
   @OneToOne(() => TgUserEntity, (tgUser) => tgUser.user)
   tgUser: TgUserEntity;
 
